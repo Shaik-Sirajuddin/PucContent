@@ -1,0 +1,349 @@
+package com.puccontent.org
+
+
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.puccontent.org.Adapters.UpdateClicked
+import com.puccontent.org.Adapters.UpdatesAdapter
+import com.puccontent.org.Models.Update
+import com.puccontent.org.databinding.ActivityMainBinding
+import java.util.*
+import kotlin.collections.ArrayList
+
+class MainActivity : AppCompatActivity(), UpdateClicked {
+    private lateinit var binding:ActivityMainBinding
+    private var email:String = ""
+    private var inProgress = false
+    private var handler:Handler? = null
+    private lateinit var updatesAdapter:UpdatesAdapter
+    private lateinit var quickAdapter: UpdatesAdapter
+    private val updatesList = ArrayList<Update>()
+    private val quickList = ArrayList<Update>()
+    private var flag = true
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        try{
+          binding = ActivityMainBinding.inflate(layoutInflater)
+          setContentView(binding.root)
+          setSupportActionBar(binding.toolBar)
+          val subjectsList = arrayListOf("Puc-1 Sem-1","Puc-1 Sem-2","Puc-2 Sem-1","Puc-2 Sem-2")
+          val subjectsAdapter = ArrayAdapter(this,R.layout.list_item,R.id.sub,subjectsList)
+          binding.classList.adapter = subjectsAdapter
+          binding.classList.setOnItemClickListener { _, _, pos, _ ->
+             classClicked(pos)
+          }
+          updatesAdapter = UpdatesAdapter(this,this,true)
+            quickAdapter = UpdatesAdapter(this,this,false)
+            binding.quickAccessList.adapter = quickAdapter
+            binding.recentUpdatesList.adapter = updatesAdapter
+            binding.recentUpdatesList.layoutManager = LinearLayoutManager(this)
+            binding.quickAccessList.layoutManager = LinearLayoutManager(this)
+            binding.recentPBar.visibility = View.VISIBLE
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.recentPBar.visibility = View.GONE
+                if(updatesList.isEmpty()){
+                    binding.recentHide.visibility = View.VISIBLE
+                }
+            },4000)
+
+        }catch(e:Exception){
+            Log.e("error",e.message.toString())
+            e.printStackTrace()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.drop_down_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.addFile->{
+                checkAndAddFile()
+                    return true
+            }
+            R.id.logOut->{
+                val a =  signOut()
+                return a
+            }
+            else->{
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:techx2002@gmail.com"))
+                    intent.putExtra(Intent.EXTRA_EMAIL, "techx2002@gmail.com")
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "PucContent - Suggestion")
+                    startActivity(intent)
+                }catch(e:Exception){
+                    Toast.makeText(this,"Your Device Cannot Perform This Action",Toast.LENGTH_SHORT).show()
+                }
+                return true
+            }
+        }
+    }
+
+    private fun signOut():Boolean {
+        try {
+            val client = GoogleSignIn.getClient(this, SignInActivity.gso)
+            client.signOut().addOnFailureListener {
+                flag = false
+                it.printStackTrace()
+                Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
+            }.addOnSuccessListener {
+                if (flag) {
+                    val intent = Intent(this, SignInActivity::class.java)
+                    startActivity(intent)
+                    finishAffinity()
+                    Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show()
+                } else {
+                    flag = true
+                }
+            }
+        }catch(e:Exception){
+            Log.e("ding",e.message.toString())
+        }
+        return flag
+    }
+    override fun onResume() {
+        super.onResume()
+        try {
+            updateQuickAccess()
+        }catch(e:Exception){
+            Log.e("rec",e.message.toString())
+        }
+    }
+
+    private fun updateQuickAccess() {
+        val tempList = FileDownloader.convertStringToArray(getQuickAccess())
+        quickList.clear()
+        tempList.forEach { item->
+            if(!item.isNullOrEmpty()) {
+                quickList.add(Update(name = getName(item.toString()), path = item.toString()))
+            }
+        }
+        quickAdapter.updateData(quickList)
+        if(quickList.isEmpty()){
+            binding.hideView.visibility = View.VISIBLE
+        }
+        else{
+            binding.hideView.visibility = View.GONE
+        }
+    }
+    private fun getQuickAccess(): String {
+        val sharedPref =
+            baseContext?.getSharedPreferences(FileDownloader.fileKey, Context.MODE_PRIVATE)
+        return sharedPref?.getString("quick", "").toString()
+    }
+    private fun getName(str:String): String {
+        var lastInd = 0
+        for(i in str.indices){
+            if(str[i]=='/'){
+                lastInd = i
+            }
+        }
+        if(str.length>lastInd+1 && str.length-4>=0)
+       return  str.substring(lastInd+1,str.length-4)
+        return ""
+    }
+    private fun checkAndAddFile(){
+        try {
+            handler?.removeCallbacksAndMessages(null)
+            inProgress = true
+            binding.mainActivityPBar.visibility = View.VISIBLE
+            val database = FirebaseDatabase.getInstance()
+            val account = GoogleSignIn.getLastSignedInAccount(this)
+            if (account == null) {
+                Toast.makeText(this, "You haven't Logged In", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
+                finishAffinity()
+                binding.mainActivityPBar.visibility = View.GONE
+                inProgress = false
+                return
+            }
+            email = account.email!!.substring(0,7)
+            database.reference.child("AllowedUsers").child(email)
+                .addListenerForSingleValueEvent(listener)
+            handler = Handler(Looper.getMainLooper())
+            handler?.postDelayed({
+               if(binding.mainActivityPBar.visibility == View.VISIBLE){
+                   inProgress = false
+                   database.reference.child("AllowedUsers").child(email).removeEventListener(listener)
+                   binding.mainActivityPBar.visibility = View.GONE
+                   Toast.makeText(this,"Network Not Available",Toast.LENGTH_LONG).show()
+               }
+            },6000)
+        }catch(e:Exception){
+            inProgress = false
+            e.printStackTrace()
+            Log.e("dd",e.message.toString())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        FirebaseDatabase.getInstance().reference.child("recent").addValueEventListener(recentUpdatesListener)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        FirebaseDatabase.getInstance().reference.child("recent").removeEventListener(recentUpdatesListener)
+    }
+    private val recentUpdatesListener = object:ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if(snapshot.exists()){
+                updatesList.clear()
+                val tempList = ArrayList<Update>()
+                for(snap in snapshot.children){
+                     val up = snap.getValue<Update>()
+                    if (up != null) {
+                        tempList.add(up)
+                    }
+                }
+                var counter = tempList.size-1
+                while(counter>=0){
+                    updatesList.add(tempList[counter])
+                    counter--
+                }
+                binding.recentPBar.visibility = View.GONE
+                if(updatesList.isNotEmpty()) {
+                    binding.recentHide.visibility = View.GONE
+                }
+                else{
+                    binding.recentHide.visibility = View.VISIBLE
+                }
+                updatesAdapter.updateData(updatesList)
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+
+        }
+
+    }
+    private val listener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (snapshot.exists()) {
+                openActivity()
+            }else {
+                binding.mainActivityPBar.visibility = View.GONE
+                Toast.makeText(
+                    this@MainActivity,
+                    "You Don't Have Rights",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        override fun onCancelled(error: DatabaseError) {
+            binding.mainActivityPBar.visibility = View.GONE
+            Toast.makeText(this@MainActivity, error.message, Toast.LENGTH_LONG).show()
+        }
+
+    }
+    override fun remove(position: Int){
+        AlertDialog.Builder(this)
+            .setTitle("Remove From QuickAccess")
+            .setCancelable(true)
+            .setPositiveButton("Yes"
+            ) { p0, p1 ->
+                p0.cancel()
+                removeFromQuickAccess(position)
+            }
+            .setNegativeButton("No"){ p0, p1 ->
+                p0.cancel()
+            }
+            .show()
+    }
+    private fun removeFromQuickAccess(position: Int) {
+        var path = quickList[position].path
+        val array = FileDownloader.convertStringToArray(getQuickAccess())
+        val arr = ArrayList<String>()
+        array.forEach {
+            if (it != null) {
+                arr.add(it)
+            }
+        }
+        arr.remove(path)
+        path = FileDownloader.convertArrayToString(arr)
+        val sharedPref =  baseContext?.getSharedPreferences(FileDownloader.fileKey,Context.MODE_PRIVATE)
+        if(sharedPref!=null) {
+            with(sharedPref.edit()) {
+                putString("quick", path)
+                apply()
+            }
+            quickList.removeAt(position)
+            quickAdapter.removeItem(position)
+            if(quickList.isEmpty()){
+                binding.hideView.visibility = View.VISIBLE
+            }
+        }
+    }
+    private fun openActivity() {
+       if(inProgress && this.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+           val intent = Intent(this, AddToDataBase::class.java)
+           binding.mainActivityPBar.visibility = View.GONE
+           inProgress = false
+           startActivity(intent)
+       }
+    }
+
+    private fun classClicked(position:Int){
+        val intent = Intent(this,SubjectsActivity::class.java)
+        val year: Int
+        val sem: Int
+        when(position){
+             0->{
+                 year = 1
+                 sem = 1
+             }
+             1->{
+                 year = 1
+                 sem = 2
+             }
+             2->{
+                 year = 2
+                 sem = 1
+             }
+             else-> {
+                 year = 2
+                 sem = 2
+             }
+         }
+        intent.putExtra("year",year)
+        intent.putExtra("sem",sem)
+        startActivity(intent)
+    }
+
+    override fun updateClicked(position: Int) {
+       try {
+           val path = quickList[position].path
+           val name = quickList[position].name
+           val inte = Intent(this, ReadingActivity::class.java)
+           inte.putExtra("file", path)
+           inte.putExtra("name",name)
+           startActivity(inte)
+       }catch(e:Exception){
+           Log.e("updateItemCLickedError",e.message.toString())
+           e.printStackTrace()
+       }
+    }
+}

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Puc Content</string>
+    <string name="access_all_the_puc_at_one_place">Access All The Puc Material At One Place</string>
+    <string name="sign_in_with_your_college_mail_to_continue">Sign In With Your College Mail To Continue</string>
+    <string name="verify_text">Email is required to verify that you belong to rgukt \n This app doesn\'t collect any kind of user data</string>
+    <string name="recent_updates">Recent Updates</string>
+    <string name="quick_access">Quick Access</string>
+    <string name="let_s_study">Let\'s Study</string>
+    <string name="logout">LogOut</string>
+    <string name="add_file">Add File</string>
+    <string name="add_files_to_database">Add Files To DataBase</string>
+    <string name="warning">Note : If you are adding new chapter then do not select any chapter in the list</string>
+    <string name="info"> &#128532; No Items To Show</string>
+    <string name="contact">Contact</string>
+</resources>

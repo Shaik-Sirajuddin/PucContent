@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp"
+        android:elevation="10dp"
+        app:cardElevation="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:minHeight="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/pdfImg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tint="#ED2224"
+                android:elevation="10dp"
+                android:src="@drawable/pdf"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/quickAccImg"
+                app:tint="#E91E63"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/up_left_arrow"
+                app:layout_constraintStart_toStartOf="@+id/pdfImg"
+                app:layout_constraintTop_toTopOf="@id/pdfImg" />
+            <TextView
+                android:id="@+id/pdfName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:layout_alignParentEnd="true"
+                android:ellipsize="end"
+                android:fontFamily="@font/alegreya_sans_sc_bold"
+                android:text="Unit 1"
+                android:textAlignment="gravity"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/downloadState"
+                app:layout_constraintStart_toEndOf="@id/pdfImg"
+                app:layout_constraintTop_toTopOf="parent"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/downloadState"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_done_24"
+                app:tint = "#170832"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
