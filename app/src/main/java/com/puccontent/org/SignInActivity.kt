@@ -47,7 +47,7 @@ class SignInActivity : AppCompatActivity() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(this)
         if(account!=null) {
-            updateUI(account)
+            updateUI(account,false)
         }
     }
     private fun signIn() {
@@ -63,14 +63,14 @@ class SignInActivity : AppCompatActivity() {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
 
-            updateUI(account)
+            updateUI(account,true)
         } catch (e: ApiException) {
             Log.w("FailedSignIn", "signInResult:failed code=" + e.statusCode)
-            updateUI(null)
+            updateUI(null,true)
         }
     }
 
-    private fun updateUI(account: GoogleSignInAccount?) {
+    private fun updateUI(account: GoogleSignInAccount?,isNewUser:Boolean) {
         if(account==null){
             binding.pBar.visibility = View.GONE
            Toast.makeText(this,"Sign In Failed",Toast.LENGTH_SHORT).show()
@@ -79,6 +79,8 @@ class SignInActivity : AppCompatActivity() {
            if(email?.endsWith("ac.in",false) == true){
                val intent = Intent(this,MainActivity::class.java)
                binding.pBar.visibility = View.GONE
+               intent.putExtra("isNewUser",isNewUser)
+               intent.putExtra("email",email)
                startActivity(intent)
                finish()
            }

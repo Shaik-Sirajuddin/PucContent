@@ -12,4 +12,17 @@
     <string name="warning">Note : If you are adding new chapter then do not select any chapter in the list</string>
     <string name="info"> &#128532; No Items To Show</string>
     <string name="contact">Contact</string>
+    <string name="semester">Semester :</string>
+    <string name="subject">Subject :</string>
+    <string name="chapter">Chapter :</string>
+    <string name="or_add_new_chapter">Or add new chapter</string>
+    <string name="chapter_name_here">Chapter name here</string>
+    <string name="delete_pdf_section">Delete Pdf Section</string>
+    <string name="delete_selected_pdf">Delete Selected Pdf</string>
+    <string name="enter_pdf_title_here">Enter pdf title here</string>
+    <string name="paste_pdf_url_here">Paste pdf url here</string>
+    <string name="upload">Upload</string>
+    <string name="about">About</string>
+    <string name="privacy_policy">->Puc Content App is developed independently by students and doesn\'t belong to Rgukt \n->Content used in the app is not owned by the app,it is licenced to their respective writers/owners \n->This app is made to help puc students by providing the content in a structured format and not meant to be used for any commercial purposes \n->PucContent app is completely free and will remain free forever</string>
+    <string name="privacy_policy_header">Privacy Policy</string>
 </resources>

@@ -4,7 +4,6 @@ package com.puccontent.org
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -29,6 +28,7 @@ import com.puccontent.org.Models.Update
 import com.puccontent.org.databinding.ActivityMainBinding
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(), UpdateClicked {
     private lateinit var binding:ActivityMainBinding
@@ -65,10 +65,33 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
                     binding.recentHide.visibility = View.VISIBLE
                 }
             },4000)
-
+            val intent = intent
+            val email = intent.getStringExtra("email")
+            val isNewUser = intent.getBooleanExtra("isNewUser",false)
+            if(isNewUser){
+                if (email != null) {
+                   for(i in email.indices){
+                       if(email[i]=='@'){
+                           addUser(email.substring(0,i),email)
+                           break
+                       }
+                   }
+                }
+            }
         }catch(e:Exception){
             Log.e("error",e.message.toString())
             e.printStackTrace()
+        }
+    }
+
+    private fun addUser(key: String,email:String) {
+        try {
+            val database = FirebaseDatabase.getInstance()
+            val map = HashMap<String, Any>()
+            map[key] = email
+            database.reference.child("Users").updateChildren(map)
+        }catch(e:java.lang.Exception){
+            Log.e("addUserError",e.message.toString())
         }
     }
 
@@ -83,18 +106,15 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
                 checkAndAddFile()
                     return true
             }
-            R.id.logOut->{
-                val a =  signOut()
-                return a
+            R.id.logOut -> {
+                return signOut()
             }
             else->{
                 try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:techx2002@gmail.com"))
-                    intent.putExtra(Intent.EXTRA_EMAIL, "techx2002@gmail.com")
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "PucContent - Suggestion")
+                  val intent = Intent(this,AboutActivity::class.java)
                     startActivity(intent)
                 }catch(e:Exception){
-                    Toast.makeText(this,"Your Device Cannot Perform This Action",Toast.LENGTH_SHORT).show()
+                   Log.e("intentAbout",e.message.toString())
                 }
                 return true
             }

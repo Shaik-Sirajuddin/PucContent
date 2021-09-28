@@ -42,12 +42,12 @@ class ReadingActivity : AppCompatActivity() {
         imageView3.setOnClickListener {
             if(nightMode){
                 pdf.setNightMode(false)
-                Toast.makeText(this,"Applying DayMode",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"DayMode activated,scroll to see changes",Toast.LENGTH_SHORT).show()
                 imageView3.setImageResource(R.drawable.night_mode)
                 nightMode = false
             }else{
                 pdf.setNightMode(true)
-                Toast.makeText(this,"Applying NightMode",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"NightMode activated,scroll to see changes",Toast.LENGTH_SHORT).show()
                 imageView3.setImageResource(R.drawable.sunny)
                 nightMode = true
             }
