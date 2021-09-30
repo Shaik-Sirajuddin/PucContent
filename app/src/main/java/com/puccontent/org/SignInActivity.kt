@@ -14,13 +14,6 @@ import android.widget.Toast
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.puccontent.org.databinding.ActivitySignInBinding
-import androidx.annotation.NonNull
-
-import com.google.android.gms.tasks.OnCompleteListener
-
-
-
-
 
 class SignInActivity : AppCompatActivity() {
 
@@ -32,16 +25,14 @@ class SignInActivity : AppCompatActivity() {
         setTheme(R.style.signInActivity)
         setContentView(binding.root)
         supportActionBar?.hide()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         binding.signInButton.setOnClickListener {
             signIn()
         }
 
-    }
-    companion object{
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
     }
     override fun onStart() {
         super.onStart()

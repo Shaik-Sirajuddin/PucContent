@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -123,7 +124,10 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
 
     private fun signOut():Boolean {
         try {
-            val client = GoogleSignIn.getClient(this, SignInActivity.gso)
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            val client = GoogleSignIn.getClient(this, gso)
             client.signOut().addOnFailureListener {
                 flag = false
                 it.printStackTrace()
@@ -284,11 +288,11 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
             .setTitle("Remove From QuickAccess")
             .setCancelable(true)
             .setPositiveButton("Yes"
-            ) { p0, p1 ->
+            ) { p0, _ ->
                 p0.cancel()
                 removeFromQuickAccess(position)
             }
-            .setNegativeButton("No"){ p0, p1 ->
+            .setNegativeButton("No"){ p0, _ ->
                 p0.cancel()
             }
             .show()
