@@ -21,18 +21,22 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var binding:ActivitySignInBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignInBinding.inflate(layoutInflater)
-        setTheme(R.style.signInActivity)
-        setContentView(binding.root)
-        supportActionBar?.hide()
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        binding.signInButton.setOnClickListener {
-            signIn()
+        try {
+            binding = ActivitySignInBinding.inflate(layoutInflater)
+            setTheme(R.style.signInActivity)
+            setContentView(binding.root)
+            supportActionBar?.hide()
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+            binding.signInButton.setOnClickListener {
+                signIn()
+            }
+        }catch(e:Exception){
+            e.printStackTrace()
+            Log.e("signIn",e.message.toString())
         }
-
     }
     override fun onStart() {
         super.onStart()
