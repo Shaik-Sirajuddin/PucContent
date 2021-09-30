@@ -88,11 +88,11 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
               .setTitle("Remove From QuickAccess")
               .setCancelable(true)
               .setPositiveButton("Yes"
-              ) { p0, p1 ->
+              ) { p0, _ ->
                   p0.cancel()
                   removeFromQuickAccess(position)
               }
-              .setNegativeButton("No"){ p0, p1 ->
+              .setNegativeButton("No"){ p0, _ ->
                   p0.cancel()
               }
               .show()
@@ -102,11 +102,11 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
               .setTitle("Add To QuickAccess")
               .setCancelable(true)
               .setPositiveButton("Yes"
-              ) { p0, p1 ->
+              ) { p0, _ ->
                   p0.cancel()
                   addToQuickAccess(position)
               }
-              .setNegativeButton("No"){ p0, p1 ->
+              .setNegativeButton("No"){ p0, _ ->
                   p0.cancel()
               }
              .show()
@@ -203,6 +203,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
             binding.info.visibility = View.GONE
         }
         adapter.updateData(list)
+        binding.pdfsListView.visibility = View.VISIBLE
         binding.shrimmer.stopShimmer()
         binding.shrimmer.visibility = View.GONE
     }
