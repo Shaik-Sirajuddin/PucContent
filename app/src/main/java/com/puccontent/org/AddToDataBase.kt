@@ -53,7 +53,7 @@ class AddToDataBase : AppCompatActivity() {
            semesterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
            binding.semesterSpinner.adapter = semesterAdapter
            binding.semesterSpinner.onItemSelectedListener = semesterListener
-           subjectsList = arrayListOf("IT", "Telugu", "English", "Maths", "Physics", "Chemistry")
+           subjectsList = arrayListOf("IT", "Telugu", "English", "Maths", "Physics", "Chemistry","Others")
            val subjectsAdapter =
                ArrayAdapter(this, android.R.layout.simple_spinner_item, subjectsList)
            subjectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
