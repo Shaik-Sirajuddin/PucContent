@@ -1,5 +1,6 @@
 package com.puccontent.org.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -26,15 +27,20 @@ class UpdatesAdapter(val context: Context, val listener:UpdateClicked,val isUpda
         }
         return holder
     }
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: UpdatesViewHolder, position: Int) {
         try {
             holder.name.text = list[position].name
-            if (isUpdate) {
+            if(isUpdate){
                 holder.image.visibility = View.GONE
                 holder.date.visibility = View.VISIBLE
                 val sdf = SimpleDateFormat("dd-MMM-yyyy")
-                holder.date.text = sdf.format(list[position].date?.let { Date(it) })
-            } else {
+                val  ad = list[position].date?.let { Date(it) }
+                if(ad!=null) {
+                    holder.date.text =sdf.format(ad)
+                }
+            }
+            else{
                 holder.image.visibility = View.VISIBLE
                 holder.date.visibility = View.GONE
                 holder.image.setOnClickListener {
