@@ -1,5 +1,6 @@
 package com.puccontent.org
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,23 @@ class AboutActivity : AppCompatActivity() {
         binding.backImage.setOnClickListener {
             finish()
         }
+        binding.otherAppsTextView.setOnClickListener {
+            openDevPage()
+        }
     }
+
+    private fun openDevPage() {
+        val pack = "HQapps"
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://dev?id=$pack")))
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=${pack}")))
+        }
+        catch (e:Exception){
+
+        }
+    }
+
     fun suggestion(){
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:techx2002@gmail.com"))

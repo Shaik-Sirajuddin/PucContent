@@ -34,6 +34,7 @@ class ChaptersActivity : AppCompatActivity() {
         year = intent.getIntExtra("year",1)
         subject = intent.getStringExtra("subject").toString()
         adapter = ArrayAdapter(this,R.layout.chapter_item,R.id.chapterName,list)
+        binding.chapterPath.text = subject
         binding.chaptersListView.adapter = adapter
         binding.backImage.setOnClickListener {
             finish()

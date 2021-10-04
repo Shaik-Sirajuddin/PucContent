@@ -10,7 +10,7 @@
     <string name="add_file">Add File</string>
     <string name="add_files_to_database">Add Files To DataBase</string>
     <string name="warning">Note : If you are adding new chapter then do not select any chapter in the list</string>
-    <string name="info"> &#128532; No Items To Show</string>
+    <string name="info"> &#128578; Items will be added soon</string>
     <string name="contact">Contact</string>
     <string name="semester">Semester :</string>
     <string name="subject">Subject :</string>
@@ -28,4 +28,6 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="addquickaccess_info">Tap on the pdf icon to add it to \n Quick Access</string>
+    <string name="checkout_more_apps_made_by_me">Checkout More Apps Made By Me</string>
 </resources>

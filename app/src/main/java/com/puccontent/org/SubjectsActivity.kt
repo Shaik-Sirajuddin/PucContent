@@ -24,6 +24,7 @@ class SubjectsActivity : AppCompatActivity(), SubjectClicked {
         list = getData()
         binding.subjectsRecyclerView.adapter = SubjectsAdapter(this,list,this)
         binding.subjectsRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.subjectPath.text = "Puc-$year Sem-${sem}"
         binding.backImage.setOnClickListener {
             finish()
         }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.puccontent.org.Models.Subject
 import com.puccontent.org.R
 
@@ -22,7 +23,7 @@ class SubjectsAdapter(private val context: Context, private val list:ArrayList<S
     }
 
     override fun onBindViewHolder(holder: SubjectsViewHolder, position: Int) {
-        holder.image.setImageResource(list[position].image)
+        Glide.with(context).load(list[position].image).into(holder.image)
         holder.name.text = list[position].name
     }
 

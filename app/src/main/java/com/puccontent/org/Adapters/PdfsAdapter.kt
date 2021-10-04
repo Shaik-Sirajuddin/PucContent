@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.puccontent.org.R
 
 class PdfsAdapter(val context: Context, private val listener: PdfClicked):RecyclerView.Adapter<PdfsViewHolder>() {
@@ -25,10 +26,10 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
         holder.pdfTitle.text = list[position]
         holder.pdfTitle.isSelected = true
         if(listener.checkIt(holder.adapterPosition)){
-            holder.pdfStatus.setImageResource(R.drawable.ic_baseline_delete_outline_24)
+            Glide.with(context).load(R.drawable.ic_baseline_delete_outline_24).into(holder.pdfStatus)
         }
         else{
-            holder.pdfStatus.setImageResource(R.drawable.download)
+            Glide.with(context).load(R.drawable.download).into(holder.pdfStatus)
         }
         if(listener.checkQuick(holder.adapterPosition)){
             holder.quickImg.visibility = View.VISIBLE

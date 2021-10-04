@@ -44,6 +44,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         year = intent.getIntExtra("year",1)
         subject = intent.getStringExtra("subject").toString()
         chapter = intent.getStringExtra("chapter").toString()
+        binding.textView8.text = chapter
         adapter = PdfsAdapter(this,this)
         binding.pdfsListView.adapter = adapter
         binding.pdfsListView.layoutManager = LinearLayoutManager(this)
