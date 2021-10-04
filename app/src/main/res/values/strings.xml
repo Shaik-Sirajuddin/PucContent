@@ -25,4 +25,7 @@
     <string name="about">About</string>
     <string name="privacy_policy">->Puc Content App is developed independently by students and doesn\'t belong to Rgukt \n->Content used in the app is not owned by the app,it is licenced to their respective writers/owners \n->This app is made to help puc students by providing the content in a structured format and not meant to be used for any commercial purposes \n->PucContent app is completely free and will remain free forever</string>
     <string name="privacy_policy_header">Privacy Policy</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

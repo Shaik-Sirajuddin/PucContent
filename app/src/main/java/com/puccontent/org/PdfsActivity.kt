@@ -1,7 +1,6 @@
 package com.puccontent.org
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,7 +18,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.puccontent.org.Adapters.PdfClicked
 import com.puccontent.org.Adapters.PdfsAdapter
 
@@ -115,6 +113,40 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
 
     }
 
+    override fun downloadOrDelete(pos: Int) {
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos]}.pdf"
+        val file= getExternalFilesDir(path)
+        if(file?.isDirectory == false){
+            deletePdf(file,list[pos],pos)
+        }
+        else{
+            file?.delete()
+            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(pathList[pos]),path,list[pos]+".pdf")
+            while(pos>=downloadList.size){
+                downloadList.add(-1)
+            }
+            downloadList[pos] = downloadID
+            Toast.makeText(this,"Download Started",Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun deletePdf(file:File,name:String,pos:Int) {
+        AlertDialog.Builder(this)
+            .setTitle("Confirm Delete")
+            .setCancelable(true)
+            .setMessage("Delete ${name}.pdf?")
+            .setPositiveButton("Yes"
+            ) { p0, p1 ->
+                p0.cancel()
+                file.delete()
+                adapter.notifyItemChanged(pos)
+                Toast.makeText(this,"Deleted ${name}.pdf",Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("No"){ p0, p1 ->
+                p0.cancel()
+            }
+            .show()
+    }
+
     private fun removeFromQuickAccess(position: Int) {
          var path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position]}.pdf"
          val array = FileDownloader.convertStringToArray(getQuickAccess())
@@ -174,7 +206,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         }
         else{
             file?.delete()
-            downloadID = FileDownloader.downloadFile(this, Uri.parse(pathList[pos]),path,list[pos]+".pdf")
+            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(pathList[pos]),path,list[pos]+".pdf")
             while(pos>=downloadList.size){
                 downloadList.add(-1)
             }

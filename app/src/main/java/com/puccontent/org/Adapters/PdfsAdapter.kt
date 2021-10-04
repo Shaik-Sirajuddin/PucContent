@@ -25,7 +25,7 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
         holder.pdfTitle.text = list[position]
         holder.pdfTitle.isSelected = true
         if(listener.checkIt(holder.adapterPosition)){
-            holder.pdfStatus.setImageResource(R.drawable.ic_baseline_done_24)
+            holder.pdfStatus.setImageResource(R.drawable.ic_baseline_delete_outline_24)
         }
         else{
             holder.pdfStatus.setImageResource(R.drawable.download)
@@ -38,6 +38,9 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
         }
         holder.pdfIcon.setOnClickListener {
             listener.quickAccesss(holder.adapterPosition)
+        }
+        holder.pdfStatus.setOnClickListener {
+            listener.downloadOrDelete(holder.adapterPosition)
         }
     }
     fun updateData(lit:ArrayList<String>){
@@ -61,4 +64,5 @@ interface PdfClicked{
     fun checkIt(position: Int):Boolean
     fun checkQuick(position: Int):Boolean
     fun quickAccesss(position: Int)
+    fun downloadOrDelete(position: Int)
 }
