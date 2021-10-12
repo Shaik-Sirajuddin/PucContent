@@ -160,7 +160,22 @@ class AddToDataBase : AppCompatActivity() {
             val map = HashMap<String, Any>()
             map[chapter] = chapter
             checker = false
-            val upd = Update(Calendar.getInstance().timeInMillis,"Added $title in $sem $sub",null)
+            val semNums:String = when(semesterNo){
+                0->{
+                    "1/1"
+                }
+                1->{
+                    "1/2"
+                }
+                2->{
+                    "2/1"
+                }
+                else->{
+                    "2/2"
+                }
+
+            }
+            val upd = Update(Calendar.getInstance().timeInMillis,"Added $title in $chapter $sem $sub","$semNums/$sub/$chapter")
             database.reference
                 .child("recent")
                 .push()

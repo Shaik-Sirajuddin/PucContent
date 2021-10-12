@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "10752488152",
+    "firebase_url": "https://puc-content-default-rtdb.firebaseio.com",
     "project_id": "puc-content",
     "storage_bucket": "puc-content.appspot.com"
   },
@@ -14,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "10752488152-1va4ahse923tuoqdvtflcd0ukppvh0bp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.puccontent.org",
+            "certificate_hash": "d6bf1384df6e244a8c06d3e019df77d23729f944"
+          }
+        },
+        {
           "client_id": "10752488152-lfflbhj09g4h112jp995ci27rkd1f85t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -21,6 +30,35 @@
             "certificate_hash": "5602632601dbb50eb89e456cd100e96682f87915"
           }
         },
+        {
+          "client_id": "10752488152-0rqc9231uucn7p5q8bbdkoft5d44fn71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2g1Th3gbydRfsHnHsIxodKD5INatVhSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10752488152-0rqc9231uucn7p5q8bbdkoft5d44fn71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10752488152:android:1ad36452f066e3b36eddad",
+        "android_client_info": {
+          "package_name": "com.sirajapps.puccontentanalytics"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "10752488152-0rqc9231uucn7p5q8bbdkoft5d44fn71.apps.googleusercontent.com",
           "client_type": 3

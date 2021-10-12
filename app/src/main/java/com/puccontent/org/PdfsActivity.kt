@@ -52,10 +52,15 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         binding.backImage.setOnClickListener {
             finish()
         }
-        binding.shrimmer.visibility = View.VISIBLE
-        binding.shrimmer.startShimmer()
-        binding.pdfsListView.visibility = View.GONE
-        fetchOnline()
+        if(isConnected()) {
+            binding.shrimmer.visibility = View.VISIBLE
+            binding.shrimmer.startShimmer()
+            binding.pdfsListView.visibility = View.GONE
+            fetchOnline()
+        }else{
+            binding.info.text = getString(R.string.offline)
+            fetchOffline()
+        }
     }
 
     override fun onDestroy() {
@@ -252,7 +257,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
             binding.shrimmer.stopShimmer()
             binding.shrimmer.visibility = View.GONE
             fetchOffline()
-        },2500)
+        },3000)
         ref.child("Puc-$year Sem-$sem").child(subject).child(chapter)
             .addValueEventListener(listener)
     }
@@ -307,5 +312,8 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
 
     private fun downloadComplete(position: Int) {
         adapter.notifyItemChanged(position)
+    }
+    private fun getDownloadSize(){
+
     }
 }

@@ -47,10 +47,15 @@ class ChaptersActivity : AppCompatActivity() {
             intent1.putExtra("chapter",list[pos])
             startActivity(intent1)
         }
-        binding.shrimmer.visibility = View.VISIBLE
-        binding.shrimmer.startShimmer()
-        binding.chaptersListView.visibility = View.GONE
-        fetchOnline()
+        if(isConnected()) {
+            binding.shrimmer.visibility = View.VISIBLE
+            binding.shrimmer.startShimmer()
+            binding.chaptersListView.visibility = View.GONE
+            fetchOnline()
+        }else{
+            binding.info.text = getString(R.string.offline)
+            fetchOffline()
+        }
     }
 
     override fun onStop() {
@@ -97,7 +102,7 @@ class ChaptersActivity : AppCompatActivity() {
             binding.chaptersListView.visibility = View.VISIBLE
             binding.shrimmer.visibility = View.GONE
             fetchOffline()
-        },2500)
+        },3000)
          ref.child("Puc-$year Sem-$sem").child(subject).child("Chapters").addListenerForSingleValueEvent(listener)
     }
     private val listener = object:ValueEventListener{

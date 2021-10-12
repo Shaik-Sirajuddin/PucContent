@@ -18,15 +18,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import com.puccontent.org.Adapters.UpdateClicked
 import com.puccontent.org.Adapters.UpdatesAdapter
 import com.puccontent.org.Models.Update
 import com.puccontent.org.databinding.ActivityMainBinding
+import java.lang.IndexOutOfBoundsException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -59,7 +62,6 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
             binding.recentUpdatesList.adapter = updatesAdapter
             binding.recentUpdatesList.layoutManager = LinearLayoutManager(this)
             binding.quickAccessList.layoutManager = LinearLayoutManager(this)
-            binding.recentPBar.visibility = View.VISIBLE
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.recentPBar.visibility = View.GONE
                 if(updatesList.isEmpty()){
@@ -124,6 +126,7 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
 
     private fun signOut():Boolean {
         try {
+            Firebase.auth.signOut()
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()
@@ -133,15 +136,15 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
                 it.printStackTrace()
                 Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
             }.addOnSuccessListener {
-                if (flag) {
+                  if(flag){
                     val intent = Intent(this, SignInActivity::class.java)
                     startActivity(intent)
                     finishAffinity()
                     Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show()
-                } else {
+                }else {
                     flag = true
+                  }
                 }
-            }
         }catch(e:Exception){
             Log.e("ding",e.message.toString())
         }
@@ -225,7 +228,13 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
 
     override fun onStart() {
         super.onStart()
-        FirebaseDatabase.getInstance().reference.child("recent").addValueEventListener(recentUpdatesListener)
+        if (isConnected()) {
+            binding.recentPBar.visibility = View.VISIBLE
+            FirebaseDatabase.getInstance().reference.child("recent")
+                .addValueEventListener(recentUpdatesListener)
+        }else{
+            binding.recentHide.visibility = View.VISIBLE
+        }
     }
 
     override fun onStop() {
@@ -297,6 +306,61 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
             }
             .show()
     }
+
+    override fun recentUpdateClicked(position: Int) {
+        try {
+            val itemName = updatesList[position].path
+            var sem = 1
+            var year = 1
+            var subject = ""
+            var chapter = ""
+            //"1/1/Maths/ModelPapers"
+            if (itemName != null) {
+                var spaceCounter = 0
+                for (i in itemName.indices) {
+                    if (itemName[i] == '/') {
+                        spaceCounter++
+                        when (spaceCounter) {
+                            1 -> {
+                                year = if(itemName[i - 1]=='1'){
+                                    1
+                                }else{
+                                    2
+                                }
+                            }
+                            2 -> {
+                                sem = if(itemName[i - 1]=='1'){
+                                    1
+                                }else{
+                                    2
+                                }
+                            }
+                            3 -> {
+                                subject = itemName.substring(4,i)
+                                chapter = itemName.substring(i + 1)
+                            }
+                            else -> {
+
+                            }
+                        }
+                    }
+                }
+            }
+            val intent1 = Intent(this,PdfsActivity::class.java)
+            intent1.putExtra("subject",subject)
+            intent1.putExtra("year",year)
+            intent1.putExtra("sem",sem)
+            intent1.putExtra("chapter",chapter)
+            startActivity(intent1)
+        }catch (ind:IndexOutOfBoundsException){
+            Toast.makeText(this,"Unexpected Error",Toast.LENGTH_SHORT).show()
+        }
+        catch (e:Exception){
+            Log.e("er",e.message.toString())
+            Toast.makeText(this,"Unknown Error",Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun removeFromQuickAccess(position: Int) {
         var path = quickList[position].path
         val array = FileDownloader.convertStringToArray(getQuickAccess())

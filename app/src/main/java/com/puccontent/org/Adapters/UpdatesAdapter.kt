@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class UpdatesAdapter(val context: Context, val listener:UpdateClicked,val isUpdate:Boolean): RecyclerView.Adapter<UpdatesViewHolder>() {
+class UpdatesAdapter(val context: Context,private val listener:UpdateClicked,private val isUpdate:Boolean): RecyclerView.Adapter<UpdatesViewHolder>() {
     private val list = ArrayList<Update>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpdatesViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.recent_updates_item,parent,false)
@@ -23,6 +23,11 @@ class UpdatesAdapter(val context: Context, val listener:UpdateClicked,val isUpda
         if(!isUpdate){
             view.setOnClickListener {
                 listener.updateClicked(holder.adapterPosition)
+            }
+        }
+        else{
+            view.setOnClickListener{
+                listener.recentUpdateClicked(holder.adapterPosition)
             }
         }
         return holder
@@ -73,4 +78,5 @@ class UpdatesViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
 interface UpdateClicked{
     fun updateClicked(position: Int)
     fun remove(position: Int)
+    fun recentUpdateClicked(position: Int)
 }
