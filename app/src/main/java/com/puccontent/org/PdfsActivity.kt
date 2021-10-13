@@ -16,16 +16,20 @@ import android.app.DownloadManager
 import android.content.*
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
 import com.puccontent.org.Adapters.PdfClicked
 import com.puccontent.org.Adapters.PdfsAdapter
+import com.puccontent.org.Models.MySingleton
+import com.puccontent.org.Models.PdfItem
 
 
 class PdfsActivity : AppCompatActivity(), PdfClicked {
     private lateinit var binding: ActivityPdfsBinding
-    private val list = ArrayList<String>()
-    private val pathList = ArrayList<String>()
+    private val list = ArrayList<PdfItem>()
     private var sem:Int = 1
     private var year:Int = 1
     private var subject:String = ""
@@ -73,7 +77,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     }
 
     override fun checkIt(position:Int):Boolean{
-        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position]}.pdf"
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
         val file= getExternalFilesDir(path)
         if(file?.isDirectory == false)return true
         file?.delete()
@@ -81,7 +85,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     }
 
     override fun checkQuick(position: Int): Boolean {
-        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position]}.pdf"
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
         val array = FileDownloader.convertStringToArray(getQuickAccess())
         if(array.contains(path))return true
         return false
@@ -120,14 +124,14 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     }
 
     override fun downloadOrDelete(pos: Int) {
-        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos]}.pdf"
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos].name}.pdf"
         val file= getExternalFilesDir(path)
         if(file?.isDirectory == false){
-            deletePdf(file,list[pos],pos)
+            deletePdf(file,list[pos].name,pos)
         }
         else{
             file?.delete()
-            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(pathList[pos]),path,list[pos]+".pdf")
+            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(list[pos].path),path,list[pos].name+".pdf")
             while(pos>=downloadList.size){
                 downloadList.add(-1)
             }
@@ -141,20 +145,20 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
             .setCancelable(true)
             .setMessage("Delete ${name}.pdf?")
             .setPositiveButton("Yes"
-            ) { p0, p1 ->
+            ) { p0, _ ->
                 p0.cancel()
                 file.delete()
                 adapter.notifyItemChanged(pos)
                 Toast.makeText(this,"Deleted ${name}.pdf",Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("No"){ p0, p1 ->
+            .setNegativeButton("No"){ p0, _ ->
                 p0.cancel()
             }
             .show()
     }
 
     private fun removeFromQuickAccess(position: Int) {
-         var path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position]}.pdf"
+         var path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
          val array = FileDownloader.convertStringToArray(getQuickAccess())
          val arr = ArrayList<String>()
          array.forEach {
@@ -175,7 +179,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     }
 
     private fun addToQuickAccess(pos: Int){
-        var path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos]}.pdf"
+        var path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos].name}.pdf"
         val file = getExternalFilesDir(path)
         if(file?.isDirectory == true){
             file.delete()
@@ -201,10 +205,10 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         return sharedPref?.getString("quick", "").toString()
     }
     private fun handleClick(pos: Int) {
-        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos]}.pdf"
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos].name}.pdf"
         val file= getExternalFilesDir(path)
         val inte = Intent(this,ReadingActivity::class.java)
-        inte.putExtra("name",list[pos]+".pdf")
+        inte.putExtra("name",list[pos].name+".pdf")
         if(file?.isDirectory == false){
             inte.putExtra("file",path)
             startActivity(inte)
@@ -212,7 +216,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         }
         else{
             file?.delete()
-            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(pathList[pos]),path,list[pos]+".pdf")
+            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(list[pos].path),path,list[pos].name+".pdf")
             while(pos>=downloadList.size){
                 downloadList.add(-1)
             }
@@ -230,8 +234,9 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         file.listFiles()?.let{ filesList->
             for(eFile in filesList){
                 val name = eFile.name
-                list.add(name.substring(0,name.length-4))
-                pathList.add(eFile.absolutePath)
+                list.add(
+                    PdfItem(name = name.substring(0,name.length-4)
+                        ,path =eFile.absolutePath ))
             }
         }
         if(list.isEmpty()){
@@ -267,15 +272,19 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         val ref = FirebaseDatabase.getInstance().reference
         ref.child("Puc-$year Sem-$sem").child(subject).child(chapter)
             .removeEventListener(listener)
+        MySingleton.getInstance(this.applicationContext).requestQueue.cancelAll{
+            return@cancelAll true
+        }
     }
     private val listener = object:ValueEventListener{
         override fun onDataChange(snapshot: DataSnapshot) {
             if(snapshot.exists()){
                 list.clear()
-                pathList.clear()
                for(snap in snapshot.children){
-                   snap.key?.let { list.add(it) }
-                   snap.getValue<String>()?.let { pathList.add(it) }
+                   val tItem = PdfItem("","")
+                   snap.key?.let { tItem.name = it }
+                   snap.getValue<String>()?.let { tItem.path = it }
+                   list.add(tItem)
                }
                 if(list.isEmpty()){
                     binding.info.visibility = View.VISIBLE
@@ -288,6 +297,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
                 binding.shrimmer.stopShimmer()
                 binding.pdfsListView.visibility = View.VISIBLE
                 binding.shrimmer.visibility = View.GONE
+                getDownloadSize()
             }
         }
         override fun onCancelled(error: DatabaseError) {
@@ -314,6 +324,35 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         adapter.notifyItemChanged(position)
     }
     private fun getDownloadSize(){
-
+        val queue = MySingleton.getInstance(this.applicationContext).requestQueue
+        for(i in  list.indices){
+            val url = getSizeUrl(list[i].path)
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                { response ->
+                   var size =  response.get("size") as String
+                    val s:Float = (size.toFloat()/1000000f)
+                    size = s.toString()
+                    for(ind in size.indices){
+                        if(size[ind]=='.'){
+                            if(size.length>ind+3)
+                                size = size.substring(0,ind+3)
+                            break
+                        }
+                    }
+                    list[i].size = "$size mb"
+                    downloadComplete(i)
+                },
+                { error ->
+                  Log.e("sizeError",error.message.toString())
+                }
+            )
+            MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+        }
+    }
+    private fun getSizeUrl(dUrl: String): String {
+        val fileId = dUrl.substring(42, 75)
+        val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
+        return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
     }
 }

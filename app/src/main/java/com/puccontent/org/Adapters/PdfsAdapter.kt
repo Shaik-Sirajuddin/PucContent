@@ -9,10 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.puccontent.org.Models.PdfItem
 import com.puccontent.org.R
 
 class PdfsAdapter(val context: Context, private val listener: PdfClicked):RecyclerView.Adapter<PdfsViewHolder>() {
-    private val list = ArrayList<String>()
+    private val list = ArrayList<PdfItem>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PdfsViewHolder {
        val view = LayoutInflater.from(context).inflate(R.layout.pdf_item,parent,false)
         val holder = PdfsViewHolder(view)
@@ -23,8 +24,11 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
     }
 
     override fun onBindViewHolder(holder: PdfsViewHolder, position: Int) {
-        holder.pdfTitle.text = list[position]
+        holder.pdfTitle.text = list[position].name
         holder.pdfTitle.isSelected = true
+        if(list[position].size!=null){
+            holder.pdfSize.text = list[position].size
+        }
         if(listener.checkIt(holder.adapterPosition)){
             Glide.with(context).load(R.drawable.ic_baseline_delete_outline_24).into(holder.pdfStatus)
         }
@@ -44,7 +48,7 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
             listener.downloadOrDelete(holder.adapterPosition)
         }
     }
-    fun updateData(lit:ArrayList<String>){
+    fun updateData(lit:ArrayList<PdfItem>){
         list.clear()
         list.addAll(lit)
         notifyDataSetChanged()
@@ -59,6 +63,7 @@ class PdfsViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
      val pdfStatus:ImageView = itemView.findViewById(R.id.downloadState)
      val pdfIcon:ImageView = itemView.findViewById(R.id.pdfImg)
      val quickImg:ImageView = itemView.findViewById(R.id.quickAccImg)
+     val pdfSize:TextView = itemView.findViewById(R.id.pdfSize)
 }
 interface PdfClicked{
     fun click(position: Int)
