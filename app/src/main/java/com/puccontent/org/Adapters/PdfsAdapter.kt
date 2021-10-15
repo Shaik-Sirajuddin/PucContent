@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.puccontent.org.Models.PdfItem
@@ -31,9 +31,12 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
         }
         if(listener.checkIt(holder.adapterPosition)){
             Glide.with(context).load(R.drawable.ic_baseline_delete_outline_24).into(holder.pdfStatus)
+           holder.pdfStatus.setColorFilter(ContextCompat.getColor(context,R.color.red),android.graphics.PorterDuff.Mode.MULTIPLY)
         }
         else{
-            Glide.with(context).load(R.drawable.download).into(holder.pdfStatus)
+            Glide.with(context).load(R.drawable.download_circular_button).into(holder.pdfStatus)
+           // holder.pdfStatus.setColorFilter(ContextCompat.getColor(context, R.color.red),android.graphics.PorterDuff.Mode.MULTIPLY)
+
         }
         if(listener.checkQuick(holder.adapterPosition)){
             holder.quickImg.visibility = View.VISIBLE

@@ -75,16 +75,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/pdfName"
                 android:text="@string/mb" />
             <ImageView
+                android:background="@drawable/download_back"
                 android:id="@+id/downloadState"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginEnd="10dp"
+                android:clickable="true"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_done_24"
-                app:tint = "#170832"
+                android:src="@drawable/download_circular_button"
+                app:tint = "#7CB342"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

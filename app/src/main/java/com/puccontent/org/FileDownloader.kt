@@ -5,10 +5,11 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
-import java.lang.Exception
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import androidx.browser.customtabs.CustomTabsIntent
+import kotlin.Exception
 
 class FileDownloader {
 
@@ -65,4 +66,25 @@ fun Activity.isConnected():Boolean{
         }
     }
     return false
+}
+fun Activity.launchOnlineView(path: String) {
+    try {
+        val fileId = path.substring(42, 75)
+        val url = "https://drive.google.com/file/d/$fileId/view?usp=drivesdk"
+        val builder = CustomTabsIntent.Builder()
+        builder.setStartAnimations(
+            this,
+            android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right
+        );
+        builder.setExitAnimations(
+            this,
+            android.R.anim.slide_out_right,
+            android.R.anim.slide_in_left
+        );
+        val customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(url))
+    }catch (e:Exception){
+        Toast.makeText(this,"Your device doesn't support this action",Toast.LENGTH_SHORT).show()
+    }
 }

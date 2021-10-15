@@ -18,6 +18,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
@@ -39,6 +40,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     private var toast:Toast? = null
     private var downloadList = ArrayList<Long>()
     private var onlineLoaded = false
+    private lateinit var database: FirebaseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPdfsBinding.inflate(layoutInflater)
@@ -48,6 +50,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         year = intent.getIntExtra("year",1)
         subject = intent.getStringExtra("subject").toString()
         chapter = intent.getStringExtra("chapter").toString()
+        database = FirebaseDatabase.getInstance()
         binding.textView8.text = chapter
         adapter = PdfsAdapter(this,this)
         binding.pdfsListView.adapter = adapter
@@ -136,7 +139,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
                 downloadList.add(-1)
             }
             downloadList[pos] = downloadID
-            Toast.makeText(this,"Download Started",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Download queued",Toast.LENGTH_SHORT).show()
         }
     }
     private fun deletePdf(file:File,name:String,pos:Int) {
@@ -211,20 +214,15 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         inte.putExtra("name",list[pos].name+".pdf")
         if(file?.isDirectory == false){
             inte.putExtra("file",path)
+            inte.putExtra("url",list[pos].path)
             startActivity(inte)
             return
         }
         else{
             file?.delete()
-            downloadID = FileDownloader.downloadFile(applicationContext, Uri.parse(list[pos].path),path,list[pos].name+".pdf")
-            while(pos>=downloadList.size){
-                downloadList.add(-1)
-            }
-            downloadList[pos] = downloadID
-            Toast.makeText(this,"Download Started",Toast.LENGTH_SHORT).show()
+            launchOnlineView(list[pos].path)
         }
     }
-
     private fun fetchOffline(){
         binding.shrimmer.startShimmer()
         binding.shrimmer.visibility = View.VISIBLE
@@ -236,7 +234,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
                 val name = eFile.name
                 list.add(
                     PdfItem(name = name.substring(0,name.length-4)
-                        ,path =eFile.absolutePath ))
+                        ,path =eFile.absolutePath,size = getFileSize(eFile.length().toString())))
             }
         }
         if(list.isEmpty()){
@@ -285,6 +283,12 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
                    snap.key?.let { tItem.name = it }
                    snap.getValue<String>()?.let { tItem.path = it }
                    list.add(tItem)
+                   database.reference
+                       .child("Puc-$year Sem-$sem")
+                       .child(subject)
+                       .child("Size")
+                       .child(tItem.name)
+                       .addListenerForSingleValueEvent(SizeListener(list.size-1))
                }
                 if(list.isEmpty()){
                     binding.info.visibility = View.VISIBLE
@@ -297,7 +301,6 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
                 binding.shrimmer.stopShimmer()
                 binding.pdfsListView.visibility = View.VISIBLE
                 binding.shrimmer.visibility = View.GONE
-                getDownloadSize()
             }
         }
         override fun onCancelled(error: DatabaseError) {
@@ -320,39 +323,62 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         }
     }
 
-    private fun downloadComplete(position: Int) {
-        adapter.notifyItemChanged(position)
-    }
-    private fun getDownloadSize(){
-        val queue = MySingleton.getInstance(this.applicationContext).requestQueue
-        for(i in  list.indices){
-            val url = getSizeUrl(list[i].path)
-            val jsonObjectRequest = JsonObjectRequest(
-                Request.Method.GET, url, null,
-                { response ->
-                   var size =  response.get("size") as String
-                    val s:Float = (size.toFloat()/1000000f)
-                    size = s.toString()
-                    for(ind in size.indices){
-                        if(size[ind]=='.'){
-                            if(size.length>ind+3)
-                                size = size.substring(0,ind+3)
-                            break
-                        }
-                    }
-                    list[i].size = "$size mb"
-                    downloadComplete(i)
-                },
-                { error ->
-                  Log.e("sizeError",error.message.toString())
-                }
-            )
-            MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
-        }
-    }
     private fun getSizeUrl(dUrl: String): String {
         val fileId = dUrl.substring(42, 75)
         val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
         return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
+    }
+    private fun downloadComplete(position: Int) {
+        adapter.notifyItemChanged(position)
+    }
+    private fun getFileSize(sizeInBytes:String): String {
+        var size = sizeInBytes
+        val s:Float = (size.toFloat()/1000000f)
+        size = s.toString()
+        for(ind in size.indices){
+            if(size[ind]=='.'){
+                if(size.length>ind+3)
+                    size = size.substring(0,ind+3)
+                break
+            }
+        }
+        size = "$size mb"
+        return size
+    }
+    private fun getDownloadSize(i: Int) {
+        val queue = MySingleton.getInstance(this.applicationContext).requestQueue
+        val url = getSizeUrl(list[i].path)
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            { response ->
+                var size = response.get("size") as String
+                size = getFileSize(size)
+                list[i].size = size
+                downloadComplete(i)
+                val map = HashMap<String, Any>()
+                map[list[i].name] = size
+                database.reference
+                    .child("Puc-${year} Sem-$sem")
+                    .child(subject)
+                    .child("Size")
+                    .updateChildren(map)
+            },
+            { error ->
+                Log.e("sizeError", error.message.toString())
+            }
+        )
+        MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+    }
+    inner class SizeListener(private val ind:Int):ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if(snapshot.exists()){
+                list[ind].size = snapshot.getValue<String>()
+                downloadComplete(ind)
+            }else{
+                getDownloadSize(ind)
+            }
+        }
+        override fun onCancelled(error: DatabaseError) {
+        }
     }
 }

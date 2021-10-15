@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:fontFamily="@font/allerta"
-        android:padding="15dp"
+        android:padding="14dp"
         android:paddingStart="12dp"
         android:textAlignment="textStart"
         android:textColor="@color/white"

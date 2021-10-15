@@ -29,10 +29,12 @@ import com.puccontent.org.Adapters.UpdateClicked
 import com.puccontent.org.Adapters.UpdatesAdapter
 import com.puccontent.org.Models.Update
 import com.puccontent.org.databinding.ActivityMainBinding
+import com.puccontent.org.storage.FirebaseQueryLiveData
 import java.lang.IndexOutOfBoundsException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+
 
 class MainActivity : AppCompatActivity(), UpdateClicked {
     private lateinit var binding:ActivityMainBinding
@@ -62,12 +64,6 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
             binding.recentUpdatesList.adapter = updatesAdapter
             binding.recentUpdatesList.layoutManager = LinearLayoutManager(this)
             binding.quickAccessList.layoutManager = LinearLayoutManager(this)
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.recentPBar.visibility = View.GONE
-                if(updatesList.isEmpty()){
-                    binding.recentHide.visibility = View.VISIBLE
-                }
-            },4000)
             val intent = intent
             val email = intent.getStringExtra("email")
             val isNewUser = intent.getBooleanExtra("isNewUser",false)
@@ -81,6 +77,15 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
                    }
                 }
             }
+            if (isConnected()) {
+                binding.recentPBar.visibility = View.VISIBLE
+            }else{
+                binding.recentHide.visibility = View.VISIBLE
+            }
+            val recentLiveData =  FirebaseQueryLiveData(FirebaseDatabase.getInstance().reference.child("recent"))
+           recentLiveData.observe(this,{
+               updateRecentUpdates(it)
+           })
         }catch(e:Exception){
             Log.e("error",e.message.toString())
             e.printStackTrace()
@@ -106,7 +111,11 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.addFile->{
-                checkAndAddFile()
+                if(isConnected()) {
+                    checkAndAddFile()
+                }else{
+                    Toast.makeText(this,"Network not available",Toast.LENGTH_SHORT).show()
+                }
                     return true
             }
             R.id.logOut -> {
@@ -226,52 +235,37 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (isConnected()) {
-            binding.recentPBar.visibility = View.VISIBLE
-            FirebaseDatabase.getInstance().reference.child("recent")
-                .addValueEventListener(recentUpdatesListener)
-        }else{
+    private fun updateRecentUpdates(snapshot:DataSnapshot?){
+        if(snapshot==null){
+            updatesList.clear()
+            updatesAdapter.updateData(updatesList)
+            binding.recentPBar.visibility = View.GONE
             binding.recentHide.visibility = View.VISIBLE
+            return
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        FirebaseDatabase.getInstance().reference.child("recent").removeEventListener(recentUpdatesListener)
-    }
-    private val recentUpdatesListener = object:ValueEventListener{
-        override fun onDataChange(snapshot: DataSnapshot) {
-            if(snapshot.exists()){
-                updatesList.clear()
-                val tempList = ArrayList<Update>()
-                for(snap in snapshot.children){
-                     val up = snap.getValue<Update>()
-                    if (up != null) {
-                        tempList.add(up)
-                    }
+        if(snapshot.exists()){
+            updatesList.clear()
+            val tempList = ArrayList<Update>()
+            for(snap in snapshot.children){
+                val up = snap.getValue<Update>()
+                if (up != null) {
+                    tempList.add(up)
                 }
-                var counter = tempList.size-1
-                while(counter>=0){
-                    updatesList.add(tempList[counter])
-                    counter--
-                }
-                binding.recentPBar.visibility = View.GONE
-                if(updatesList.isNotEmpty()) {
-                    binding.recentHide.visibility = View.GONE
-                }
-                else{
-                    binding.recentHide.visibility = View.VISIBLE
-                }
-                updatesAdapter.updateData(updatesList)
             }
+            var counter = tempList.size-1
+            while(counter>=0){
+                updatesList.add(tempList[counter])
+                counter--
+            }
+            binding.recentPBar.visibility = View.GONE
+            if(updatesList.isNotEmpty()) {
+                binding.recentHide.visibility = View.GONE
+            }
+            else{
+                binding.recentHide.visibility = View.VISIBLE
+            }
+            updatesAdapter.updateData(updatesList)
         }
-
-        override fun onCancelled(error: DatabaseError) {
-
-        }
-
     }
     private val listener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
@@ -314,7 +308,6 @@ class MainActivity : AppCompatActivity(), UpdateClicked {
             var year = 1
             var subject = ""
             var chapter = ""
-            //"1/1/Maths/ModelPapers"
             if (itemName != null) {
                 var spaceCounter = 0
                 for (i in itemName.indices) {

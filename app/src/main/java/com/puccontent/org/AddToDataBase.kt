@@ -1,6 +1,6 @@
 package com.puccontent.org
 
-import android.content.DialogInterface
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,11 +11,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import com.puccontent.org.Models.MySingleton
 import com.puccontent.org.Models.Update
 import com.puccontent.org.databinding.ActivityAddToDataBaseBinding
 import java.lang.Exception
@@ -176,6 +179,7 @@ class AddToDataBase : AppCompatActivity() {
 
             }
             val upd = Update(Calendar.getInstance().timeInMillis,"Added $title in $chapter $sem $sub","$semNums/$sub/$chapter")
+            getDownloadSize(path = url,chapter = chapter,sem = sem,sub = sub)
             database.reference
                 .child("recent")
                 .push()
@@ -231,10 +235,51 @@ class AddToDataBase : AppCompatActivity() {
             val FileID = trim.substring(32, 65)
             return "https://www.googleapis.com/drive/v3/files/${FileID}?alt=media&key=${APIKey}"
     }
-
+    private fun getSizeUrl(dUrl: String): String {
+        val fileId = dUrl.substring(42, 75)
+        val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
+        return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
+    }
+    private fun getDownloadSize(path:String,chapter:String,sem:String,sub:String){
+        val queue = MySingleton.getInstance(this.applicationContext).requestQueue
+            val url = getSizeUrl(path)
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                { response ->
+                    var size =  response.get("size") as String
+                    val s:Float = (size.toFloat()/1000000f)
+                    size = s.toString()
+                    for(ind in size.indices){
+                        if(size[ind]=='.'){
+                            if(size.length>ind+3)
+                                size = size.substring(0,ind+3)
+                            break
+                        }
+                    }
+                    size = "$size mb"
+                    val map = HashMap<String,Any>()
+                    map[chapter] = size
+                    val database = FirebaseDatabase.getInstance()
+                    database.reference
+                        .child(sem)
+                        .child(sub)
+                        .child("Size")
+                        .updateChildren(map).addOnSuccessListener {
+                            completed()
+                        }.addOnFailureListener {
+                            binding.submitBar.visibility = View.GONE
+                            Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        }
+                },
+                { error ->
+                    Log.e("sizeError",error.message.toString())
+                }
+            )
+            MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+    }
     private fun completed(){
         counter++
-        if(counter>=3){
+        if(counter>=4){
             checker = true
             binding.submitBar.visibility = View.GONE
             Toast.makeText(this,"Upload Completed",Toast.LENGTH_LONG).show()

@@ -27,6 +27,7 @@ class ReadingActivity : AppCompatActivity() {
         val intent = intent
         val file = intent.getStringExtra("file")
         val name = intent.getStringExtra("name")
+        val url = intent.getStringExtra("url")
         val pdf: PDFView = findViewById(R.id.pdfView)
         val backImage: ImageView = findViewById(R.id.backImage)
         val readName:TextView = findViewById(R.id.readName)
@@ -64,7 +65,12 @@ class ReadingActivity : AppCompatActivity() {
                     .scrollHandle(DefaultScrollHandle(this))
                     .onError {
                         Toast.makeText(this,"Pdf Not Downloaded Yet it will be downloaded soon automatically",Toast.LENGTH_LONG).show()
-                        finish()
+                        if (url != null) {
+                            launchOnlineView(url)
+                        }
+                        else{
+                            finish()
+                        }
                     }
                     .load()
             }

@@ -4,20 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<ImageView
+    android:id="@+id/arrow"
+    android:layout_width="20dp"
+    android:layout_height="20dp"
+    android:src="@drawable/right_arrow"
+    android:scaleType="centerCrop"
+    android:layout_marginTop="15dp"
+    android:layout_marginStart="5dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
     <TextView
         android:id="@+id/recentUpdate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:ellipsize="end"
         android:fontFamily="@font/baumans"
-        android:padding="15dp"
-        android:text="-> Added Physics fafdasffaafMaterial to puc1"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="0dp"
+        android:text="Added Physics fafdasffaaf ajfjoajflkMat erial to puc1"
         android:textColor="#1B0B1E"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/rDate"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -26,11 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:gravity="end"
-        android:padding="10dp"
+        android:textColor="@color/grey"
+        android:padding="7dp"
+        android:layout_marginTop="8dp"
         android:textSize="12sp"
         android:text="19 sep 2021"
         android:textAlignment="textEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
