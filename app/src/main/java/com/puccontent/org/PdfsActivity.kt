@@ -40,6 +40,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     private var toast:Toast? = null
     private var downloadList = ArrayList<Long>()
     private var onlineLoaded = false
+    private var onlineListened = false
     private lateinit var database: FirebaseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -241,6 +242,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
             binding.info.visibility = View.VISIBLE
         }
         else{
+            binding.info.text = ""
             binding.info.visibility = View.GONE
         }
         adapter.updateData(list)
@@ -253,18 +255,21 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         binding.shrimmer.visibility = View.VISIBLE
         val ref = FirebaseDatabase.getInstance().reference
         Handler(Looper.getMainLooper()).postDelayed({
-            if(onlineLoaded){
-                onlineLoaded = false
+            if(onlineListened){
+                onlineListened = false
                 return@postDelayed
             }
             binding.shrimmer.stopShimmer()
             binding.shrimmer.visibility = View.GONE
+            showToast("Your Internet connection is slow,it may take time to load items")
             fetchOffline()
         },3000)
         ref.child("Puc-$year Sem-$sem").child(subject).child(chapter)
             .addValueEventListener(listener)
     }
-
+    fun showToast(string:String){
+        Toast.makeText(this@PdfsActivity,string,Toast.LENGTH_SHORT).show()
+    }
     override fun onStop() {
         super.onStop()
         val ref = FirebaseDatabase.getInstance().reference
@@ -297,10 +302,19 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
                     binding.info.visibility = View.GONE
                 }
                 onlineLoaded = true
+                onlineListened = true
                 adapter.updateData(list)
                 binding.shrimmer.stopShimmer()
                 binding.pdfsListView.visibility = View.VISIBLE
                 binding.shrimmer.visibility = View.GONE
+            }
+            else{
+                onlineListened = true
+                binding.shrimmer.stopShimmer()
+                binding.pdfsListView.visibility = View.VISIBLE
+                binding.shrimmer.visibility = View.GONE
+                binding.info.visibility = View.VISIBLE
+                fetchOffline()
             }
         }
         override fun onCancelled(error: DatabaseError) {

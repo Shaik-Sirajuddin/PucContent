@@ -124,6 +124,12 @@ class ChaptersActivity : AppCompatActivity() {
                 binding.shrimmer.stopShimmer()
                 binding.shrimmer.visibility = View.GONE
             }
+            else{
+                binding.info.visibility = View.VISIBLE
+                binding.shrimmer.stopShimmer()
+                binding.shrimmer.visibility = View.GONE
+                fetchOffline()
+            }
         }
         override fun onCancelled(error: DatabaseError) {
 
