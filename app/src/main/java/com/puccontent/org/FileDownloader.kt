@@ -3,12 +3,17 @@ package com.puccontent.org
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import kotlin.Exception
 
 class FileDownloader {
@@ -86,5 +91,27 @@ fun Activity.launchOnlineView(path: String) {
         customTabsIntent.launchUrl(this, Uri.parse(url))
     }catch (e:Exception){
         Toast.makeText(this,"Your device doesn't support this action",Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun Activity.copyFile(inputPath: String,outputPath: Uri,onComplete:(isDone:Boolean)->Unit) {
+    try {
+        val input = FileInputStream(inputPath)
+        val out = contentResolver.openOutputStream(outputPath)!!
+        val buffer = ByteArray(1024)
+        var read: Int
+        while (input.read(buffer).also { read = it } != -1) {
+            out.write(buffer, 0, read)
+        }
+        input.close()
+        out.flush()
+        out.close()
+        onComplete(true)
+    } catch (fnfe1: FileNotFoundException) {
+        onComplete(false)
+        Log.e("copyFile", fnfe1.message.toString())
+    } catch (e: java.lang.Exception) {
+        onComplete(false)
+        Log.e("copyFile", e.message.toString())
     }
 }

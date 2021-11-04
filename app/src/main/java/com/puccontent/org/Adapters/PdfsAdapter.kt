@@ -2,9 +2,11 @@ package com.puccontent.org.Adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -35,8 +37,6 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
         }
         else{
             Glide.with(context).load(R.drawable.download_circular_button).into(holder.pdfStatus)
-           // holder.pdfStatus.setColorFilter(ContextCompat.getColor(context, R.color.red),android.graphics.PorterDuff.Mode.MULTIPLY)
-
         }
         if(listener.checkQuick(holder.adapterPosition)){
             holder.quickImg.visibility = View.VISIBLE
@@ -49,6 +49,24 @@ class PdfsAdapter(val context: Context, private val listener: PdfClicked):Recycl
         }
         holder.pdfStatus.setOnClickListener {
             listener.downloadOrDelete(holder.adapterPosition)
+        }
+        holder.menu.setOnClickListener {
+            val popUpMenu = PopupMenu(context,holder.menu)
+            popUpMenu.inflate(R.menu.pdf_item_menu)
+            popUpMenu.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.share->{
+                        listener.shareFile(position)
+                        return@setOnMenuItemClickListener true
+                    }
+                    R.id.extract->{
+                        listener.extractPdf(position)
+                        return@setOnMenuItemClickListener true
+                    }
+                }
+                true
+            }
+            popUpMenu.show()
         }
     }
     fun updateData(lit:ArrayList<PdfItem>){
@@ -67,6 +85,7 @@ class PdfsViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
      val pdfIcon:ImageView = itemView.findViewById(R.id.pdfImg)
      val quickImg:ImageView = itemView.findViewById(R.id.quickAccImg)
      val pdfSize:TextView = itemView.findViewById(R.id.pdfSize)
+     val menu:ImageView = itemView.findViewById(R.id.menu)
 }
 interface PdfClicked{
     fun click(position: Int)
@@ -74,4 +93,6 @@ interface PdfClicked{
     fun checkQuick(position: Int):Boolean
     fun quickAccesss(position: Int)
     fun downloadOrDelete(position: Int)
+    fun shareFile(position: Int)
+    fun extractPdf(position: Int)
 }

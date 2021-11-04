@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -25,6 +26,7 @@ class ChaptersActivity : AppCompatActivity() {
     private var subject:String = ""
     private lateinit var adapter:ArrayAdapter<String>
     private var onlineLoaded = false
+    private var onlineListened = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChaptersBinding.inflate(layoutInflater)
@@ -89,18 +91,22 @@ class ChaptersActivity : AppCompatActivity() {
         binding.shrimmer.stopShimmer()
         binding.shrimmer.visibility = View.GONE
     }
+    private fun showToast(string:String){
+        Toast.makeText(this@ChaptersActivity,string, Toast.LENGTH_SHORT).show()
+    }
     private fun fetchOnline(){
         binding.shrimmer.startShimmer()
         binding.shrimmer.visibility = View.VISIBLE
          val ref = FirebaseDatabase.getInstance().reference
         Handler(Looper.getMainLooper()).postDelayed({
-            if(onlineLoaded){
-                onlineLoaded = false
+            if(onlineListened){
+                onlineListened = false
                 return@postDelayed
             }
             binding.shrimmer.stopShimmer()
             binding.chaptersListView.visibility = View.VISIBLE
             binding.shrimmer.visibility = View.GONE
+            showToast("Your Internet connection is slow,it may take time to load items")
             fetchOffline()
         },3000)
          ref.child("Puc-$year Sem-$sem").child(subject).child("Chapters").addListenerForSingleValueEvent(listener)
@@ -119,17 +125,20 @@ class ChaptersActivity : AppCompatActivity() {
                     binding.info.visibility = View.GONE
                 }
                 onlineLoaded = true
+                onlineListened  = true
                 binding.chaptersListView.visibility = View.VISIBLE
                 adapter.notifyDataSetChanged()
                 binding.shrimmer.stopShimmer()
                 binding.shrimmer.visibility = View.GONE
             }
             else{
+                onlineListened = true
                 binding.info.visibility = View.VISIBLE
                 binding.shrimmer.stopShimmer()
                 binding.shrimmer.visibility = View.GONE
                 fetchOffline()
             }
+
         }
         override fun onCancelled(error: DatabaseError) {
 

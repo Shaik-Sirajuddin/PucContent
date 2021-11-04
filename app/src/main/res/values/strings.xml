@@ -33,4 +33,6 @@
     <string name="clientId">10752488152-0rqc9231uucn7p5q8bbdkoft5d44fn71.apps.googleusercontent.com</string>
     <string name="offline">You are offline</string>
     <string name="mb">- - mb</string>
+    <string name="share">Share</string>
+    <string name="extract">Extract</string>
 </resources>

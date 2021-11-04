@@ -22,23 +22,25 @@
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/font/baumans.xml" value="0.23076923076923078" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/font/reem_kufi.xml" value="0.23076923076923078" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_about.xml" value="0.15" />
-        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_add_to_data_base.xml" value="0.16540084388185655" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_add_to_data_base.xml" value="0.21" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_chapters.xml" value="0.2" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_fullscreen.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_pdfs.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_reading.xml" value="0.22" />
-        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_sign_in.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_subjects.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/any_item.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/chapter_item.xml" value="0.21" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/class_list_item.xml" value="0.22" />
-        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/list_item.xml" value="0.25" />
-        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/pdf_item.xml" value="0.25" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/list_item.xml" value="0.17" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/pdf_item.xml" value="0.2" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/recent_updates_item.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/shrim.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/menu/drop_down_menu.xml" value="0.153125" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/menu/pdf_item_menu.xml" value="0.33" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.165234375" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/xml/provider_paths.xml" value="0.1675213675213675" />
       </map>
     </option>
   </component>

@@ -14,10 +14,12 @@ import com.puccontent.org.databinding.ActivityPdfsBinding
 import java.io.File
 import android.app.DownloadManager
 import android.content.*
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
@@ -26,6 +28,11 @@ import com.puccontent.org.Adapters.PdfClicked
 import com.puccontent.org.Adapters.PdfsAdapter
 import com.puccontent.org.Models.MySingleton
 import com.puccontent.org.Models.PdfItem
+import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PdfsActivity : AppCompatActivity(), PdfClicked {
@@ -41,6 +48,7 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     private var downloadList = ArrayList<Long>()
     private var onlineLoaded = false
     private var onlineListened = false
+    private var extractPosition = 0
     private lateinit var database: FirebaseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,6 +150,46 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
             downloadList[pos] = downloadID
             Toast.makeText(this,"Download queued",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun shareFile(position: Int) {
+        if (!checkIt(position)) {
+          shareLink(position)
+        } else {
+            val file =
+                getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf")
+            val url = FileProvider.getUriForFile(this,
+                applicationContext.packageName.toString() + ".provider",
+                file!!)
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "application/pdf"
+            intent.putExtra(Intent.EXTRA_STREAM, url)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(Intent.createChooser(intent,
+                "Share " + list[position].name + " using ..."))
+        }
+    }
+
+    private fun shareLink(position: Int) {
+        val fileId = list[position].path.substring(42, 75)
+        val url = "https://drive.google.com/file/d/$fileId/view?usp=drivesdk"
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT,"${list[position].name} \n $url \n from PucContent App")
+        startActivity(Intent.createChooser(intent,"Share url using ..."))
+    }
+    override fun extractPdf(position: Int) {
+        if(!checkIt(position)){
+            Toast.makeText(this,"Download the file first",Toast.LENGTH_SHORT).show()
+            return
+        }
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "${list[position].name}.pdf")
+        }
+        extractPosition = position
+        resultLauncher1.launch(intent)
     }
     private fun deletePdf(file:File,name:String,pos:Int) {
         AlertDialog.Builder(this)
@@ -336,7 +384,30 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
             }
         }
     }
-
+    private val resultLauncher1 =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            it.data?.data.also { uri ->
+                val path = getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[extractPosition].name}.pdf")!!.absolutePath
+                if (uri != null) {
+                    lifecycleScope.launch(Dispatchers.Default) {
+                        copyFile(path, uri){ done->
+                                if (done) {
+                                    runOnUiThread {
+                                        Toast.makeText(applicationContext,
+                                            "File saved successfully",
+                                            Toast.LENGTH_SHORT).show()
+                                    }
+                                } else {
+                                    runOnUiThread{
+                                        Toast.makeText(applicationContext, "Failed to save file", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
     private fun getSizeUrl(dUrl: String): String {
         val fileId = dUrl.substring(42, 75)
         val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"

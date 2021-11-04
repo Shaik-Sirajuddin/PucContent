@@ -60,6 +60,7 @@ class SignInActivity : AppCompatActivity() {
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
         val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         binding.pBar.visibility = View.VISIBLE
+        binding.signInButton.isEnabled = false
         handleSignInResult(task)
     }
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -110,6 +111,7 @@ class SignInActivity : AppCompatActivity() {
                Toast.makeText(this,"Invalid Email",Toast.LENGTH_SHORT).show()
            }
        }
+        binding.signInButton.isEnabled = true
     }
     private fun signOut() {
         mGoogleSignInClient.signOut()
