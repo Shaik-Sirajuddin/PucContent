@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -23,47 +22,62 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.puccontent.org.Adapters.SubjectClicked
-import com.puccontent.org.Adapters.SubjectsAdapter
 import com.puccontent.org.Adapters.UpdateClicked
 import com.puccontent.org.Adapters.UpdatesAdapter
-import com.puccontent.org.Models.Subject
 import com.puccontent.org.Models.Update
 import com.puccontent.org.databinding.ActivityMainBinding
+import com.puccontent.org.storage.FirebaseQueryLiveData
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
+    private lateinit var updatesAdapter: UpdatesAdapter
     private lateinit var binding: ActivityMainBinding
     private var email: String = ""
     private var inProgress = false
     private var handler: Handler? = null
     private lateinit var quickAdapter: UpdatesAdapter
-    private lateinit var subjectsAdapter: SubjectsAdapter
-    private val subjectsList = ArrayList<Subject>()
     private val quickList = ArrayList<Update>()
+    private val updatesList = ArrayList<Update>()
     private var flag = true
-    private var year = 1
-    private var sem = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             setSupportActionBar(binding.toolBar)
-            quickAdapter = UpdatesAdapter(this, this)
+            quickAdapter = UpdatesAdapter(this, this,false)
+            updatesAdapter = UpdatesAdapter(this,this,true)
             binding.quickAccessList.adapter = quickAdapter
             binding.quickAccessList.layoutManager = LinearLayoutManager(this)
-            subjectsAdapter = SubjectsAdapter(this, subjectsList, this)
-            binding.subjectsRecyclerView.adapter = subjectsAdapter
-            binding.subjectsRecyclerView.layoutManager = object:GridLayoutManager(this,2){
-                override fun canScrollVertically(): Boolean = false
-            }
-            getData()
+            binding.recentUpdatesList.adapter = updatesAdapter
+            binding.recentUpdatesList.layoutManager = LinearLayoutManager(this)
             initUser()
+            val contentBox = binding.contentBox
+            val aboutBox = binding.aboutBox
+            contentBox.subName.text = "Content"
+            aboutBox.subName.text = "About"
+            contentBox.subName.setBackgroundResource(R.drawable.content_box_back)
+            aboutBox.subName.setBackgroundResource(R.drawable.about_box_back)
+
+            contentBox.root.setOnClickListener {
+                val intent = Intent(this@MainActivity, SubjectsActivity::class.java)
+                startActivity(intent)
+            }
+            aboutBox.root.setOnClickListener {
+                val intent = Intent(this@MainActivity, AboutActivity::class.java)
+                startActivity(intent)
+            }
+
+            val recentLiveData =  FirebaseQueryLiveData(FirebaseDatabase.getInstance().reference.child("recent"))
+            recentLiveData.observe(this,{
+                updateRecentUpdates(it)
+            })
         } catch (e: Exception) {
             Log.e("error", e.message.toString())
             e.printStackTrace()
@@ -85,7 +99,38 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
             }
         }
     }
-
+    private fun updateRecentUpdates(snapshot:DataSnapshot?){
+        if(snapshot==null){
+            updatesList.clear()
+            updatesAdapter.updateData(updatesList)
+            binding.recentPBar.visibility = View.GONE
+            binding.recentHide.visibility = View.VISIBLE
+            return
+        }
+        if(snapshot.exists()){
+            updatesList.clear()
+            val tempList = ArrayList<Update>()
+            for(snap in snapshot.children){
+                val up = snap.getValue<Update>()
+                if (up != null) {
+                    tempList.add(up)
+                }
+            }
+            var counter = tempList.size-1
+            while(counter>=0){
+                updatesList.add(tempList[counter])
+                counter--
+            }
+            binding.recentPBar.visibility = View.GONE
+            if(updatesList.isNotEmpty()) {
+                binding.recentHide.visibility = View.GONE
+            }
+            else{
+                binding.recentHide.visibility = View.VISIBLE
+            }
+            updatesAdapter.updateData(updatesList)
+        }
+    }
     private fun addUser(key: String, email: String) {
         try {
             val database = FirebaseDatabase.getInstance()
@@ -269,6 +314,10 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
             .show()
     }
 
+    override fun recentUpdateClicked(position: Int) {
+
+    }
+
     private fun removeFromQuickAccess(position: Int) {
         var path = quickList[position].path
         val array = FileDownloader.convertStringToArray(getQuickAccess())
@@ -304,32 +353,6 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
         }
     }
 
-    private fun classClicked(position: Int) {
-        val intent = Intent(this, SubjectsActivity::class.java)
-        val year: Int
-        val sem: Int
-        when (position) {
-            0 -> {
-                year = 1
-                sem = 1
-            }
-            1 -> {
-                year = 1
-                sem = 2
-            }
-            2 -> {
-                year = 2
-                sem = 1
-            }
-            else -> {
-                year = 2
-                sem = 2
-            }
-        }
-        intent.putExtra("year", year)
-        intent.putExtra("sem", sem)
-        startActivity(intent)
-    }
 
     override fun updateClicked(position: Int) {
         try {
@@ -345,20 +368,6 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
         }
     }
 
-    private fun getData(){
-        val arrayList = ArrayList<Subject>()
-        arrayList.add(Subject("IT", R.drawable.it_back))
-        arrayList.add(Subject("Telugu", R.drawable.telugu_back))
-        arrayList.add(Subject("English", R.drawable.english_back))
-        arrayList.add(Subject("Maths", R.drawable.maths_back))
-        arrayList.add(Subject("Physics", R.drawable.physics_back))
-        arrayList.add(Subject("Chemistry", R.drawable.chemistry_back))
-        arrayList.add(Subject("Others", R.drawable.biology_back))
-        arrayList.add(Subject("Others", R.drawable.others_back))
-        subjectsList.clear()
-        subjectsList.addAll(arrayList)
-        subjectsAdapter.notifyDataSetChanged()
-    }
 
     override fun subClicked(position: Int) {
 
