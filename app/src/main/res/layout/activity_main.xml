@@ -38,89 +38,33 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
-
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/recentCardVeiw"
-        android:background="@drawable/about_back"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="7dp"
-        app:cardElevation="20dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="#039BE5"
+        android:id="@+id/cardViewAdd"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="7dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBar">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        android:layout_height="150dp">
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/imageSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#0E1A59"
-                android:fontFamily="@font/amiko_semibold"
-                android:padding="12dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:text="@string/recent_updates"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recentUpdatesList"
-                android:layout_width="match_parent"
-                android:layout_height="104dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7"
-                tools:listitem="@layout/recent_updates_item" />
-            <ProgressBar
-                android:visibility="gone"
-                android:id="@+id/recentPBar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView7"
-                />
-
-            <TextView
-                android:id="@+id/recentHide"
-                android:visibility="gone"
-                android:text="No items to show"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="105dp"
-                app:layout_constraintBottom_toBottomOf="@+id/recentUpdatesList"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:iss_auto_cycle="true"
+            app:iss_delay="0"
+            app:iss_period="1000" />
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/quickCardView"
-        app:strokeColor="#039BE5"
-        app:strokeWidth="1dp"
         android:background="@drawable/about_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="7dp"
-        app:cardElevation="20dp"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recentCardVeiw">
+        app:layout_constraintTop_toBottomOf="@id/cardViewAdd">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,7 +74,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0E1A59"
+                android:background="@color/light_blue_A400"
                 android:fontFamily="@font/amiko_semibold"
                 android:padding="12dp"
                 android:paddingStart="20dp"
@@ -172,16 +116,11 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        app:strokeWidth="0dp"
-        app:strokeColor="@color/grey"
-        android:layout_height="360dp"
-        android:layout_margin="12dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:background="@drawable/about_back"
-        app:cardCornerRadius="7dp"
-        app:cardElevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/quickCardView">
 
         <LinearLayout
@@ -192,20 +131,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFEB3B"
+                android:background="@color/light_blue_A400"
                 android:fontFamily="@font/amiko_semibold"
                 android:padding="12dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:text="@string/let_s_study"
-                android:textColor="@color/black"
+                android:text="Content"
+                android:textColor="@color/white"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="20sp" />
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 tools:listitem="@layout/list_item"
-                android:id="@+id/classList"
+                android:id="@+id/subjectsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp" />

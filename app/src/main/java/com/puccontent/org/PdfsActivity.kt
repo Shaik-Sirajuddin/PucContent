@@ -14,13 +14,11 @@ import com.puccontent.org.databinding.ActivityPdfsBinding
 import java.io.File
 import android.app.DownloadManager
 import android.content.*
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
@@ -32,7 +30,6 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class PdfsActivity : AppCompatActivity(), PdfClicked {
@@ -89,11 +86,16 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
     }
 
     override fun checkIt(position:Int):Boolean{
-        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
-        val file= getExternalFilesDir(path)
-        if(file?.isDirectory == false)return true
-        file?.delete()
-        return false
+        try {
+            val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
+            val file= getExternalFilesDir(path)
+            if(file?.isDirectory == false)return true
+            file?.delete()
+            return false
+        }catch (e:Exception){
+            e.printStackTrace()
+            return false
+        }
     }
 
     override fun checkQuick(position: Int): Boolean {
@@ -179,17 +181,22 @@ class PdfsActivity : AppCompatActivity(), PdfClicked {
         startActivity(Intent.createChooser(intent,"Share url using ..."))
     }
     override fun extractPdf(position: Int) {
-        if(!checkIt(position)){
-            Toast.makeText(this,"Download the file first",Toast.LENGTH_SHORT).show()
-            return
+        try{
+            if(!checkIt(position)){
+                Toast.makeText(this,"Download the file first",Toast.LENGTH_SHORT).show()
+                return
+            }
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/pdf"
+                putExtra(Intent.EXTRA_TITLE, "${list[position].name}.pdf")
+            }
+            extractPosition = position
+            resultLauncher1.launch(intent)
+        }catch (e:Exception){
+            e.printStackTrace()
         }
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/pdf"
-            putExtra(Intent.EXTRA_TITLE, "${list[position].name}.pdf")
-        }
-        extractPosition = position
-        resultLauncher1.launch(intent)
+
     }
     private fun deletePdf(file:File,name:String,pos:Int) {
         AlertDialog.Builder(this)

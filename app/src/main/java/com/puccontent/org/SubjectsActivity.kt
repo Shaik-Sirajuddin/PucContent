@@ -21,7 +21,7 @@ class SubjectsActivity : AppCompatActivity(), SubjectClicked {
         val intent = intent
         year = intent.getIntExtra("year",1)
         sem = intent.getIntExtra("sem",1)
-        list = getData()
+       // list = getData()
         binding.subjectsRecyclerView.adapter = SubjectsAdapter(this,list,this)
         binding.subjectsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.subjectPath.text = "Puc-$year Sem-${sem}"
@@ -29,18 +29,6 @@ class SubjectsActivity : AppCompatActivity(), SubjectClicked {
             finish()
         }
     }
-    private fun getData(): ArrayList<Subject> {
-        val arrayList = ArrayList<Subject>()
-        arrayList.add(Subject("IT",R.drawable.it))
-        arrayList.add(Subject("Telugu",R.drawable.telugu))
-        arrayList.add(Subject("English",R.drawable.english))
-        arrayList.add(Subject("Maths",R.drawable.maths))
-        arrayList.add(Subject("Physics",R.drawable.physics))
-        arrayList.add(Subject("Chemistry",R.drawable.chemistry))
-        arrayList.add(Subject("Others",R.drawable.others))
-        return arrayList
-    }
-
     override fun subClicked(position: Int) {
           val intent = Intent(this,ChaptersActivity::class.java)
            intent.putExtra("subject",list[position].name)

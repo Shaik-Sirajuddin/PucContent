@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,9 @@ class ReadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReadingBinding.inflate(layoutInflater)
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+      /*  window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
         setContentView(binding.root)
         val intent = intent
         val file = intent.getStringExtra("file")
@@ -95,11 +99,11 @@ class ReadingActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-    fun hideFullScreen(){
+    private fun hideFullScreen(){
         WindowInsetsControllerCompat(window,window.decorView).show(WindowInsetsCompat.Type.navigationBars())
         WindowInsetsControllerCompat(window,window.decorView).show(WindowInsetsCompat.Type.systemBars())
     }
-    fun showFullScreen(){
+    private fun showFullScreen(){
         WindowInsetsControllerCompat(window,window.decorView).hide(WindowInsetsCompat.Type.systemBars())
         WindowInsetsControllerCompat(window,window.decorView).hide(WindowInsetsCompat.Type.navigationBars())
         WindowInsetsControllerCompat(window,window.decorView).systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE

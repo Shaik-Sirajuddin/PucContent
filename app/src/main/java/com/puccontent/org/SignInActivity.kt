@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.puccontent.org.databinding.ActivitySignInBinding
 
 class SignInActivity : AppCompatActivity() {
@@ -25,6 +27,7 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient:GoogleSignInClient
     private lateinit var binding:ActivitySignInBinding
     private lateinit var mAuth:FirebaseAuth
+    private var allEnabled = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -51,6 +54,17 @@ class SignInActivity : AppCompatActivity() {
         val user = mAuth.currentUser
         if(user!=null) {
             updateUI(user,false)
+        }
+        else{
+
+            val remoteConfig = Firebase.remoteConfig
+            val configSettings = remoteConfigSettings {
+                minimumFetchIntervalInSeconds = 3600
+            }
+            remoteConfig.setConfigSettingsAsync(configSettings)
+            remoteConfig.fetchAndActivate().addOnCompleteListener {
+                allEnabled = remoteConfig.getBoolean("allowAllEmails")
+            }
         }
     }
     private fun signIn() {
@@ -93,11 +107,13 @@ class SignInActivity : AppCompatActivity() {
     }
     private fun updateUI(user:FirebaseUser?,isNewUser:Boolean = false) {
         if(user==null){
+            mGoogleSignInClient.signOut()
             binding.pBar.visibility = View.GONE
-           Toast.makeText(this,"Sign In Failed",Toast.LENGTH_SHORT).show()
-       }else{
+            Toast.makeText(this,"Sign In Failed",Toast.LENGTH_SHORT).show()
+        }else{
            val email = user.email
-           if(email?.endsWith("ac.in",false) == true){
+
+           if(allEnabled || email?.endsWith("ac.in",false) == true){
                val intent = Intent(this,MainActivity::class.java)
                binding.pBar.visibility = View.GONE
                intent.putExtra("isNewUser",isNewUser)
@@ -114,6 +130,7 @@ class SignInActivity : AppCompatActivity() {
         binding.signInButton.isEnabled = true
     }
     private fun signOut() {
+        Firebase.auth.signOut()
         mGoogleSignInClient.signOut()
     }
 }

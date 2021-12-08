@@ -7,15 +7,25 @@
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/about_back.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/addfile.xml" value="0.165234375" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/any_item_back.xml" value="0.12" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/biology_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/chemistry_back.xml" value="0.17848101265822786" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/class_list.xml" value="0.2203125" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/data_collection_signin_back.xml" value="0.18" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/download_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/english_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/hindi_back.xml" value="0.17848101265822786" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.165234375" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/ic_baseline_delete_outline_24.xml" value="0.17848101265822786" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/ic_baseline_keyboard_backspace_24.xml" value="0.165234375" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2203125" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/image_back.xml" value="0.165234375" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/it_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/maths_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/others_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/physics_back.xml" value="0.17848101265822786" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/splash.xml" value="0.2203125" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/subject_back.xml" value="0.17848101265822786" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/telugu_back.xml" value="0.17848101265822786" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/font/amiko_semibold.xml" value="0.23076923076923078" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/font/anonymous_pro_bold.xml" value="0.23076923076923078" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/font/arimo_bold.xml" value="0.23076923076923078" />
@@ -30,7 +40,7 @@
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_reading.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_sign_in.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_subjects.xml" value="0.22" />
-        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/any_item.xml" value="0.22" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/any_item.xml" value="0.2" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/chapter_item.xml" value="0.21" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/class_list_item.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/list_item.xml" value="0.17" />
