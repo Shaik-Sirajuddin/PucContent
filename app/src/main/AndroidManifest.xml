@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.puccontent.org" >
+    package="com.puccontent.org">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/rguktlogo"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/rguktlogo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PucContent" >
+        android:theme="@style/Theme.PucContent">
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.LeaderBoardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AboutActivity"
             android:exported="true" />
         <activity
-            android:name=".ReadingActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/fullScreen"
-            android:exported="true" />
-        <activity
-            android:name=".PdfsActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="true" />
-        <activity
-            android:name=".AddToDataBase"
-            android:configChanges="orientation|screenSize"
-            android:exported="true" />
-        <activity
-            android:name=".ChaptersActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="true" />
-        <activity
-            android:name=".SubjectsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="true" />
-        <activity
-            android:name=".SignInActivity"
+            android:name=".activities.ReadingActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
-            android:theme="@style/splashScreen" >
+            android:theme="@style/fullScreen" />
+        <activity
+            android:name=".activities.AddToDataBase"
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
+        <activity
+            android:name=".activities.ContentActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
+        <activity
+            android:name=".activities.SignInActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/splashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,8 +51,12 @@
         </activity>
 
         <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5198941761547304~8009000347" />
+        <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -61,8 +64,18 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <service
+            android:name=".network.NotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.internet.RECEIVE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -16,5 +16,6 @@
     <color name="black_overlay">#66000000</color>
     <color name="pinkish">#E91E63</color>
     <color name="green">#43A047</color>
-
+    <color name="lightViolet">#efe6f9</color>
+    <color name="violet">#5f259e</color>
 </resources>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddToDataBase"
+    tools:context=".activities.AddToDataBase"
     android:background="@color/white"
     >
     <TextView
@@ -124,6 +125,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/chapterSpinner" />
 
+            <Button
+                android:id="@+id/deleteChapter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#B60404"
+                android:text="Delete"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/three"
+                app:layout_constraintStart_toStartOf="@+id/three"
+                app:layout_constraintTop_toBottomOf="@+id/three" />
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/chapterSpinner"
                 android:layout_width="wrap_content"
@@ -174,12 +185,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginStart="3dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="3dp"
                 android:background="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/newChapter" />
+                app:layout_constraintTop_toBottomOf="@+id/deleteChapter" />
 
             <ProgressBar
                 android:id="@+id/chapterBar"
@@ -269,7 +279,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
             <EditText
-                android:inputType="textUri"
+                android:inputType="textMultiLine"
                 android:elevation="6dp"
                 android:id="@+id/pdfUrl"
                 android:layout_width="match_parent"

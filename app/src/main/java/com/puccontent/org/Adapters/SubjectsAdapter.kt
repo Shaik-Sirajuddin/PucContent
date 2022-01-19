@@ -30,6 +30,7 @@ class SubjectsAdapter(
     override fun onBindViewHolder(holder: SubjectsViewHolder, position: Int) {
         holder.name.text = list[position].name
         holder.name.setBackgroundResource(list[position].image)
+
     }
 
     override fun getItemCount(): Int {

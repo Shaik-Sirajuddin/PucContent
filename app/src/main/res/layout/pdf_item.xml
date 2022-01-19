@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.cardview.widget.CardView
-        android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
-        android:elevation="10dp"
-        app:cardElevation="20dp"
+    android:layout_height="80dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:minHeight="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:padding="12dp"
-            android:orientation="horizontal"
+
+
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="78dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
             <ImageView
                 android:id="@+id/pdfImg"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:elevation="10dp"
-                android:src="@drawable/pdf"
+                android:padding="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#ED2224" />
+                app:tint="#ED2224"
+                tools:src="@drawable/pdf" />
 
             <ImageView
                 android:id="@+id/quickAccImg"
-                app:tint="#E91E63"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/up_left_arrow"
                 app:layout_constraintStart_toStartOf="@+id/pdfImg"
-                app:layout_constraintTop_toTopOf="@id/pdfImg" />
+                app:layout_constraintTop_toTopOf="@id/pdfImg"
+                app:tint="#E91E63" />
 
             <TextView
                 android:id="@+id/pdfName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:layout_marginTop="2dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/alegreya_sans_sc_bold"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:singleLine="true"
-                android:layout_marginTop="2dp"
-                tools:text="Unit 1"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/downloadState"
                 app:layout_constraintStart_toEndOf="@id/pdfImg"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Unit 1" />
 
             <TextView
                 android:id="@+id/pdfSize"
@@ -69,42 +69,49 @@
                 android:paddingStart="10dp"
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
-                android:textColor="#3949AB"
+                android:text="@string/mb"
+                android:textColor="@color/violet"
                 app:layout_constraintBottom_toBottomOf="@+id/pdfImg"
                 app:layout_constraintStart_toEndOf="@+id/pdfImg"
-                app:layout_constraintTop_toBottomOf="@+id/pdfName"
-                android:text="@string/mb" />
+                app:layout_constraintTop_toBottomOf="@+id/pdfName" />
+
             <ImageView
-                android:background="@drawable/download_back"
                 android:id="@+id/downloadState"
-                android:elevation="5dp"
-                android:padding="7dp"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:clickable="true"
                 android:layout_gravity="center"
-                android:src="@drawable/download_circular_button"
-                app:tint = "#7CB342"
+                android:background="@drawable/download_back"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                android:padding="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/menu"
                 app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true" />
+                app:tint="#7CB342"
+                tools:src="@drawable/download_circular_button" />
+
             <ImageView
                 android:id="@+id/menu"
-                android:elevation="5dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="5dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:clickable="true"
-                app:tint="@color/grey"
+                android:elevation="5dp"
+                android:focusable="true"
+                android:paddingStart="18dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="4dp"
                 android:src="@drawable/menu"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true" />
+                app:tint="@color/grey" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DFDADA" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

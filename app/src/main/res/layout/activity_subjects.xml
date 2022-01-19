@@ -1,54 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SubjectsActivity"
-    android:orientation="vertical">
-<androidx.appcompat.widget.Toolbar
-    android:background="@color/purple_700"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:theme="?attr/actionBarTheme"
-    >
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
-        <ImageView
-            android:id="@+id/backImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_baseline_keyboard_backspace_24"
-            app:tint="@color/white"
-            />
+    android:background="@color/lightViolet"
+    android:orientation="vertical"
+    tools:context=".activities.ContentActivity">
 
-        <TextView
-            android:id="@+id/subjectPath"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/amiko_semibold"
-            android:paddingStart="10dp"
-            tools:text="Subjects"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/backImage"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.appcompat.widget.Toolbar>
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainer"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/subjectsRecyclerView"
-        />
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/study_graph" />
 </LinearLayout>

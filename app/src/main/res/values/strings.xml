@@ -35,4 +35,17 @@
     <string name="mb">- - mb</string>
     <string name="share">Share</string>
     <string name="extract">Extract</string>
+    <string name="interstitialAd">ca-app-pub-5198941761547304/1105695971</string>
+    <string name="appOpenAd">ca-app-pub-5198941761547304/4874809776</string>
+    <string-array name="semesters">
+        <item>Puc-1 Sem-1</item>
+        <item>Puc-1 Sem-2</item>
+        <item>Puc-2 Sem-1</item>
+        <item>Puc-2 Sem-2</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open_with">Open with ...</string>
+    <string name="join_discord_group">Join Discord Group</string>
+    <string name="support_text">Help us to maintain servers by watching a short video ad.\n We gain server charges you gain reputation.</string>
 </resources>

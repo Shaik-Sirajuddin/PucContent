@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReadingActivity">
+    tools:context=".activities.ReadingActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/readToolBar"
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:src="@drawable/ic_baseline_keyboard_backspace_24"
+                android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -38,10 +38,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:maxLines="2"
-                android:fontFamily="@font/amiko_semibold"
+                android:fontFamily="@font/reem_kufi"
                 android:paddingStart="10dp"
                 android:text="Classification of elements and the periodic table"
                 android:paddingEnd="10dp"
+                android:paddingVertical="5dp"
                 android:ellipsize="end"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
@@ -53,8 +54,9 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="27dp"
+                android:padding="5dp"
+                android:layout_height="27dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/night_mode"
                 app:layout_constraintBottom_toBottomOf="parent"

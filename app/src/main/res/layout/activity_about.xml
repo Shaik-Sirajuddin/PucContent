@@ -6,178 +6,182 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".AboutActivity">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#333">
+    tools:context=".activities.AboutActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBBar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/black"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:background="#333">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolBBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="60dp"
+            android:background="@color/black"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/backImage"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/backImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_keyboard_backspace_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:fontFamily="@font/amiko_semibold"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/about"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/backImage"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/privacyCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolBBar"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_keyboard_backspace_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#121111"
+                    android:fontFamily="@font/amiko_semibold"
+                    android:padding="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/privacy_policy_header"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#1C1A1A"
+                    android:fontFamily="@font/averia_sans_libre"
+                    android:padding="15dp"
+                    android:text="@string/privacy_policy"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/suggestCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/privacyCard"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/writeButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:background="#121111"
                 android:fontFamily="@font/amiko_semibold"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:text="@string/about"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="Write Suggestion Or Report Problem"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/otherApps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/suggestCard"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/otherAppsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#121111"
+                android:fontFamily="@font/amiko_semibold"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/checkout_more_apps_made_by_me"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/otherApps"
+            app:layout_constraintVertical_bias="1"
+            app:strokeColor="#CC0045"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#121111"
+                android:fontFamily="@font/tauri"
+                android:lineSpacingExtra="3dp"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="This App is developed by Sirajuddin\nApp's Content is managed by Farman\nThanks to Manoj for providing content"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backImage"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.appcompat.widget.Toolbar>
-    <com.google.android.material.card.MaterialCardView
-        app:strokeColor="@color/white"
-        app:strokeWidth="1dp"
-        android:id="@+id/privacyCard"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="30dp"
-        android:layout_margin="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBBar"
-        >
-       <LinearLayout
-           android:orientation="vertical"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
-
-           <TextView
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:background="#121111"
-               android:fontFamily="@font/amiko_semibold"
-               android:padding="10dp"
-               android:paddingStart="20dp"
-               android:paddingEnd="20dp"
-               android:text="@string/privacy_policy_header"
-               android:textColor="@color/white"
-               android:textSize="18sp" />
-
-           <TextView
-               android:textColor="@color/white"
-               android:background="#1C1A1A"
-               android:textSize="16sp"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/averia_sans_libre"
-               android:padding="15dp"
-               android:text="@string/privacy_policy" />
-
-       </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/suggestCard"
-        android:elevation="10dp"
-        app:strokeColor="@color/white"
-        app:strokeWidth="1dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="30dp"
-        android:layout_margin="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/privacyCard"
-        >
-        <TextView
-            android:id="@+id/writeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#121111"
-            android:fontFamily="@font/amiko_semibold"
-            android:padding="10dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="Write Suggestion Or Report Problem"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </com.google.android.material.card.MaterialCardView>
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/otherApps"
-        android:elevation="10dp"
-        app:strokeColor="@color/white"
-        app:strokeWidth="1dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="30dp"
-        android:layout_margin="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/suggestCard"
-        >
-        <TextView
-            android:id="@+id/otherAppsTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#121111"
-            android:fontFamily="@font/amiko_semibold"
-            android:padding="10dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="@string/checkout_more_apps_made_by_me"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otherApps"
-        app:layout_constraintVertical_bias="1"
-        app:strokeColor="#CC0045"
-        app:strokeWidth="1dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#121111"
-            android:fontFamily="@font/tauri"
-            android:lineSpacingExtra="3dp"
-            android:padding="10dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="This App is developed by Sirajuddin\nApp's Content is managed by Farman\nThanks to Manoj for providing content"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
-    </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="15sp" />
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#efe6f9"
+    android:background="@color/lightViolet"
     android:fillViewport="true"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="30dp">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="#5f259e"
+            android:background="@color/violet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -42,30 +42,28 @@
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.card.MaterialCardView
+            android:visibility="visible"
             android:id="@+id/cardViewAdd"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginHorizontal="7dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="9dp"
             android:layout_marginTop="10dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolBar">
-
-            <com.denzcoskun.imageslider.ImageSlider
-                android:id="@+id/imageSlider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:iss_auto_cycle="true"
-                app:iss_delay="0"
-                app:iss_period="1000" />
+            <com.google.android.ads.nativetemplates.TemplateView
+                android:id= "@+id/nativeAdView"
+                app:gnt_template_type= "@layout/gnt_small_template_view"
+                android:layout_width= "match_parent"
+                android:layout_height= "wrap_content" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/recentCardVeiw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="7dp"
+            android:layout_marginHorizontal="9dp"
             android:layout_marginVertical="10dp"
             android:background="@drawable/about_back"
             android:elevation="10dp"
@@ -85,9 +83,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:paddingHorizontal="15dp"
-                    android:paddingTop="15dp"
+                    android:paddingVertical="15dp"
                     android:text="@string/recent_updates"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/capriola"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -121,6 +120,7 @@
                     android:text="No items to show"
                     android:textAlignment="center"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/capriola"
                     android:textSize="18sp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/recentUpdatesList"
@@ -135,7 +135,7 @@
             android:id="@+id/quickCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="7dp"
+            android:layout_marginHorizontal="9dp"
             android:layout_marginVertical="10dp"
             android:background="@drawable/about_back"
             android:elevation="10dp"
@@ -154,8 +154,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="15dp"
-                    android:paddingTop="15dp"
+                    android:paddingVertical="15dp"
                     android:text="@string/quick_access"
+                    android:fontFamily="@font/capriola"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -182,6 +183,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:fontFamily="@font/capriola"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -189,16 +191,57 @@
                     app:layout_constraintTop_toBottomOf="@id/textView6" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
+            android:id="@+id/support"
+            app:cardElevation="7dp"
             android:layout_width="match_parent"
+            app:cardCornerRadius="7dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="7dp"
+            android:outlineSpotShadowColor="@color/violet"
+            android:outlineAmbientShadowColor="@color/violet"
+            android:layout_marginHorizontal="9dp"
             android:layout_marginVertical="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/quickCardView">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:elevation="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:padding="10dp"
+                    android:layout_marginStart="10dp"
+                    android:textStyle="bold"
+                    android:layout_weight="4"
+                    android:layout_gravity="center_vertical"
+                    android:text="Leaderboard"
+                    android:fontFamily="@font/capriola"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:elevation="10dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/images"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            app:cardCornerRadius="7dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="9dp"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/support">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,18 +249,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Explore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:paddingHorizontal="15dp"
-                    android:paddingTop="15dp"
+                    android:paddingVertical="15dp"
+                    android:text="Explore"
+                    android:fontFamily="@font/capriola"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -227,7 +270,7 @@
                         layout="@layout/any_item"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
-                        android:layout_margin="5dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="1" />
 
                     <include
@@ -235,12 +278,80 @@
                         layout="@layout/any_item"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
-                        android:layout_margin="5dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="1" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/discordJoin"
+            android:layout_width="match_parent"
+            app:cardCornerRadius="7dp"
+            app:cardElevation="7dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="9dp"
+            android:layout_marginVertical="10dp"
+            android:outlineSpotShadowColor="@color/violet"
+            android:outlineAmbientShadowColor="@color/violet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:padding="10dp"
+                    android:layout_marginStart="10dp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/capriola"
+                    android:layout_weight="4"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/join_discord_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/discord"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+            </LinearLayout>
 
+        </com.google.android.material.card.MaterialCardView>
+        <LinearLayout
+            android:background="@color/violet"
+            android:layout_marginTop="9dp"
+            app:layout_constraintTop_toBottomOf="@id/discordJoin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/discord"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/discord"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+            <ImageView
+                android:id="@+id/insta"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/insta"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+            <ImageView
+                android:id="@+id/twitter"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:src="@drawable/twitter"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+        </LinearLayout>
         <ProgressBar
             android:id="@+id/mainActivityPBar"
             android:layout_width="wrap_content"

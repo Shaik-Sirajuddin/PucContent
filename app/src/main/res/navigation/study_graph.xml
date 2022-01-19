@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/study_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/study_graph"
+    app:startDestination="@id/subjectsScreen">
 
+    <fragment
+        android:id="@+id/subjectsScreen"
+        android:name="com.puccontent.org.fragments.SubjectsScreen"
+        android:label="fragment_subjects_screen"
+        tools:layout="@layout/fragment_subjects_screen">
+
+        <action
+            android:id="@+id/action_subjectsScreen_to_foldersScreen"
+            app:destination="@id/foldersScreen"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_subjectsScreen_to_filesScreen"
+            app:destination="@id/filesScreen"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/foldersScreen"
+        android:name="com.puccontent.org.fragments.FoldersScreen"
+        android:label="fragment_folders_screen"
+        tools:layout="@layout/fragment_folders_screen">
+
+        <action
+            android:id="@+id/action_foldersScreen_to_filesScreen"
+            app:destination="@id/filesScreen"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="year"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <argument
+            android:name="sem"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <argument
+            android:name="subject"
+            android:defaultValue="Physics"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/filesScreen"
+        android:name="com.puccontent.org.fragments.FilesScreen"
+        android:label="fragment_files_screen"
+        tools:layout="@layout/fragment_files_screen">
+        <argument
+            android:name="year"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <argument
+            android:name="sem"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <argument
+            android:name="subject"
+            android:defaultValue="physics"
+            app:argType="string" />
+        <argument
+            android:name="chapter"
+            app:argType="string" />
+
+    </fragment>
 </navigation>
