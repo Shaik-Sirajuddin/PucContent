@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +17,12 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.ads.AdRequest
@@ -42,12 +44,13 @@ import com.puccontent.org.Models.MySingleton
 import com.puccontent.org.Models.PdfItem
 import com.puccontent.org.activities.ReadingActivity
 import com.puccontent.org.databinding.FragmentFilesScreenBinding
+import com.puccontent.org.network.*
 import com.puccontent.org.storage.FirebaseQueryLiveData
+import com.puccontent.org.storage.OfflineStorage
+import com.puccontent.org.util.SwipeGesture
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import com.puccontent.org.network.*
-import com.puccontent.org.storage.OfflineStorage
 
 
 class FilesScreen : Fragment(), PdfClicked {
@@ -64,16 +67,23 @@ class FilesScreen : Fragment(), PdfClicked {
     private var onlineListened = false
     private var extractPosition = 0
     private lateinit var database: FirebaseDatabase
+    private var sharePosition: Int = -1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentFilesScreenBinding.inflate(inflater)
-        initAds()
         initData()
+        initViews()
+        fetchOffline()
+        fetchOnline()
+        return binding.root
+    }
+
+    private fun initViews() {
         database = Firebase.database
         binding.textView8.text = chapter
-        with(binding.textView8){
+        with(binding.textView8) {
             setHorizontallyScrolling(true);
             isSingleLine = true;
             marqueeRepeatLimit = -1
@@ -82,9 +92,27 @@ class FilesScreen : Fragment(), PdfClicked {
         }
         adapter = PdfsAdapter(requireContext(), this)
         binding.pdfsListView.adapter = adapter
+        binding.pdfsListView.itemAnimator?.changeDuration = 0
         binding.pdfsListView.layoutManager = LinearLayoutManager(requireContext())
-        requireContext().registerReceiver(onDownloadComplete,
-            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        val swipeGesture = object : SwipeGesture(requireContext(), 15) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        deletePdf(viewHolder.absoluteAdapterPosition)
+                    }
+                    ItemTouchHelper.RIGHT -> {
+                        shareFile(viewHolder.absoluteAdapterPosition)
+                    }
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeGesture)
+        itemTouchHelper.attachToRecyclerView(binding.pdfsListView)
+
+        requireContext().registerReceiver(
+            onDownloadComplete,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        )
         binding.backImage.setOnClickListener {
             Navigation.findNavController(binding.root).navigateUp()
         }
@@ -95,10 +123,6 @@ class FilesScreen : Fragment(), PdfClicked {
             binding.info.visibility = View.VISIBLE
             binding.progressCard.visibility = View.GONE
         }
-        fetchOffline()
-        fetchOnline()
-
-        return binding.root
     }
 
     private fun initAds() {
@@ -115,13 +139,14 @@ class FilesScreen : Fragment(), PdfClicked {
                 }
             MobileAds.initialize(it)
             val adView = AdView(requireContext())
-            adView.adSize = AdSize.BANNER
             adView.adUnitId = id
             val adRequest = AdRequest.Builder().build()
             adView.loadAd(adRequest)
             val params =
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT)
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
             binding.adContainer.addView(adView, params)
         }
     }
@@ -163,72 +188,59 @@ class FilesScreen : Fragment(), PdfClicked {
         return false
     }
 
-    override fun quickAccesss(position: Int) {
+    override fun quickAccess(position: Int) {
         if (checkQuick(position)) {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Remove From QuickAccess")
-                .setCancelable(true)
-                .setPositiveButton("Yes"
-                ) { p0, _ ->
-                    p0.cancel()
-                    removeFromQuickAccess(position)
-                }
-                .setNegativeButton("No") { p0, _ ->
-                    p0.cancel()
-                }
-                .show()
+            removeFromQuickAccess(position)
         } else {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Add To QuickAccess")
-                .setCancelable(true)
-                .setPositiveButton("Yes"
-                ) { p0, _ ->
-                    p0.cancel()
-                    addToQuickAccess(position)
-                }
-                .setNegativeButton("No") { p0, _ ->
-                    p0.cancel()
-                }
-                .show()
+            addToQuickAccess(position)
         }
-
-
     }
 
-    override fun downloadOrDelete(pos: Int) {
-        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[pos].name}.pdf"
+    override fun downloadOrOpen(position: Int) {
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
         val file = context?.getExternalFilesDir(path)
         if (file?.isDirectory == false) {
-            deletePdf(file, list[pos].name, pos)
+            openWith(position)
         } else {
             file?.delete()
-            downloadID = FileDownloader.downloadFile(requireContext().applicationContext,
-                Uri.parse(list[pos].path),
+            downloadID = FileDownloader.downloadFile(
+                requireContext().applicationContext,
+                Uri.parse(list[position].path),
                 path,
-                list[pos].name + ".pdf")
-            while (pos >= downloadList.size) {
+                list[position].name + ".pdf"
+            )
+            while (position >= downloadList.size) {
                 downloadList.add(-1)
             }
-            downloadList[pos] = downloadID
+            downloadList[position] = downloadID
             Toast.makeText(requireContext(), "Download queued", Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun shareFile(position: Int) {
+    fun shareFile(position: Int) {
+        sharePosition = position
         if (!checkIt(position)) {
             shareLink(position)
         } else {
             val file =
                 context?.getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf")
-            val url = FileProvider.getUriForFile(requireContext(),
+            val url = FileProvider.getUriForFile(
+                requireContext(),
                 context?.applicationContext?.packageName.toString() + ".provider",
-                file!!)
+                file!!
+            )
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "application/pdf"
             intent.putExtra(Intent.EXTRA_STREAM, url)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(intent,
-                "Share " + list[position].name + " using ..."))
+            startActivity(
+                Intent.createChooser(
+                    intent,
+                    "Share " + list[position].name + " using ..."
+                )
+            )
+//            adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+
         }
     }
 
@@ -241,24 +253,6 @@ class FilesScreen : Fragment(), PdfClicked {
         startActivity(Intent.createChooser(intent, "Share url using ..."))
     }
 
-    override fun extractPdf(position: Int) {
-        try {
-            if (!checkIt(position)) {
-                showToast("Download the file first")
-                return
-            }
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/pdf"
-                putExtra(Intent.EXTRA_TITLE, "${list[position].name}.pdf")
-            }
-            extractPosition = position
-            resultLauncher1.launch(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
 
     override fun openWith(position: Int) {
         try {
@@ -268,35 +262,68 @@ class FilesScreen : Fragment(), PdfClicked {
             }
             val file =
                 context?.getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf")
-            val url = FileProvider.getUriForFile(requireContext(),
+            val url = FileProvider.getUriForFile(
+                requireContext(),
                 context?.applicationContext?.packageName.toString() + ".provider",
-                file!!)
+                file!!
+            )
+            sharePosition = position
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(url, "application/pdf")
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(intent,
-                "Open " + list[position].name + " using ..."))
+//            startActivity(Intent.createChooser(intent,
+//                "Open " + list[position].name + " using ..."))
+            startActivity(intent)
         } catch (e: Exception) {
             Firebase.crashlytics.log(e.message.toString())
         }
     }
 
-    private fun deletePdf(file: File, name: String, pos: Int) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Confirm Delete")
-            .setCancelable(true)
-            .setMessage("Delete ${name}.pdf?")
-            .setPositiveButton("Yes"
-            ) { p0, _ ->
-                p0.cancel()
-                file.delete()
-                adapter.notifyItemChanged(pos)
-                showToast("Deleted ${name}.pdf")
-            }
-            .setNegativeButton("No") { p0, _ ->
-                p0.cancel()
-            }
-            .show()
+    override fun onResume() {
+        super.onResume()
+        Log.d("state", sharePosition.toString())
+        if (sharePosition != -1) {
+            adapter.notifyItemChanged(sharePosition)
+            sharePosition = -1
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("state", sharePosition.toString())
+    }
+
+    private fun deletePdf(position: Int) {
+        val path = "OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[position].name}.pdf"
+        val name = list[position].name
+        val file = context?.getExternalFilesDir(path)
+        if (file?.isDirectory == false) {
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Confirm Delete")
+                .setCancelable(true)
+                .setMessage("Delete ${name}?")
+                .setPositiveButton(
+                    "Yes"
+                ) { p0, _ ->
+                    p0.cancel()
+                    file.delete()
+                    adapter.notifyItemChanged(position, null)
+                    showToast("Deleted ${name}.pdf")
+                }
+                .setNegativeButton("No") { p0, _ ->
+                    p0.cancel()
+                    adapter.notifyItemChanged(position, null)
+                }
+                .setOnCancelListener {
+                    adapter.notifyItemChanged(position, null)
+                }
+                .show()
+        } else {
+            adapter.notifyItemChanged(position, null)
+            showToast("Pdf not downloaded")
+        }
+
     }
 
     private fun removeFromQuickAccess(position: Int) {
@@ -317,7 +344,7 @@ class FilesScreen : Fragment(), PdfClicked {
                 putString("quick", path)
                 apply()
             }
-            adapter.notifyItemChanged(position)
+            adapter.notifyItemChanged(position, null)
         }
     }
 
@@ -340,7 +367,7 @@ class FilesScreen : Fragment(), PdfClicked {
                 putString("quick", path)
                 apply()
             }
-            adapter.notifyItemChanged(pos)
+            adapter.notifyItemChanged(pos, null)
         }
     }
 
@@ -373,11 +400,15 @@ class FilesScreen : Fragment(), PdfClicked {
         list.clear()
         file.listFiles()?.let { filesList ->
             for (eFile in filesList) {
+                verifyFile(eFile)
                 val name = eFile.name
                 list.add(
-                    PdfItem(name = name.substring(0, name.length - 4),
+                    PdfItem(
+                        name = name.substring(0, name.length - 4),
                         path = eFile.absolutePath,
-                        size = getFileSize(eFile.length().toString())))
+                        size = getFileSize(eFile.length().toString())
+                    )
+                )
             }
         }
         if (list.isNotEmpty()) {
@@ -385,6 +416,23 @@ class FilesScreen : Fragment(), PdfClicked {
         }
         list.sortBy { it.name }
         adapter.updateData(list)
+    }
+
+    private fun verifyFile(file: File) {
+        if (file.name.endsWith(".download")) {
+            val name = file.name
+            renameFile(name, name.substring(0, name.length - 9))
+        }
+    }
+
+    private fun renameFile(oldName: String, newName: String) {
+        val dir: File? =
+            context?.getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter")
+        if (dir?.exists() == true) {
+            val from = File(dir, oldName)
+            val to = File(dir, newName)
+            if (from.exists()) from.renameTo(to)
+        }
     }
 
     private fun fetchOnline() {
@@ -433,50 +481,34 @@ class FilesScreen : Fragment(), PdfClicked {
     private val onDownloadComplete: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            var coun = 0
-            for (a in downloadList) {
+            for ((counter, a) in downloadList.withIndex()) {
                 if (a == id) {
                     toast?.cancel()
                     toast =
                         Toast.makeText(requireContext(), "Download Completed", Toast.LENGTH_SHORT)
                     toast?.show()
-                    downloadComplete(coun)
+                    downloadComplete(counter)
                 }
-                coun++
             }
         }
     }
-    private val resultLauncher1 =
+    private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            it.data?.data.also { uri ->
-                val path =
-                    context?.getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[extractPosition].name}.pdf")!!.absolutePath
-                if (uri != null) {
-                    lifecycleScope.launch(Dispatchers.Default) {
-                        requireActivity().copyFile(path, uri) { done ->
-                            if (done) {
-                                requireActivity().runOnUiThread {
-                                    showToast("File saved successfully")
-                                }
-                            } else {
-                                requireActivity().runOnUiThread {
-                                    showToast("Failed to save file")
-                                }
-                            }
-                        }
-                    }
-                }
+            if (sharePosition != -1) {
+                adapter.notifyItemChanged(sharePosition)
+                sharePosition = -1
             }
         }
 
     private fun getSizeUrl(dUrl: String): String {
+
         val fileId = dUrl.substring(42, 75)
         val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
         return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
     }
 
     private fun downloadComplete(position: Int) {
-        adapter.notifyItemChanged(position)
+        adapter.notifyItemChanged(position, null);
     }
 
     private fun getFileSize(sizeInBytes: String): String {

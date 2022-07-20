@@ -48,8 +48,8 @@ class AppOpenManager() : Application.ActivityLifecycleCallbacks, LifecycleObserv
                 this@AppOpenManager.loadTime = Date().time
             }
 
-            override fun onAdFailedToLoad(loadAdError: LoadAdError?) {
-                 Log.d(LOG_TAG,loadAdError?.message.toString())
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                 Log.d(LOG_TAG,loadAdError.message)
             }
         }
         val request: AdRequest = adRequest
@@ -75,7 +75,7 @@ class AppOpenManager() : Application.ActivityLifecycleCallbacks, LifecycleObserv
                         isShowingAd = false
                         fetchAd()
                     }
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError?) {}
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {}
                     override fun onAdShowedFullScreenContent() {
                         isShowingAd = true
                     }

@@ -3,6 +3,43 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/about_box_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/addfile.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/any_item_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/back_button_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/biology_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/chemistry_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/english_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/ic_wave.xml" value="0.124" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/ic_wave2.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/image_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/it_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/maths_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/offline.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/others_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/physics_back.xml" value="0.124" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/telugu_back.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/drawable/userimage.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_about.xml" value="0.264" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_add_to_data_base.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_analytics.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_leader_board.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_main.xml" value="0.21403508771929824" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_reading.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_sign_in.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_subjects.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/any_item.xml" value="0.264" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/chapter_item.xml" value="0.12236842105263158" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/donor_item.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/fragment_files_screen.xml" value="0.2" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/fragment_folders_screen.xml" value="0.16052631578947368" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/fragment_subjects_screen.xml" value="0.16052631578947368" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/list_item.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/pdf_item.xml" value="0.264" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/recent_updates_item.xml" value="0.20384294068504594" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/shrim.xml" value="0.20854700854700856" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/layout/subject_item.xml" value="0.264" />
+        <entry key="..\:/AllFiles/AndroidStudioProjects/PucContent/app/src/main/res/menu/drop_down_menu.xml" value="0.20863616930312098" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2203125" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/about_back.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/drawable/about_box_back.xml" value="0.17848101265822786" />
@@ -38,7 +75,7 @@
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_chapters.xml" value="0.2" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_fullscreen.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_leader_board.xml" value="0.18" />
-        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_main.xml" value="0.14" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_pdfs.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_reading.xml" value="0.22" />
         <entry key="..\:/Users/Siraj/AndroidStudioProjects/PucContent/app/src/main/res/layout/activity_sign_in.xml" value="0.16" />

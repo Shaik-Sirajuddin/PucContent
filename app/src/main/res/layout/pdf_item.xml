@@ -4,8 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    app:cardElevation="5dp">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="14dp"
+    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="3dp"
+    android:background="#FBFBFB">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,100 +17,87 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-
-
             android:layout_width="match_parent"
-            android:layout_height="78dp"
+            android:layout_height="75dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:padding="12dp">
-
+            android:padding="10dp">
             <ImageView
                 android:id="@+id/pdfImg"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:elevation="10dp"
-                android:padding="3dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#ED2224"
-                tools:src="@drawable/pdf" />
+                tools:src="@drawable/pdf1"
+                app:tint="@color/black"
+                />
 
             <ImageView
                 android:id="@+id/quickAccImg"
-                android:layout_width="20dp"
+                android:layout_width="12dp"
                 android:layout_height="20dp"
-                android:src="@drawable/up_left_arrow"
-                app:layout_constraintStart_toStartOf="@+id/pdfImg"
+                android:elevation="1dp"
+                android:translationY="-2dp"
+                android:translationX="-3dp"
+                android:src="@drawable/pin"
+                app:layout_constraintEnd_toEndOf="@+id/pdfImg"
                 app:layout_constraintTop_toTopOf="@id/pdfImg"
-                app:tint="#E91E63" />
+                app:tint="#736F6F" />
 
-            <TextView
-                android:id="@+id/pdfName"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/alegreya_sans_sc_bold"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:singleLine="true"
-                android:textAlignment="gravity"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:orientation="vertical"
+                android:layout_marginStart="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/pdfImg"
                 app:layout_constraintEnd_toStartOf="@+id/downloadState"
                 app:layout_constraintStart_toEndOf="@id/pdfImg"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Unit 1" />
+                app:layout_constraintTop_toTopOf="@+id/pdfImg">
 
-            <TextView
-                android:id="@+id/pdfSize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/reem_kufi"
-                android:paddingStart="10dp"
-                android:paddingTop="3dp"
-                android:paddingEnd="10dp"
-                android:text="@string/mb"
-                android:textColor="@color/violet"
-                app:layout_constraintBottom_toBottomOf="@+id/pdfImg"
-                app:layout_constraintStart_toEndOf="@+id/pdfImg"
-                app:layout_constraintTop_toBottomOf="@+id/pdfName" />
+                <TextView
+                    android:id="@+id/pdfName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingHorizontal="10dp"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/downloadState"
+                    app:layout_constraintStart_toEndOf="@id/pdfImg"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Unit 1  \n  aljflsal" />
+
+                <TextView
+                    android:id="@+id/pdfSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:paddingHorizontal="10dp"
+                    android:text="24 mb"
+                    android:textColor="#736F6F"
+                    app:layout_constraintStart_toEndOf="@+id/pdfImg"
+                    app:layout_constraintTop_toBottomOf="@+id/pdfName" />
+
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/downloadState"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:background="@drawable/download_back"
                 android:clickable="true"
-                android:elevation="5dp"
                 android:focusable="true"
                 android:padding="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/menu"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#7CB342"
-                tools:src="@drawable/download_circular_button" />
-
-            <ImageView
-                android:id="@+id/menu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:clickable="true"
-                android:elevation="5dp"
-                android:focusable="true"
-                android:paddingStart="18dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="5dp"
-                android:paddingBottom="4dp"
-                android:src="@drawable/menu"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/grey" />
+                app:tint="@color/black"
+                tools:src="@drawable/download_icon" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         <View
             android:layout_weight="1"

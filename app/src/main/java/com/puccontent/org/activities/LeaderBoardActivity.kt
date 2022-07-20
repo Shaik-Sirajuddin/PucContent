@@ -116,7 +116,7 @@ class LeaderBoardActivity : AppCompatActivity() {
                     Log.d("ad", "Ad was shown.")
                 }
 
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     Log.d("ad", "Ad failed to show.")
                 }
 

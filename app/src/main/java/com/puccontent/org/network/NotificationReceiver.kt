@@ -15,9 +15,16 @@ import com.google.firebase.messaging.RemoteMessage
 import com.puccontent.org.R
 import com.puccontent.org.activities.ContentActivity
 import com.puccontent.org.activities.MainActivity
+import com.puccontent.org.storage.OfflineStorage
 
 
 class NotificationReceiver : FirebaseMessagingService() {
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.e("newToken", token)
+        val storage  = OfflineStorage(this)
+        storage.userToken = token
+    }
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Log.d("entered",message.toString())

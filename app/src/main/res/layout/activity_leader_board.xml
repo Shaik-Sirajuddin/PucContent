@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gnt_white"
+    android:background="@color/white"
     tools:context=".activities.LeaderBoardActivity">
 
     <ImageView
@@ -23,7 +23,6 @@
         android:id="@+id/head1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/capriola"
         android:padding="10dp"
         android:text="We are proudly non profitable"
         android:textColor="@color/black"
@@ -50,7 +49,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#3949AB"
-                android:fontFamily="@font/capriola"
                 android:padding="15dp"
                 android:text="@string/support_text"
                 android:textColor="@color/white"
@@ -80,7 +78,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:fontFamily="@font/reem_kufi"
                 android:text="Watch Rewarded Ad"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
@@ -104,7 +101,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/tauri"
             android:text="My Points"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -117,7 +113,6 @@
         <TextView
             android:text="My Rank"
             android:textColor="@color/black"
-            android:fontFamily="@font/tauri"
             android:textSize="16sp"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -141,7 +136,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sans_sc_bold"
             android:padding="10dp"
             android:text="Leaderboard"
             android:textAlignment="center"

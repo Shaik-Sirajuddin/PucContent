@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="14dp"
+    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="3dp"
+    android:background="#FBFBFB"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,32 +19,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:padding="10dp">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/folder" />
+               <ImageView
+                   android:layout_gravity="center"
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:layout_margin="5dp"
+                   android:elevation="10dp"
+                   app:tint="@color/black"
+                   android:src="@drawable/folder" />
 
             <TextView
                 android:id="@+id/chapterName"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="15dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/alegreya_sans_sc_bold"
-                android:maxLines="1"
-                android:text="Unit 1"
+                android:maxLines="2"
+                android:layout_weight="1"
+                android:fontFamily="@font/reem_kufi"
+                tools:text="Unit 1 \n f"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                />
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#DFDADA" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

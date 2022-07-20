@@ -30,6 +30,7 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var mAuth: FirebaseAuth
     private var allEnabled = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -56,7 +57,6 @@ class SignInActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         try {
-
             val user = mAuth.currentUser
             val remoteConfig = Firebase.remoteConfig
             val configSettings = remoteConfigSettings {
@@ -91,6 +91,7 @@ class SignInActivity : AppCompatActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
+
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
             Log.w("FailedSignIn", "signInResult:failed code=" + e.statusCode)
@@ -124,6 +125,8 @@ class SignInActivity : AppCompatActivity() {
             Toast.makeText(this, "Sign In Failed", Toast.LENGTH_SHORT).show()
         } else {
             val email = user.email
+            val name = user.displayName
+
             if (allEnabled || email?.endsWith("ac.in", false) == true) {
                 val url = intent.getStringExtra("url")
                 Log.d("urlS",url.toString())
@@ -132,6 +135,7 @@ class SignInActivity : AppCompatActivity() {
                 mainIntent.putExtra("url",url)
                 mainIntent.putExtra("isNewUser", isNewUser)
                 mainIntent.putExtra("email", email)
+                mainIntent.putExtra("name",name)
                 startActivity(mainIntent)
                 finish()
             } else {

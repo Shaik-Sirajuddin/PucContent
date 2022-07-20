@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -43,6 +44,7 @@ class ReadingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityReadingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val intent = intent
         val file = intent.getStringExtra("file")
         val name = intent.getStringExtra("name")
@@ -118,7 +120,7 @@ class ReadingActivity : AppCompatActivity() {
                     finish()
                 }
 
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     mInterstitialAd = null
                     finish()
                 }

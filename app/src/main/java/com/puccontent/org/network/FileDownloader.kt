@@ -26,7 +26,7 @@ class FileDownloader {
                 val request = DownloadManager.Request(url)
                 request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-                request.setDestinationInExternalFilesDir(context,null,path)
+                request.setDestinationInExternalFilesDir(context,null,path+".download")
                 request.setTitle(name)
                 request.setDescription("Just a few seconds")
                 val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager

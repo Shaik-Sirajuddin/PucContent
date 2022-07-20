@@ -4,10 +4,7 @@ package com.puccontent.org.activities
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,57 +13,54 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import androidx.core.view.setPadding
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.denzcoskun.imageslider.models.SlideModel
-import com.google.android.ads.nativetemplates.TemplateView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.gms.ads.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.puccontent.org.Adapters.SubjectClicked
 import com.puccontent.org.Adapters.UpdateClicked
 import com.puccontent.org.Adapters.UpdatesAdapter
-import com.puccontent.org.Models.CustomAd
 import com.puccontent.org.Models.Update
-import com.puccontent.org.databinding.ActivityMainBinding
-import com.puccontent.org.storage.FirebaseQueryLiveData
-import java.lang.IndexOutOfBoundsException
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import com.google.android.ads.nativetemplates.NativeTemplateStyle
-import com.google.android.gms.ads.*
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.firebase.database.ktx.database
-import com.google.firebase.messaging.FirebaseMessaging
-import com.puccontent.org.*
+import com.puccontent.org.Models.User
 import com.puccontent.org.R
+import com.puccontent.org.databinding.ActivityMainBinding
 import com.puccontent.org.network.*
 import com.puccontent.org.storage.OfflineStorage
+import com.puccontent.org.util.SwipeGesture
+import java.util.*
 
-
-class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
-    private lateinit var updatesAdapter: UpdatesAdapter
+class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
     private lateinit var binding: ActivityMainBinding
     private var email: String = ""
     private var inProgress = false
     private var handler: Handler? = null
-    private lateinit var quickAdapter: UpdatesAdapter
-    private val quickList = ArrayList<Update>()
-    private val updatesList = ArrayList<Update>()
+    private lateinit var quickAccessAdapter: UpdatesAdapter
+    private val quickAccessList = ArrayList<Update>()
     private lateinit var adLoader: AdLoader
-    private lateinit var template: TemplateView
     private var adLoaded = false
     private val ImmediateRequestCode = 1
     private val FlexibleRequestCode = 1
+    private var sharePosition = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -74,64 +68,80 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
             setContentView(binding.root)
             setSupportActionBar(binding.toolBar)
             initAds()
-            quickAdapter = UpdatesAdapter(this, this, false)
-            updatesAdapter = UpdatesAdapter(this, this, true)
-            binding.quickAccessList.adapter = quickAdapter
-            binding.quickAccessList.layoutManager = LinearLayoutManager(this)
-            binding.recentUpdatesList.adapter = updatesAdapter
-            binding.recentUpdatesList.layoutManager = LinearLayoutManager(this)
+            initRecyclerView()
+            getToken()
             initUser()
-            val contentBox = binding.contentBox
-            val aboutBox = binding.aboutBox
-            contentBox.subName.text = "Content"
-            aboutBox.subName.text = "About"
-
-            contentBox.subName.setBackgroundResource(R.drawable.content_box_back)
-            aboutBox.subName.setBackgroundResource(R.drawable.about_box_back)
-
-            contentBox.root.setOnClickListener {
-                val intent = Intent(this@MainActivity, ContentActivity::class.java)
-                startActivity(intent)
-            }
-            aboutBox.root.setOnClickListener {
-                val intent = Intent(this@MainActivity, AboutActivity::class.java)
-                startActivity(intent)
-            }
-            if (isConnected()) {
-                binding.recentPBar.visibility = View.VISIBLE
-            } else {
-                binding.recentPBar.visibility = View.GONE
-                binding.recentHide.visibility = View.VISIBLE
-            }
-            val recentLiveData =
-                FirebaseQueryLiveData(FirebaseDatabase.getInstance().reference.child("recent"))
-            recentLiveData.observe(this, {
-                updateRecentUpdates(it)
-            })
-            binding.discordJoin.setOnClickListener {
-                launchUrl("https://discord.gg/Gbvz3d8peP")
-            }
-
-            binding.discord.setOnClickListener {
-                launchUrl("https://discord.gg/Gbvz3d8peP")
-            }
-            binding.insta.setOnClickListener {
-                launchUrl("https://www.instagram.com/sirajuddinb1/")
-            }
-            binding.twitter.setOnClickListener {
-                launchUrl("https://twitter.com/_siraj_uddin_?t=-SDQjn4k3zEayGDYzTG32Q&s=09")
-            }
+            initViews()
             checkNotification()
             checkAppUpdate()
             FirebaseMessaging.getInstance().token.addOnCompleteListener {
-                if (it.isSuccessful){
-                    Log.d("token",it.result.toString())
+                if (it.isSuccessful) {
+                    Log.d("token", it.result.toString())
                 }
             }
         } catch (e: Exception) {
             Log.e("error", e.message.toString())
             e.printStackTrace()
         }
+    }
+
+    private fun initRecyclerView() {
+        quickAccessAdapter = UpdatesAdapter(this, this)
+        binding.quickAccessList.adapter = quickAccessAdapter
+        binding.quickAccessList.layoutManager = LinearLayoutManager(this)
+        val swipeGesture = object : SwipeGesture(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        removeFromQuickAccess(viewHolder.absoluteAdapterPosition)
+                    }
+                    ItemTouchHelper.RIGHT -> {
+                        shareFile(viewHolder.absoluteAdapterPosition)
+                    }
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeGesture)
+        itemTouchHelper.attachToRecyclerView(binding.quickAccessList)
+    }
+
+    private fun initViews() {
+        val contentBox = binding.contentBox
+        val aboutBox = binding.aboutBox
+        val linksBox = binding.linksBox
+        val libraryBox = binding.libraryBox
+
+        contentBox.subName.text = "Content"
+        aboutBox.subName.text = "About"
+        libraryBox.subName.text = "Library"
+        linksBox.subName.text = "Links"
+
+        contentBox.image.setImageResource(R.drawable.content)
+        linksBox.image.setImageResource(R.drawable.links)
+        libraryBox.image.setImageResource(R.drawable.library)
+        aboutBox.image.setImageResource(R.drawable.about)
+        contentBox.root.setOnClickListener {
+            val intent = Intent(this@MainActivity, ContentActivity::class.java)
+            startActivity(intent)
+        }
+        aboutBox.root.setOnClickListener {
+            val intent = Intent(this@MainActivity, AboutActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    private fun renderUserDetails() {
+        val acct = GoogleSignIn.getLastSignedInAccount(this)
+        if (acct != null) {
+            val personPhoto = acct.photoUrl
+            Glide.with(this)
+                .load(personPhoto)
+                .placeholder(R.drawable.profile)
+                .into(binding.userImage)
+        }
+        val name = acct?.displayName ?: ""
+        binding.name.text = name
     }
 
     private fun checkNotification() {
@@ -155,136 +165,83 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
                         appUpdateInfo,
                         AppUpdateType.IMMEDIATE,
                         this,
-                        ImmediateRequestCode)
+                        ImmediateRequestCode
+                    )
                 } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo,
                         AppUpdateType.FLEXIBLE,
                         this,
-                        FlexibleRequestCode)
+                        FlexibleRequestCode
+                    )
                 }
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ImmediateRequestCode || requestCode == FlexibleRequestCode) {
             if (resultCode != RESULT_OK) {
-               showToast("App update failed")
-            }
-            else{
+                showToast("App update failed")
+            } else {
                 showToast("App updated successfully")
             }
         }
     }
+
     private fun launchUrl(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
 
     private fun initAds() {
         val storage = OfflineStorage(this)
-        val id = storage.nativeAdvancedId
+        // val id = storage.nativeAdvancedId
         Firebase.database.reference.child("Ads")
             .child("NativeAd")
             .get()
             .addOnSuccessListener {
-                it.getValue<String>()?.let{ itId->
+                it.getValue<String>()?.let { itId ->
                     storage.nativeAdvancedId = itId
                 }
             }
         MobileAds.initialize(this)
-        adLoader = AdLoader.Builder(this, id)
-            .forNativeAd {
-                val styles =
-                    NativeTemplateStyle.Builder()
-                        .withMainBackgroundColor(ColorDrawable(Color.WHITE)).build()
-                template = findViewById(R.id.nativeAdView)
-                template.setStyles(styles)
-                template.setNativeAd(it)
-                adLoaded = true
-                if (isDestroyed) {
-                    it.destroy()
-                }
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(p0: LoadAdError) {
-                    super.onAdFailedToLoad(p0)
-                    binding.nativeAdView.visibility = View.GONE
-                }
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    binding.nativeAdView.visibility = View.VISIBLE
-                }
-            })
-            .build()
-        binding.support.setOnClickListener {
-            val intent = Intent(this,LeaderBoardActivity::class.java)
-            startActivity(intent)
-        }
-        val adRequest = AdRequest.Builder().build()
-        adLoader.loadAds(adRequest, 3)
-
     }
+
     private fun initUser() {
+        renderUserDetails()
         val intent = intent
         val email = intent.getStringExtra("email")
-        val isNewUser = intent.getBooleanExtra("isNewUser", false)
-        if (isNewUser) {
-            if (email != null) {
-                for (i in email.indices) {
-                    if (email[i] == '@') {
-                        addUser(email.substring(0, i), email)
-                        break
-                    }
+        val name = intent.getStringExtra("name").toString()
+        if (email != null) {
+            for (i in email.indices) {
+                if (email[i] == '@') {
+                    addUser(email.substring(0, i), email, name)
+                    break
                 }
             }
         }
     }
 
-    private fun updateRecentUpdates(snapshot: DataSnapshot?) {
-        if (snapshot == null || !snapshot.exists()) {
-            updatesList.clear()
-            updatesAdapter.updateData(updatesList)
-            binding.recentPBar.visibility = View.GONE
-            binding.recentHide.visibility = View.VISIBLE
-            return
-        }
-        if (snapshot.exists()) {
-            updatesList.clear()
-            val tempList = ArrayList<Update>()
-            for (snap in snapshot.children) {
-                val up = snap.getValue<Update>()
-                if (up != null) {
-                    tempList.add(up)
-                }
-            }
-            var counter = tempList.size - 1
-            while (counter >= 0) {
-                updatesList.add(tempList[counter])
-                counter--
-            }
-            binding.recentPBar.visibility = View.GONE
-            if (updatesList.isNotEmpty()) {
-                binding.recentHide.visibility = View.GONE
-            } else {
-                binding.recentHide.visibility = View.VISIBLE
-            }
-            updatesAdapter.updateData(updatesList)
-        }
-    }
-
-    private fun addUser(key: String, email: String) {
+    private fun addUser(key: String, email: String, name: String) {
         try {
+            val token = OfflineStorage(this).userToken
             val database = FirebaseDatabase.getInstance()
+            val user = User(
+                name,
+                email,
+                token,
+                Date().time
+            )
             val map = HashMap<String, Any>()
-            map[key] = email
+            map[key] = user
             database.reference.child("Users").updateChildren(map)
         } catch (e: java.lang.Exception) {
             Log.e("addUserError", e.message.toString())
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.drop_down_menu, menu)
         return true
     }
@@ -339,22 +296,45 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
     override fun onResume() {
         super.onResume()
         try {
+            if (sharePosition != -1) {
+                quickAccessAdapter.notifyItemChanged(sharePosition)
+                sharePosition = -1
+            }
             updateQuickAccess()
         } catch (e: Exception) {
             Log.e("rec", e.message.toString())
         }
     }
 
+    override fun openWith(position: Int) {
+        try {
+            val file =
+                this.getExternalFilesDir(quickAccessList[position].path)
+            val url = FileProvider.getUriForFile(
+                this,
+                this.applicationContext?.packageName.toString() + ".provider",
+                file!!
+            )
+            sharePosition = position
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(url, "application/pdf")
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Firebase.crashlytics.log(e.message.toString())
+        }
+    }
+
     private fun updateQuickAccess() {
         val tempList = FileDownloader.convertStringToArray(getQuickAccess())
-        quickList.clear()
+        quickAccessList.clear()
         tempList.forEach { item ->
             if (!item.isNullOrEmpty()) {
-                quickList.add(Update(name = getName(item.toString()), path = item.toString()))
+                quickAccessList.add(Update(name = getName(item.toString()), path = item.toString()))
             }
         }
-        quickAdapter.updateData(quickList)
-        if (quickList.isEmpty()) {
+        quickAccessAdapter.updateData(quickAccessList)
+        if (quickAccessList.isEmpty()) {
             binding.hideView.visibility = View.VISIBLE
         } else {
             binding.hideView.visibility = View.GONE
@@ -365,6 +345,20 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
         val sharedPref =
             baseContext?.getSharedPreferences(FileDownloader.fileKey, Context.MODE_PRIVATE)
         return sharedPref?.getString("quick", "").toString()
+    }
+
+    private fun getToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("token", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            val storage = OfflineStorage(this)
+            storage.userToken = token
+            Log.d("token", token)
+            initUser()
+        }
     }
 
     private fun getName(str: String): String {
@@ -437,76 +431,30 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
 
     }
 
-    override fun remove(position: Int) {
-        AlertDialog.Builder(this)
-            .setTitle("Remove From QuickAccess")
-            .setCancelable(true)
-            .setPositiveButton("Yes"
-            ) { p0, _ ->
-                p0.cancel()
-                removeFromQuickAccess(position)
-            }
-            .setNegativeButton("No") { p0, _ ->
-                p0.cancel()
-            }
-            .show()
-    }
+    fun shareFile(position: Int) {
+        sharePosition = position
+        val file =
+            this.getExternalFilesDir(quickAccessList[position].path)
+        val url = FileProvider.getUriForFile(
+            this,
+            this.applicationContext?.packageName.toString() + ".provider",
+            file!!
+        )
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "application/pdf"
+        intent.putExtra(Intent.EXTRA_STREAM, url)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivity(
+            Intent.createChooser(
+                intent,
+                "Share " + quickAccessList[position].name + " using ..."
+            )
+        )
 
-    override fun recentUpdateClicked(position: Int) {
-        try {
-            val itemName = updatesList[position].path
-            var sem = 1
-            var year = 1
-            var subject = ""
-            var chapter = ""
-            if (itemName != null) {
-                var spaceCounter = 0
-                for (i in itemName.indices) {
-                    if (itemName[i] == '/') {
-                        spaceCounter++
-                        when (spaceCounter) {
-                            1 -> {
-                                year = if (itemName[i - 1] == '1') {
-                                    1
-                                } else {
-                                    2
-                                }
-                            }
-                            2 -> {
-                                sem = if (itemName[i - 1] == '1') {
-                                    1
-                                } else {
-                                    2
-                                }
-                            }
-                            3 -> {
-                                subject = itemName.substring(4, i)
-                                chapter = itemName.substring(i + 1)
-                            }
-                            else -> {
-
-                            }
-                        }
-                    }
-                }
-            }
-            val intent1 = Intent(this, ContentActivity::class.java)
-            intent1.putExtra("subject", subject)
-            intent1.putExtra("year", year)
-            intent1.putExtra("sem", sem)
-            intent1.putExtra("chapter", chapter)
-            intent1.putExtra("recent", true)
-            startActivity(intent1)
-        } catch (ind: IndexOutOfBoundsException) {
-            Toast.makeText(this, "Unexpected Error", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            Log.e("er", e.message.toString())
-            Toast.makeText(this, "Unknown Error", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun removeFromQuickAccess(position: Int) {
-        var path = quickList[position].path
+        var path = quickAccessList[position].path
         val array = FileDownloader.convertStringToArray(getQuickAccess())
         val arr = ArrayList<String>()
         array.forEach {
@@ -523,9 +471,9 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
                 putString("quick", path)
                 apply()
             }
-            quickList.removeAt(position)
-            quickAdapter.removeItem(position)
-            if (quickList.isEmpty()) {
+            quickAccessList.removeAt(position)
+            quickAccessAdapter.removeItem(position)
+            if (quickAccessList.isEmpty()) {
                 binding.hideView.visibility = View.VISIBLE
             }
         }
@@ -540,11 +488,10 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
         }
     }
 
-
-    override fun updateClicked(position: Int) {
+    override fun pdfClicked(position: Int) {
         try {
-            val path = quickList[position].path
-            val name = quickList[position].name
+            val path = quickAccessList[position].path
+            val name = quickAccessList[position].name
             val inte = Intent(this, ReadingActivity::class.java)
             inte.putExtra("file", path)
             inte.putExtra("name", name)
@@ -554,7 +501,6 @@ class MainActivity : AppCompatActivity(), UpdateClicked, SubjectClicked {
             e.printStackTrace()
         }
     }
-    override fun subClicked(position: Int) {
 
-    }
+    override fun subClicked(position: Int) {}
 }

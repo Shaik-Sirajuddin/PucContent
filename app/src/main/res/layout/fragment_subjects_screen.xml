@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightViolet"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".activities.ContentActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/violet"
         android:theme="?attr/actionBarTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,10 +19,11 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:background="@drawable/back_button_back"
                 android:id="@+id/backImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="7dp"
                 android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -31,14 +31,15 @@
                 app:tint="@color/white" />
 
             <TextView
-                android:fontFamily="@font/reem_kufi"
                 android:id="@+id/subjectPath"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/reem_kufi"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/backImage"
                 app:layout_constraintTop_toTopOf="parent"
@@ -50,14 +51,15 @@
         android:layout_margin="10dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:hint="Semester"
-        app:hintTextColor="@color/violet"
-        app:boxStrokeColor="@color/violet"
-        app:endIconTint="@color/violet"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="#AED1EE"
+        app:endIconTint="#AED1EE"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <AutoCompleteTextView
             android:inputType="none"
+            android:fontFamily="@font/reem_kufi"
             android:id="@+id/autoCompleteTextView"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -68,5 +70,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/subjectsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/any_item"
+        />
 </LinearLayout>

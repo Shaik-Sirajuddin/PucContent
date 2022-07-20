@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,18 +20,18 @@ class SubjectsAdapter(
 ) : RecyclerView.Adapter<SubjectsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectsViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.any_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.subject_item, parent, false)
         val holder = SubjectsViewHolder(view)
         view.setOnClickListener {
-            listener.subClicked(holder.adapterPosition)
+            listener.subClicked(holder.absoluteAdapterPosition)
         }
         return holder
     }
 
     override fun onBindViewHolder(holder: SubjectsViewHolder, position: Int) {
         holder.name.text = list[position].name
-        holder.name.setBackgroundResource(list[position].image)
-
+        holder.image.setImageResource(list[position].image)
+        holder.linearLayout.setBackgroundResource(list[position].background)
     }
 
     override fun getItemCount(): Int {
@@ -40,6 +41,8 @@ class SubjectsAdapter(
 
 class SubjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val name: TextView = itemView.findViewById(R.id.subName)
+    val image:ImageView = itemView.findViewById(R.id.image)
+    val linearLayout:LinearLayout = itemView.findViewById(R.id.linearLayout)
 }
 
 interface SubjectClicked {

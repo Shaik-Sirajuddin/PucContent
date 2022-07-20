@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:textColorSecondary">@color/white</item>
         <!-- Customize your theme here. -->
     </style>
@@ -20,5 +20,12 @@
     <style name="ThemeOverlay.PucContent.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
         <item name="fullscreenTextColor">@color/light_blue_A400</item>
+    </style>
+    <style name="ReemKufiFontTextview" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/reem_kufi</item>
+    </style>
+
+    <style name="ReemKufiFontButton" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/reem_kufi</item>
     </style>
 </resources>

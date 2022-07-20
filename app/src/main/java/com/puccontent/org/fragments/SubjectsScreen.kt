@@ -22,6 +22,9 @@ import com.puccontent.org.network.*
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Filter
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.puccontent.org.util.SwipeGesture
 
 
 class SubjectsScreen : Fragment(), SubjectClicked {
@@ -40,23 +43,34 @@ class SubjectsScreen : Fragment(), SubjectClicked {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentSubjectsScreenBinding.inflate(inflater)
-
+        initViews()
+        getCurrentSemester()
+        setUpAutoCompleteTextView()
+        getData()
+        return binding.root
+    }
+    private fun updateOfflineData() {
+        data.edit {
+            putInt(Constants.year, year)
+            putInt(Constants.sem, sem)
+        }
+    }
+    private fun initViews(){
         subjectsAdapter = SubjectsAdapter(requireContext(), subjectsList, this)
-
         binding.subjectsRecyclerView.adapter = subjectsAdapter
         binding.subjectsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-
-        //Fetch Offline Data
-
-        data =
-            requireContext().getSharedPreferences(FileDownloader.fileKey, Context.MODE_PRIVATE)
-        sem = data.getInt(Constants.sem, 1)
-        year = data.getInt(Constants.year, 1)
-
-        //Semesters Adapter
-
         semestersList = resources.getStringArray(R.array.semesters)
         semestersAdapter =  MyAdapter(requireContext(), android.R.layout.simple_list_item_1, semestersList)
+        binding.backImage.setOnClickListener {
+            requireActivity().finish()
+        }
+    }
+    private fun getCurrentSemester(){
+        data = requireContext().getSharedPreferences(FileDownloader.fileKey, Context.MODE_PRIVATE)
+        sem = data.getInt(Constants.sem, 1)
+        year = data.getInt(Constants.year, 1)
+    }
+    private fun setUpAutoCompleteTextView(){
         //Setting selection from offline
         binding.autoCompleteTextView.setText("Puc-$year Sem-$sem", false)
         //AutoComplete TextView
@@ -82,41 +96,17 @@ class SubjectsScreen : Fragment(), SubjectClicked {
             }
             updateOfflineData()
         }
-
-        binding.backImage.setOnClickListener {
-            requireActivity().finish()
-        }
-        getData()
-        return binding.root
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("state","destroy")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("state","resume")
-    }
-    private fun updateOfflineData() {
-        data.edit {
-            putInt(Constants.year, year)
-            putInt(Constants.sem, sem)
-        }
-    }
-
-
     private fun getData() {
         val arrayList = ArrayList<Subject>()
-        arrayList.add(Subject("IT", R.drawable.it_back))
-        arrayList.add(Subject("Telugu", R.drawable.telugu_back))
-        arrayList.add(Subject("English", R.drawable.english_back))
-        arrayList.add(Subject("Maths", R.drawable.maths_back))
-        arrayList.add(Subject("Physics", R.drawable.physics_back))
-        arrayList.add(Subject("Chemistry", R.drawable.chemistry_back))
-        arrayList.add(Subject("Biology", R.drawable.biology_back))
-        arrayList.add(Subject("Others", R.drawable.others_back))
+        arrayList.add(Subject("Telugu",R.drawable.teulgu, R.drawable.telugu_back))
+        arrayList.add(Subject("IT",R.drawable.it, R.drawable.it_back))
+        arrayList.add(Subject("English",R.drawable.english, R.drawable.english_back))
+        arrayList.add(Subject("Maths",R.drawable.maths, R.drawable.maths_back))
+        arrayList.add(Subject("Physics",R.drawable.physics,R.drawable.physics_back))
+        arrayList.add(Subject("Chemistry",R.drawable.chemistry, R.drawable.chemistry_back))
+        arrayList.add(Subject("Biology",R.drawable.biology, R.drawable.biology_back))
+        arrayList.add(Subject("Others",R.drawable.others, R.drawable.others_back))
         subjectsList.clear()
         subjectsList.addAll(arrayList)
         subjectsAdapter.notifyDataSetChanged()
@@ -137,7 +127,6 @@ class SubjectsScreen : Fragment(), SubjectClicked {
                     return FilterResults()
                 }
                 override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-
                 }
             }
         }

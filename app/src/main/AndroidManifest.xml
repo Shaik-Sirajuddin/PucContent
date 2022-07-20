@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.puccontent.org">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -16,6 +16,9 @@
         android:roundIcon="@drawable/rguktlogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.PucContent">
+        <activity
+            android:name=".activities.AnalyticsActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.LeaderBoardActivity"
             android:exported="false" />
@@ -72,8 +75,9 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.android.c2dm.internet.RECEIVE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.google.android.c2dm.internet.RECEIVE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
     </application>

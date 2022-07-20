@@ -16,6 +16,12 @@
     <color name="black_overlay">#66000000</color>
     <color name="pinkish">#E91E63</color>
     <color name="green">#43A047</color>
-    <color name="lightViolet">#efe6f9</color>
-    <color name="violet">#5f259e</color>
+    <color name="lightViolet">#FBF8FF</color>
+    <color name="violet">#7354F5</color>
+    <color name="lightCyan">#2fc8b4</color>
+    <color name="cyanBack">#d5d2d2</color>
+
+    <color name="lightBlack">#191B20</color>
+    <color name="lightWhite">#F7F4FF</color>
+    <color name="lightGrey">#777987</color>
 </resources>

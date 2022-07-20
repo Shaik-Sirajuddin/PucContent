@@ -42,7 +42,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:fontFamily="@font/amiko_semibold"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:text="@string/about"
@@ -54,7 +53,34 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/myself"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolBBar"
 
+            app:strokeColor="#EA8B84"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/green"
+                android:lineSpacingExtra="3dp"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="Developed by Sirajuddin"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </com.google.android.material.card.MaterialCardView>
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/privacyCard"
             android:layout_width="match_parent"
@@ -64,8 +90,8 @@
             app:cardElevation="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolBBar"
-            app:strokeColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/myself"
+            app:strokeColor="#000000"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -77,7 +103,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#121111"
-                    android:fontFamily="@font/amiko_semibold"
                     android:padding="10dp"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
@@ -89,7 +114,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#1C1A1A"
-                    android:fontFamily="@font/averia_sans_libre"
                     android:padding="15dp"
                     android:text="@string/privacy_policy"
                     android:textColor="@color/white"
@@ -104,12 +128,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:elevation="10dp"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="7dp"
             app:cardElevation="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/privacyCard"
-            app:strokeColor="@color/white"
+            app:strokeColor="@color/black_overlay"
             app:strokeWidth="1dp">
 
             <TextView
@@ -117,7 +141,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#121111"
-                android:fontFamily="@font/amiko_semibold"
                 android:padding="10dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -128,16 +151,17 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/otherApps"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:elevation="10dp"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="7dp"
             app:cardElevation="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/suggestCard"
-            app:strokeColor="@color/white"
+            app:strokeColor="@color/black_overlay"
             app:strokeWidth="1dp">
 
             <TextView
@@ -145,7 +169,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#121111"
-                android:fontFamily="@font/amiko_semibold"
                 android:padding="10dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -153,8 +176,33 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </com.google.android.material.card.MaterialCardView>
-
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/github"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="7dp"
+            app:cardElevation="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/otherApps"
+            app:strokeColor="@color/black_overlay"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#121111"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="For the curious ones click on this box  to check my github account"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/creditBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -164,21 +212,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/otherApps"
+            app:layout_constraintTop_toBottomOf="@+id/github"
             app:layout_constraintVertical_bias="1"
-            app:strokeColor="#CC0045"
+            app:strokeColor="@color/green"
             app:strokeWidth="1dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#121111"
-                android:fontFamily="@font/tauri"
                 android:lineSpacingExtra="3dp"
                 android:padding="10dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:text="This App is developed by Sirajuddin\nApp's Content is managed by Farman\nThanks to Manoj for providing content"
+                android:text="Developed by : Sirajuddin \nContentManaged by : Farman , Manoj "
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="15sp" />

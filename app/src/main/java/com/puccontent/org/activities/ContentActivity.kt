@@ -2,9 +2,15 @@ package com.puccontent.org.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -58,6 +64,28 @@ class ContentActivity : AppCompatActivity() {
                     storage.appOpenId = itId
                 }
             }
+
         AppOpenManager.AD_UNIT_ID = id
+
+        val anotherId = storage.filesScreenId
+        Firebase.database.reference.child("Ads")
+            .child("FilesBanner")
+            .get()
+            .addOnSuccessListener { data ->
+                data.getValue<String>()?.let { itId ->
+                    storage.filesScreenId = itId
+                }
+            }
+        MobileAds.initialize(this)
+        val adView = AdView(this)
+        adView.setAdSize(AdSize.BANNER)
+        adView.adUnitId = anotherId
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+        val params =
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT)
+        binding.adContainer.addView(adView, params)
     }
 }

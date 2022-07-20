@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:padding="10dp"
-        android:background="#EE2224"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,11 +25,12 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:background="@drawable/back_button_back"
                 android:id="@+id/backImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@drawable/ic_baseline_keyboard_backspace_24"
+                android:padding="7dp"
+                android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -38,35 +38,18 @@
 
             <TextView
                 android:id="@+id/textView8"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:fontFamily="@font/amiko_semibold"
-                android:paddingStart="4dp"
-                tools:text="Pdfsjfalsjdfkaffa"
-                android:textAlignment="textStart"
-                android:textColor="@color/white"
+                android:fontFamily="@font/reem_kufi"
+                android:text="Subjects"
+                android:layout_marginStart="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@+id/info1"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/backImage"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/info1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="@string/addquickaccess_info"
-                android:textAlignment="textEnd"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 

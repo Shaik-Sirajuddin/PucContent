@@ -20,7 +20,7 @@ class FoldersAdapter(
         val view = LayoutInflater.from(context).inflate(R.layout.chapter_item, parent, false)
         val holder = FoldersHolder(view)
         view.setOnClickListener {
-            onClick(holder.adapterPosition)
+            onClick(holder.absoluteAdapterPosition)
         }
         return holder
     }
@@ -30,7 +30,7 @@ class FoldersAdapter(
             chapterName.text = list[position]
             with(chapterName) {
                 setHorizontallyScrolling(true);
-                isSingleLine = true;
+                maxLines =2
                 marqueeRepeatLimit = -1
                 ellipsize = TextUtils.TruncateAt.MARQUEE;
                 isSelected = true

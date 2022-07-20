@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.google.android.ads.nativetemplates-merged_res-23:/layout-v21/notification_template_icon_group.xml",
+        "source": "com.google.android.ads.nativetemplates-core-1.7.0-13:/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "com.google.android.ads.nativetemplates-merged_res-23:/layout-v21/notification_template_custom_big.xml",
+        "source": "com.google.android.ads.nativetemplates-core-1.7.0-13:/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "com.google.android.ads.nativetemplates-merged_res-23:/layout-v21/notification_action.xml",
+        "source": "com.google.android.ads.nativetemplates-core-1.7.0-13:/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "com.google.android.ads.nativetemplates-merged_res-23:/layout-v21/notification_action_tombstone.xml",
+        "source": "com.google.android.ads.nativetemplates-core-1.7.0-13:/layout-v21/notification_action_tombstone.xml"
+    }
+]

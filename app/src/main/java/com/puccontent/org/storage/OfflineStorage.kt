@@ -62,6 +62,17 @@ class OfflineStorage(){
                 commit()
             }
         }
+    var userToken = ""
+        get(){
+            return sharedPreferences.getString(Token,"").toString()
+        }
+        set(value) {
+            field = value
+            sharedPreferences.edit{
+                putString(Token,value)
+                commit()
+            }
+        }
 
     constructor(context: Context) : this() {
         this.context = context
@@ -82,6 +93,7 @@ class OfflineStorage(){
         const val PdfInterstitial = "PdfInterstitial"
         const val AppOpenId = "AppOpen"
         const val RewardAd = "RewardVideoAd"
+        const val Token = "userToken"
         private const val fileId  = "ca-app-pub-5198941761547304/2235597781"
         private const val foldId = "ca-app-pub-5198941761547304/3310357375"
         private const val natId = "ca-app-pub-5198941761547304/2104252763"

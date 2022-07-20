@@ -28,7 +28,7 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="addquickaccess_info">Tap on the pdf icon to add it to \n Quick Access</string>
+    <string name="addquickaccess_info">Tap on the pdf icon to \n add it to  Quick Access</string>
     <string name="checkout_more_apps_made_by_me">Checkout More Apps Made By Me</string>
     <string name="clientId">10752488152-0rqc9231uucn7p5q8bbdkoft5d44fn71.apps.googleusercontent.com</string>
     <string name="offline">You are offline</string>

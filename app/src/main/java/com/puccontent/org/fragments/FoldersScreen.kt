@@ -12,7 +12,9 @@ import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -26,7 +28,9 @@ import com.puccontent.org.R
 import com.puccontent.org.databinding.FragmentFoldersScreenBinding
 import com.puccontent.org.network.*
 import com.puccontent.org.storage.FirebaseQueryLiveData
+import com.puccontent.org.storage.MediaStorage
 import com.puccontent.org.storage.OfflineStorage
+import com.puccontent.org.util.SwipeGesture
 import java.io.File
 
 class FoldersScreen : Fragment() {
@@ -41,7 +45,7 @@ class FoldersScreen : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentFoldersScreenBinding.inflate(inflater)
-        initAds()
+        testing()
         val argsData = requireArguments()
         sem = argsData.getInt("sem")
         year = argsData.getInt("year")
@@ -62,6 +66,7 @@ class FoldersScreen : Fragment() {
         binding.backImage.setOnClickListener {
             Navigation.findNavController(binding.root).navigateUp()
         }
+
         if (isConnected()) {
             binding.progressCard.visibility = View.VISIBLE
         } else {
@@ -72,6 +77,11 @@ class FoldersScreen : Fragment() {
         fetchOffline()
         fetchOnline()
         return binding.root
+    }
+
+    private fun testing() {
+        val mediaStorage = MediaStorage()
+        mediaStorage.getRootDirectory(requireContext())
     }
 
     private fun initAds() {
@@ -88,7 +98,6 @@ class FoldersScreen : Fragment() {
                 }
             MobileAds.initialize(it)
             val adView = AdView(requireContext())
-            adView.adSize = AdSize.BANNER
             adView.adUnitId = id
             val adRequest = AdRequest.Builder().build()
             adView.loadAd(adRequest)

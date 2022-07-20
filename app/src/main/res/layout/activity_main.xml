@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,347 +10,228 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@drawable/ic_wave"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/violet"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp"
+            app:contentInsetStart="0dp"
+            >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/reem_kufi"
-                    android:padding="10dp"
-                    android:text="@string/app_name"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:fontFamily="@font/reem_kufi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Welcome,"
+                            android:textColor="#FDFCFF"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:fontFamily="@font/reem_kufi"
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            tools:text="Sirajudin"
+                            android:maxLines="2"
+                            android:textColor="#F8EEFF"
+                            android:textSize="24sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/userimage"
+                        android:clipToOutline="true"
+                        android:src="@drawable/profile" />
+                </LinearLayout>
+            </LinearLayout>
+
+
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.card.MaterialCardView
-            android:visibility="visible"
             android:id="@+id/cardViewAdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="9dp"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolBar">
-            <com.google.android.ads.nativetemplates.TemplateView
-                android:id= "@+id/nativeAdView"
-                app:gnt_template_type= "@layout/gnt_small_template_view"
-                android:layout_width= "match_parent"
-                android:layout_height= "wrap_content" />
+
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/recentCardVeiw"
+        <TextView
+            android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="9dp"
-            android:layout_marginVertical="10dp"
-            android:background="@drawable/about_back"
-            android:elevation="10dp"
-            app:cardCornerRadius="7dp"
+            android:text="@string/quick_access"
+            android:fontFamily="@font/reem_kufi"
+            android:textStyle="bold"
+            android:layout_marginTop="100dp"
+            android:layout_marginHorizontal="10dp"
+            android:textColor="#010003"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardViewAdd">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="15dp"
-                    android:text="@string/recent_updates"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/capriola"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recentUpdatesList"
-                    android:layout_width="match_parent"
-                    android:layout_height="104dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7"
-                    tools:listitem="@layout/recent_updates_item" />
-
-                <ProgressBar
-                    android:id="@+id/recentPBar"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView7" />
-
-                <TextView
-                    android:id="@+id/recentHide"
-                    android:layout_width="match_parent"
-                    android:layout_height="105dp"
-                    android:gravity="center"
-                    android:text="No items to show"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/capriola"
-                    android:textSize="18sp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/recentUpdatesList"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
+            app:layout_constraintTop_toBottomOf="@id/cardViewAdd" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/quickCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="9dp"
-            android:layout_marginVertical="10dp"
+            android:layout_margin="10dp"
             android:background="@drawable/about_back"
-            android:elevation="10dp"
-            app:cardCornerRadius="7dp"
+            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recentCardVeiw">
+            app:layout_constraintTop_toBottomOf="@id/textView6">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="15dp"
-                    android:text="@string/quick_access"
-                    android:fontFamily="@font/capriola"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/quickAccessList"
                     android:layout_width="match_parent"
-                    android:layout_height="105dp"
+                    android:layout_height="180dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/recent_updates_item" />
 
                 <TextView
                     android:id="@+id/hideView"
                     android:layout_width="match_parent"
                     android:layout_height="105dp"
+                    android:fontFamily="@font/reem_kufi"
                     android:gravity="center"
                     android:text="No items to show"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:fontFamily="@font/capriola"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView6" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/support"
-            app:cardElevation="7dp"
+
+        <TextView
+            android:fontFamily="@font/reem_kufi"
+            android:id="@+id/explore"
             android:layout_width="match_parent"
-            app:cardCornerRadius="7dp"
             android:layout_height="wrap_content"
-            android:outlineSpotShadowColor="@color/violet"
-            android:outlineAmbientShadowColor="@color/violet"
-            android:layout_marginHorizontal="9dp"
-            android:layout_marginVertical="10dp"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:text="Explore"
+            android:textColor="#010003"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/quickCardView">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:elevation="15dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:padding="10dp"
-                    android:layout_marginStart="10dp"
-                    android:textStyle="bold"
-                    android:layout_weight="4"
-                    android:layout_gravity="center_vertical"
-                    android:text="Leaderboard"
-                    android:fontFamily="@font/capriola"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <ImageView
-                    android:elevation="10dp"
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/images"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"/>
-            </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/quickCardView" />
 
-        </com.google.android.material.card.MaterialCardView>
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            app:cardCornerRadius="7dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="9dp"
             android:layout_marginVertical="10dp"
+            app:cardBackgroundColor="@color/lightViolet"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/support">
+            app:layout_constraintTop_toBottomOf="@id/explore">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="15dp"
-                    android:text="Explore"
-                    android:fontFamily="@font/capriola"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <include
-                        android:id="@+id/contentBox"
-                        layout="@layout/any_item"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="160dp"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1" />
+                        android:layout_height="wrap_content">
 
-                    <include
-                        android:id="@+id/aboutBox"
-                        layout="@layout/any_item"
+                        <include
+                            android:id="@+id/contentBox"
+                            layout="@layout/any_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/linksBox"
+                            layout="@layout/any_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="160dp"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1" />
+                        android:layout_height="wrap_content">
+
+                        <include
+                            android:id="@+id/libraryBox"
+                            layout="@layout/any_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/aboutBox"
+                            layout="@layout/any_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/discordJoin"
-            android:layout_width="match_parent"
-            app:cardCornerRadius="7dp"
-            app:cardElevation="7dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="9dp"
-            android:layout_marginVertical="10dp"
-            android:outlineSpotShadowColor="@color/violet"
-            android:outlineAmbientShadowColor="@color/violet"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:padding="10dp"
-                    android:layout_marginStart="10dp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/capriola"
-                    android:layout_weight="4"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/join_discord_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <ImageView
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/discord"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"/>
-            </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
-        <LinearLayout
-            android:background="@color/violet"
-            android:layout_marginTop="9dp"
-            app:layout_constraintTop_toBottomOf="@id/discordJoin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/discord"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:src="@drawable/discord"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-            <ImageView
-                android:id="@+id/insta"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:src="@drawable/insta"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-            <ImageView
-                android:id="@+id/twitter"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:src="@drawable/twitter"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-        </LinearLayout>
         <ProgressBar
             android:id="@+id/mainActivityPBar"
             android:layout_width="wrap_content"

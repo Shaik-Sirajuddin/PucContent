@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.google.android.ads.nativetemplates-merged_res-23:/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "source": "com.google.android.ads.nativetemplates-appcompat-1.4.2-9:/layout-watch-v20/abc_alert_dialog_title_material.xml"
+    },
+    {
+        "merged": "com.google.android.ads.nativetemplates-merged_res-23:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "source": "com.google.android.ads.nativetemplates-appcompat-1.4.2-9:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+    }
+]

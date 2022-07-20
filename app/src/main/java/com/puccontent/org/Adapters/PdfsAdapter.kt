@@ -3,13 +3,10 @@ package com.puccontent.org.Adapters
 import android.content.Context
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.puccontent.org.Models.PdfItem
@@ -34,55 +31,55 @@ class PdfsAdapter(
         holder.pdfTitle.text = list[position].name
         holder.pdfTitle.isSelected = true
         Glide.with(context)
-            .load(R.drawable.pdf)
+            .load(R.drawable.pdf1)
             .into(holder.pdfIcon)
+
         if (list[position].size != null) {
             holder.pdfSize.text = list[position].size
         }
-        if (listener.checkIt(holder.adapterPosition)) {
-            Glide.with(context).load(R.drawable.ic_baseline_delete_outline_24)
+        if (listener.checkIt(holder.absoluteAdapterPosition)) {
+            Glide.with(context).load(R.drawable.openwith)
                 .into(holder.pdfStatus)
-            holder.pdfStatus.setColorFilter(ContextCompat.getColor(context, R.color.red),
-                android.graphics.PorterDuff.Mode.MULTIPLY)
         } else {
-            Glide.with(context).load(R.drawable.download_circular_button).into(holder.pdfStatus)
+            Glide.with(context).load(R.drawable.download_icon).into(holder.pdfStatus)
         }
-        if (listener.checkQuick(holder.adapterPosition)) {
+        if (listener.checkQuick(holder.absoluteAdapterPosition)) {
             holder.quickImg.visibility = View.VISIBLE
         } else {
             holder.quickImg.visibility = View.GONE
         }
         holder.pdfIcon.setOnClickListener {
-            listener.quickAccesss(holder.adapterPosition)
+            listener.quickAccess(holder.absoluteAdapterPosition)
         }
         holder.pdfStatus.setOnClickListener {
-            listener.downloadOrDelete(holder.adapterPosition)
+            listener.downloadOrOpen(holder.absoluteAdapterPosition)
         }
-        holder.menu.setOnClickListener {
-            val popUpMenu = PopupMenu(context, holder.menu)
-            popUpMenu.inflate(R.menu.pdf_item_menu)
-            popUpMenu.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.share -> {
-                        listener.shareFile(position)
-                        return@setOnMenuItemClickListener true
-                    }
-                    R.id.extract -> {
-                        listener.extractPdf(position)
-                        return@setOnMenuItemClickListener true
-                    }
-                    R.id.open -> {
-                        listener.openWith(position)
-                        return@setOnMenuItemClickListener true
-                    }
-                }
-                true
-            }
-            popUpMenu.show()
-        }
+//        holder.menu.setOnClickListener {
+//            val popUpMenu = PopupMenu(context, holder.menu)
+//            popUpMenu.inflate(R.menu.pdf_item_menu)
+//            popUpMenu.setOnMenuItemClickListener {
+//                when (it.itemId) {
+//                    R.id.share -> {
+//                        listener.shareFile(position)
+//                        return@setOnMenuItemClickListener true
+//                    }
+//                    R.id.extract -> {
+//                        listener.extractPdf(position)
+//                        return@setOnMenuItemClickListener true
+//                    }
+//                    R.id.open -> {
+//                        listener.openWith(position)
+//                        return@setOnMenuItemClickListener true
+//                    }
+//                }
+//                true
+//            }
+//            popUpMenu.show()
+//        }
         with(holder.pdfTitle) {
             setHorizontallyScrolling(true);
-            isSingleLine = true;
+            maxLines = 1;
+            isSingleLine = true
             marqueeRepeatLimit = -1
             ellipsize = TextUtils.TruncateAt.MARQUEE;
             isSelected = true
@@ -106,16 +103,13 @@ class PdfsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val pdfIcon: ImageView = itemView.findViewById(R.id.pdfImg)
     val quickImg: ImageView = itemView.findViewById(R.id.quickAccImg)
     val pdfSize: TextView = itemView.findViewById(R.id.pdfSize)
-    val menu: ImageView = itemView.findViewById(R.id.menu)
 }
 
 interface PdfClicked {
     fun click(position: Int)
     fun checkIt(position: Int): Boolean
     fun checkQuick(position: Int): Boolean
-    fun quickAccesss(position: Int)
-    fun downloadOrDelete(position: Int)
-    fun shareFile(position: Int)
-    fun extractPdf(position: Int)
+    fun quickAccess(position: Int)
+    fun downloadOrOpen(position: Int)
     fun openWith(position: Int)
 }
