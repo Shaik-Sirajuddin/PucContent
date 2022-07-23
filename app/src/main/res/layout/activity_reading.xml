@@ -3,77 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:animateLayoutChanges="true"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".activities.ReadingActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/readToolBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginTop="30dp"
         android:background="@color/black"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/backImage"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:cardBackgroundColor="@color/black"
+                app:rippleColor="@color/grey"
+                app:cardCornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/backImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    app:tint="@color/white" />
+            </com.google.android.material.card.MaterialCardView>
+
 
             <TextView
                 android:id="@+id/readName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:maxLines="1"
-                android:paddingStart="10dp"
-                android:text="Classification of elements and the periodic table"
-                android:paddingEnd="10dp"
-                android:paddingVertical="5dp"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingVertical="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView3"
-                app:layout_constraintStart_toEndOf="@+id/backImage"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="27dp"
-                android:padding="5dp"
-                android:layout_height="27dp"
+                app:layout_constraintEnd_toStartOf="@+id/nightModeCard"
+                app:layout_constraintStart_toEndOf="@+id/card"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Classification of elements and the periodic table" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/nightModeCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/black"
+                app:rippleColor="@color/grey"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/night_mode"
+                app:cardCornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/fullScreen"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-            <ImageView
-                android:id="@+id/fullScreen"
-                app:tint="@color/white"
-                android:src="@drawable/ic_baseline_fullscreen_24"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="30dp"
-                android:layout_margin="10dp"
-                android:layout_height="30dp"/>
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="10dp"
+                    android:src="@drawable/night_mode"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+            </com.google.android.material.card.MaterialCardView>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"
         android:layout_width="match_parent"

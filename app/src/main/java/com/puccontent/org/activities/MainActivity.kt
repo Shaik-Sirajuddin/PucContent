@@ -109,16 +109,16 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
         val contentBox = binding.contentBox
         val aboutBox = binding.aboutBox
         val linksBox = binding.linksBox
-        val libraryBox = binding.libraryBox
+//        val libraryBox = binding.libraryBox
 
         contentBox.subName.text = "Content"
         aboutBox.subName.text = "About"
-        libraryBox.subName.text = "Library"
+//        libraryBox.subName.text = "Library"
         linksBox.subName.text = "Links"
 
         contentBox.image.setImageResource(R.drawable.content)
         linksBox.image.setImageResource(R.drawable.links)
-        libraryBox.image.setImageResource(R.drawable.library)
+//        libraryBox.image.setImageResource(R.drawable.library)
         aboutBox.image.setImageResource(R.drawable.about)
         contentBox.root.setOnClickListener {
             val intent = Intent(this@MainActivity, ContentActivity::class.java)
@@ -128,6 +128,11 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
             val intent = Intent(this@MainActivity, AboutActivity::class.java)
             startActivity(intent)
         }
+        linksBox.root.setOnClickListener {
+            val intent = Intent(this@MainActivity, LinksActivity::class.java)
+            startActivity(intent)
+        }
+
 
     }
 

@@ -15,7 +15,11 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/rguktlogo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PucContent">
+        android:theme="@style/Theme.PucContent"
+        tools:targetApi="n">
+        <activity
+            android:name=".activities.LinksActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.AnalyticsActivity"
             android:exported="false" />

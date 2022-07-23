@@ -31,7 +31,7 @@ class PdfsAdapter(
         holder.pdfTitle.text = list[position].name
         holder.pdfTitle.isSelected = true
         Glide.with(context)
-            .load(R.drawable.pdf1)
+            .load(R.drawable.pdf)
             .into(holder.pdfIcon)
 
         if (list[position].size != null) {

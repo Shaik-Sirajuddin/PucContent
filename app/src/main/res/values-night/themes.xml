@@ -14,9 +14,7 @@
         <item name="android:textColorSecondary">@color/white</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="signInActivity" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">#E91E63</item>
-    </style>
+
     <style name="ThemeOverlay.PucContent.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
         <item name="fullscreenTextColor">@color/light_blue_A400</item>
@@ -28,4 +26,5 @@
     <style name="ReemKufiFontButton" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">@font/reem_kufi</item>
     </style>
+
 </resources>

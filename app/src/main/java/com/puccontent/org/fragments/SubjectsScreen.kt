@@ -49,12 +49,14 @@ class SubjectsScreen : Fragment(), SubjectClicked {
         getData()
         return binding.root
     }
+
     private fun updateOfflineData() {
         data.edit {
             putInt(Constants.year, year)
             putInt(Constants.sem, sem)
         }
     }
+
     private fun initViews(){
         subjectsAdapter = SubjectsAdapter(requireContext(), subjectsList, this)
         binding.subjectsRecyclerView.adapter = subjectsAdapter

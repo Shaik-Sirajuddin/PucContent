@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -108,7 +106,10 @@ class FilesScreen : Fragment(), PdfClicked {
         }
         val itemTouchHelper = ItemTouchHelper(swipeGesture)
         itemTouchHelper.attachToRecyclerView(binding.pdfsListView)
+        binding.pdfsListView.setOnLongClickListener {
 
+            true
+        }
         requireContext().registerReceiver(
             onDownloadComplete,
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
@@ -481,13 +482,13 @@ class FilesScreen : Fragment(), PdfClicked {
     private val onDownloadComplete: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            for ((counter, a) in downloadList.withIndex()) {
+            for (a in downloadList) {
                 if (a == id) {
                     toast?.cancel()
                     toast =
                         Toast.makeText(requireContext(), "Download Completed", Toast.LENGTH_SHORT)
                     toast?.show()
-                    downloadComplete(counter)
+                    downloadComplete()
                 }
             }
         }
@@ -507,10 +508,13 @@ class FilesScreen : Fragment(), PdfClicked {
         return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
     }
 
-    private fun downloadComplete(position: Int) {
-        adapter.notifyItemChanged(position, null);
+    private fun downloadComplete() {
+        fetchOffline()
+        fetchOnline()
     }
-
+    private fun refreshPdf(position: Int){
+        adapter.notifyItemChanged(position)
+    }
     private fun getFileSize(sizeInBytes: String): String {
         var size = sizeInBytes
         val s: Float = (size.toFloat() / 1000000f)
@@ -534,7 +538,7 @@ class FilesScreen : Fragment(), PdfClicked {
                 var size = response.get("size") as String
                 size = getFileSize(size)
                 list[i].size = size
-                downloadComplete(i)
+                refreshPdf(i)
                 val map = HashMap<String, Any>()
                 map[list[i].name] = size
                 database.reference
@@ -554,7 +558,7 @@ class FilesScreen : Fragment(), PdfClicked {
         override fun onDataChange(snapshot: DataSnapshot) {
             if (snapshot.exists()) {
                 list[ind].size = snapshot.getValue<String>()
-                downloadComplete(ind)
+                refreshPdf(ind)
             } else {
                 getDownloadSize(ind)
             }

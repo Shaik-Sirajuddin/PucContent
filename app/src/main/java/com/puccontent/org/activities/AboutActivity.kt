@@ -1,12 +1,16 @@
 package com.puccontent.org.activities
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.view.MotionEvent
+import android.view.View.OnTouchListener
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -15,10 +19,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.puccontent.org.databinding.ActivityAboutBinding
-import com.puccontent.org.network.launchOnlineView
+
 
 class AboutActivity : AppCompatActivity() {
     private lateinit var binding:ActivityAboutBinding
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAboutBinding.inflate(layoutInflater)
@@ -29,18 +34,25 @@ class AboutActivity : AppCompatActivity() {
         binding.backImage.setOnClickListener {
             finish()
         }
-        binding.otherApps.setOnClickListener {
-            openDevPage()
-        }
         binding.creditBox.setOnClickListener {
-           openAnalyticForAdmin()
+            openAnalyticForAdmin()
+        }
+        binding.playstore.setOnClickListener {
+            openDevPage()
         }
         binding.github.setOnClickListener {
             launchUrl("https://github.com/Shaik-Sirajuddin")
         }
-        binding.myself.setOnClickListener {
+        binding.insta.setOnClickListener{
             launchUrl("https://www.instagram.com/sirajuddinb1/")
         }
+        binding.twitter.setOnClickListener {
+            launchUrl("https://twitter.com/_siraj_uddin_")
+        }
+        binding.discord.setOnClickListener {
+            launchUrl("https://discord.gg/Gbvz3d8peP")
+        }
+
     }
     private fun launchUrl(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))

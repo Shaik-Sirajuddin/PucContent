@@ -40,6 +40,7 @@ class ReadingActivity : AppCompatActivity() {
     private var isAdShown = false
     private var isAdLoaded = false
     private var isInterstitialEnabled = true
+    private var isFullScreen = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReadingBinding.inflate(layoutInflater)
@@ -50,41 +51,39 @@ class ReadingActivity : AppCompatActivity() {
         val name = intent.getStringExtra("name")
         val url = intent.getStringExtra("url")
         val pdf: PDFView = findViewById(R.id.pdfView)
-        val backImage: ImageView = findViewById(R.id.backImage)
         val readName: TextView = findViewById(R.id.readName)
-        val readToolbar: Toolbar = findViewById(R.id.readToolBar)
         val imageView3: ImageView = findViewById(R.id.imageView3)
-        val fullScreen: ImageView = findViewById(R.id.fullScreen)
-        backImage.setOnClickListener {
+        binding.card.setOnClickListener {
             handleBackClick()
         }
-        fullScreen.setOnClickListener {
-            showFullScreen()
-            readToolbar.visibility = View.GONE
-            Toast.makeText(this, "Press back button to exit full screen", Toast.LENGTH_SHORT)
-                .show()
+        binding.pdfView.setOnClickListener {
+            if(isFullScreen){
+                hideFullScreen()
+            }
+            else{
+                showFullScreen()
+            }
         }
-        imageView3.setOnClickListener {
-            if (nightMode) {
+
+        binding.nightModeCard.setOnClickListener {
+            nightMode = if (nightMode) {
                 pdf.setNightMode(false)
-                Toast.makeText(this,
-                    "DayMode activated,scroll to see changes",
-                    Toast.LENGTH_SHORT)
-                    .show()
                 imageView3.setImageResource(R.drawable.night_mode)
-                nightMode = false
+                false
             } else {
                 pdf.setNightMode(true)
-                Toast.makeText(this,
-                    "NightMode activated,scroll to see changes",
-                    Toast.LENGTH_SHORT).show()
                 imageView3.setImageResource(R.drawable.sunny)
-                nightMode = true
+                true
             }
+            showFullScreen()
         }
         readName.text = name
         try {
             if (file != null) {
+                pdf.maxZoom = 10F
+                pdf.useBestQuality(true)
+                pdf.enableRenderDuringScale(true)
+                pdf.enableAnnotationRendering(true)
                 pdf.fromFile(getExternalFilesDir(file))
                     .defaultPage(curPage)
                     .pageFitPolicy(FitPolicy.WIDTH)
@@ -186,17 +185,10 @@ class ReadingActivity : AppCompatActivity() {
         hideFullScreen()
     }
 
-    override fun onBackPressed() {
-        hideFullScreen()
-        val readToolbar: Toolbar = findViewById(R.id.readToolBar)
-        if (readToolbar.visibility == View.GONE) {
-            readToolbar.visibility = View.VISIBLE
-        } else {
-            handleBackClick()
-        }
-    }
 
     private fun hideFullScreen() {
+        binding.readToolBar.visibility = View.VISIBLE
+        isFullScreen = false
         WindowInsetsControllerCompat(window,
             window.decorView).show(WindowInsetsCompat.Type.navigationBars())
         WindowInsetsControllerCompat(window,
@@ -204,6 +196,8 @@ class ReadingActivity : AppCompatActivity() {
     }
 
     private fun showFullScreen() {
+        binding.readToolBar.visibility = View.GONE
+        isFullScreen = true
         WindowInsetsControllerCompat(window,
             window.decorView).hide(WindowInsetsCompat.Type.systemBars())
         WindowInsetsControllerCompat(window,

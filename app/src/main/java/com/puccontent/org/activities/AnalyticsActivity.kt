@@ -59,7 +59,7 @@ class AnalyticsActivity : AppCompatActivity() {
     private fun initData() {
         dataBase.reference
             .child("Users")
-            .addValueEventListener(listener)
+            .addListenerForSingleValueEvent(listener)
     }
     private fun copyToClipboard(text: String){
         val clipboard: ClipboardManager =
@@ -74,13 +74,11 @@ class AnalyticsActivity : AppCompatActivity() {
             usersList.clear()
             var counter = 1
              for(item in snapshot.children){
-                 var user:User? = null
-                 user = try{
+                 val user:User? = try{
                      item.getValue<User>()
                  }catch (e:Exception){
                      null
                  }
-1
                  val date = user?.let { Date(it.lastLoginTime) }
                  val dateFormat: DateFormat = DateFormat.getDateTimeInstance(
                      DateFormat.MEDIUM,
@@ -97,7 +95,6 @@ class AnalyticsActivity : AppCompatActivity() {
                  }
                  usersList.add(userString)
                  cachedList.add(userString)
-
                  counter++
              }
             adapter.notifyDataSetChanged()

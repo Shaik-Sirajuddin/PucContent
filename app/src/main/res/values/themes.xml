@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.PucContent" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/pinkish</item>
+        <item name="colorPrimary">#0E1A59</item>
         <item name="colorPrimaryVariant">#0E1A59</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -17,18 +17,18 @@
         <item name="android:buttonStyle">@style/ReemKufiFontButton</item>
 
     </style>
-    <style name="signInActivity" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">#E91E63</item>
-    </style>
     <style name="splashScreen" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:statusBarColor">@color/white</item>
     </style>
-    <style name="fullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="fullScreen" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="ReemKufiFontTextview" parent="android:Widget.TextView">

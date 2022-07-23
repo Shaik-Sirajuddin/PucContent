@@ -35,7 +35,7 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         try {
             binding = ActivitySignInBinding.inflate(layoutInflater)
-            setTheme(R.style.signInActivity)
+            setTheme(R.style.Theme_PucContent)
             setContentView(binding.root)
             mAuth = Firebase.auth
             supportActionBar?.hide()

@@ -212,19 +212,16 @@
                         android:layout_height="wrap_content">
 
                         <include
-                            android:id="@+id/libraryBox"
+                            android:id="@+id/aboutBox"
                             layout="@layout/any_item"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="1" />
 
-                        <include
-                            android:id="@+id/aboutBox"
-                            layout="@layout/any_item"
+                        <View
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
                             android:layout_weight="1" />
                     </LinearLayout>
 

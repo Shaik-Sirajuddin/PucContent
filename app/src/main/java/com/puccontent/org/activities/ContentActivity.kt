@@ -22,7 +22,7 @@ import com.puccontent.org.util.AppOpenManager
 
 class ContentActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySubjectsBinding
-    private lateinit var  appOpenManager: AppOpenManager
+//    private lateinit var  appOpenManager: AppOpenManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySubjectsBinding.inflate(layoutInflater)
@@ -45,8 +45,8 @@ class ContentActivity : AppCompatActivity() {
                 navController
                     .navigate(R.id.action_subjectsScreen_to_filesScreen, bundle)
             }
-            initAds()
-            appOpenManager = AppOpenManager(this)
+//            initAds()
+//            appOpenManager = AppOpenManager(this)
         }catch(e:IllegalArgumentException){
             e.printStackTrace()
             Log.e("content",e.message.toString())

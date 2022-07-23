@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Puc Content</string>
     <string name="access_all_the_puc_at_one_place">Access All The Puc Material At One Place</string>
-    <string name="sign_in_with_your_college_mail_to_continue">Sign In With Your College Mail To Continue</string>
+    <string name="sign_in_with_your_college_mail_to_continue">Sign In With Your Mail To Continue</string>
     <string name="verify_text">Email is required to verify that you belong to rgukt \n This app doesn\'t collect any kind of user data</string>
     <string name="recent_updates">Recent Updates</string>
     <string name="quick_access">Quick Access</string>
@@ -23,7 +23,7 @@
     <string name="paste_pdf_url_here">Paste pdf url here</string>
     <string name="upload">Upload</string>
     <string name="about">About</string>
-    <string name="privacy_policy">->Puc Content App is developed independently by students and doesn\'t belong to Rgukt \n->Content used in the app is not owned by the app,it is licenced to their respective writers/owners \n->This app is made to help puc students by providing the content in a structured format and not meant to be used for any commercial purposes \n->PucContent app is completely free and will remain free forever</string>
+    <string name="privacy_policy">Puc Content App is developed independently by students and doesn\'t belong to Rgukt \n Content used in the app is not owned by the app,it is licenced to their respective writers/owners \nThis app is made to help puc students by providing the content in a structured format and not meant to be used for any commercial purposes \nPucContent app is completely free and will remain free forever</string>
     <string name="privacy_policy_header">Privacy Policy</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
