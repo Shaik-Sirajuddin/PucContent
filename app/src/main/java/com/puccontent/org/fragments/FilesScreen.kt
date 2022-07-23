@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -493,11 +494,42 @@ class FilesScreen : Fragment(), PdfClicked {
             }
         }
     }
+     fun extractPdf(position: Int) {
+        if(!checkIt(position)){
+            Toast.makeText(requireContext(),"Download the file first",Toast.LENGTH_SHORT).show()
+            return
+        }
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_TITLE, "${list[position].name}.pdf")
+        }
+        extractPosition = position
+        resultLauncher.launch(intent)
+    }
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (sharePosition != -1) {
-                adapter.notifyItemChanged(sharePosition)
-                sharePosition = -1
+            it.data?.data.also { uri ->
+                val path = requireContext().getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$chapter/${list[extractPosition].name}.pdf")!!.absolutePath
+                if (uri != null) {
+                    lifecycleScope.launch(Dispatchers.Default)
+                    {
+                        copyFile(path, uri){ done->
+                            if (done) {
+                                requireActivity().runOnUiThread {
+                                    Toast.makeText(requireContext(),
+                                        "File saved successfully",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                requireActivity().runOnUiThread{
+                                    Toast.makeText(requireContext(), "Failed to save file", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
