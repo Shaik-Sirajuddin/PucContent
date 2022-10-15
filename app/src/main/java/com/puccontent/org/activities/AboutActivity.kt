@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.puccontent.org.databinding.ActivityAboutBinding
+import com.puccontent.org.storage.FirebaseQueryLiveData
 
 
 class AboutActivity : AppCompatActivity() {
@@ -73,18 +74,12 @@ class AboutActivity : AppCompatActivity() {
             openActivity()
             return
         }
-        database.reference.child("Admin").child(email)
-            .addListenerForSingleValueEvent(listener)
-    }
-    private val listener = object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            if (snapshot.exists()) {
+        val ref =  database.reference.child("Admin").child(email)
+        val data = FirebaseQueryLiveData(ref, FirebaseQueryLiveData.singleType)
+        data.observe(this) {
+            if (it.exists()) {
                 openActivity()
             }
-        }
-
-        override fun onCancelled(p0: DatabaseError) {
-
         }
     }
 

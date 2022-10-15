@@ -4,14 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.puccontent.org.Adapters.LinksAdapter
-import com.puccontent.org.Models.Link
-import com.puccontent.org.R
+import com.puccontent.org.adapters.LinksAdapter
+import com.puccontent.org.models.Link
 import com.puccontent.org.databinding.ActivityLinksBinding
-import com.puccontent.org.network.launchOnlineView
 
 class LinksActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLinksBinding

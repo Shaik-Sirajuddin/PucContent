@@ -18,10 +18,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.puccontent.org.Models.MySingleton
-import com.puccontent.org.Models.Update
+import com.puccontent.org.models.MySingleton
+import com.puccontent.org.models.Update
 import com.puccontent.org.databinding.ActivityAddToDataBaseBinding
 import com.puccontent.org.network.showToast
+import com.puccontent.org.storage.OfflineStorage
 import java.util.*
 import kotlin.Exception
 import kotlin.collections.ArrayList
@@ -298,14 +299,14 @@ class AddToDataBase : AppCompatActivity() {
     }
 
     private fun getUrl(trim: String): String {
-        val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
+        val APIKey = OfflineStorage(this).apiKey
         val FileID = trim.substring(32, 65)
         return "https://www.googleapis.com/drive/v3/files/${FileID}?alt=media&key=${APIKey}"
     }
 
     private fun getSizeUrl(dUrl: String): String {
         val fileId = dUrl.substring(42, 75)
-        val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
+        val APIKey = OfflineStorage(this).apiKey
         return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
     }
 

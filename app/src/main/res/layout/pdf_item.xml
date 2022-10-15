@@ -20,10 +20,12 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="75dp"
+            android:background="?myCardBackground"
             android:layout_weight="1"
             android:orientation="horizontal"
             android:padding="10dp">
             <ImageView
+                android:background="?myCardBackground"
                 android:id="@+id/pdfImg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -32,22 +34,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/pdf"
-                app:tint="@color/lightCyan"
+                app:tint="@color/blueOverlay"
                 />
 
             <ImageView
+                android:background="?myCardBackground"
                 android:id="@+id/quickAccImg"
                 android:layout_width="12dp"
                 android:layout_height="20dp"
-                android:elevation="1dp"
                 android:translationY="-2dp"
                 android:translationX="-3dp"
                 android:src="@drawable/pin"
                 app:layout_constraintEnd_toEndOf="@+id/pdfImg"
                 app:layout_constraintTop_toTopOf="@id/pdfImg"
-                app:tint="@color/lightCyan" />
+                app:tint="@color/blueOverlay" />
 
             <LinearLayout
+                android:background="?myCardBackground"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -58,6 +61,7 @@
                 app:layout_constraintTop_toTopOf="@+id/pdfImg">
 
                 <TextView
+                    android:background="?myCardBackground"
                     android:id="@+id/pdfName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -66,7 +70,6 @@
                     android:fontFamily="@font/reem_kufi"
                     android:paddingHorizontal="10dp"
                     android:textAlignment="gravity"
-                    android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toStartOf="@+id/downloadState"
                     app:layout_constraintStart_toEndOf="@id/pdfImg"
@@ -74,12 +77,13 @@
                     tools:text="Unit 1  \n  aljflsal" />
 
                 <TextView
+                    android:background="?myCardBackground"
                     android:id="@+id/pdfSize"
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:fontFamily="@font/reem_kufi"
                     android:paddingHorizontal="10dp"
-                    android:text="24 mb"
+                    android:text="-- mb"
                     android:textColor="#736F6F"
                     app:layout_constraintStart_toEndOf="@+id/pdfImg"
                     app:layout_constraintTop_toBottomOf="@+id/pdfName" />
@@ -88,6 +92,7 @@
             </LinearLayout>
 
             <ImageView
+                android:background="?myCardBackground"
                 android:id="@+id/downloadState"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -98,7 +103,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/lightCyan"
+                app:tint="@color/blueOverlay"
                 tools:src="@drawable/download_icon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

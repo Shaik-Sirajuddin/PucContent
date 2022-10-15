@@ -14,8 +14,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.puccontent.org.Models.User
+import com.puccontent.org.models.User
 import com.puccontent.org.databinding.ActivityAnalyticsBinding
+import com.puccontent.org.storage.FirebaseQueryLiveData
 import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,6 +36,7 @@ class AnalyticsActivity : AppCompatActivity() {
         dataBase = Firebase.database
         initViews()
         initData()
+
     }
     private fun performSearch(text:String){
         val tempList  = cachedList.filter {
@@ -57,9 +59,12 @@ class AnalyticsActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        dataBase.reference
+        val ref = dataBase.reference
             .child("Users")
-            .addListenerForSingleValueEvent(listener)
+        val data = FirebaseQueryLiveData(ref, FirebaseQueryLiveData.singleType)
+        data.observe(this) {
+            setData(it)
+        }
     }
     private fun copyToClipboard(text: String){
         val clipboard: ClipboardManager =
@@ -68,37 +73,35 @@ class AnalyticsActivity : AppCompatActivity() {
         clipboard.setPrimaryClip(clip)
         Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_LONG).show()
     }
-    private val listener = object:ValueEventListener{
-        override fun onDataChange(snapshot: DataSnapshot) {
-            cachedList.clear()
-            usersList.clear()
-            var counter = 1
-             for(item in snapshot.children){
-                 val user:User? = try{
-                     item.getValue<User>()
-                 }catch (e:Exception){
-                     null
-                 }
-                 val date = user?.let { Date(it.lastLoginTime) }
-                 val dateFormat: DateFormat = DateFormat.getDateTimeInstance(
-                     DateFormat.MEDIUM,
-                     DateFormat.SHORT,
-                     Locale.getDefault()
-                 )
-                 var time = ""
-                 if(date!=null)
-                  time =   dateFormat.format(date)
-                 var userString = "${counter}) name : ${user?.name} \n email : ${user?.email} \n lastSeen : $time \n token : ${user?.userToken} "
+    private fun setData(snapshot: DataSnapshot){
+        cachedList.clear()
+        usersList.clear()
+        var counter = 1
+        for(item in snapshot.children){
+            val user:User? = try{
+                item.getValue<User>()
+            }catch (e:Exception){
+                null
+            }
+            val date = user?.let { Date(it.lastLoginTime) }
+            val dateFormat: DateFormat = DateFormat.getDateTimeInstance(
+                DateFormat.MEDIUM,
+                DateFormat.SHORT,
+                Locale.getDefault()
+            )
+            var time = ""
+            if(date!=null)
+                time =   dateFormat.format(date)
+            var userString = "${counter}) name : ${user?.name} \n email : ${user?.email} \n lastSeen : $time \n token : ${user?.userToken} "
 
-                 if(user==null){
-                     userString = item.value.toString()
-                 }
-                 usersList.add(userString)
-                 cachedList.add(userString)
-                 counter++
-             }
-            adapter.notifyDataSetChanged()
+            if(user==null){
+                userString = item.value.toString()
+            }
+            usersList.add(userString)
+            cachedList.add(userString)
+            counter++
         }
-        override fun onCancelled(error: DatabaseError) {}
+        adapter.notifyDataSetChanged()
     }
+
 }

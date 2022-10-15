@@ -23,11 +23,27 @@
           }
         },
         {
+          "client_id": "10752488152-28lfelsiav7pk578ubfgb4mpt51eusrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.puccontent.org",
+            "certificate_hash": "d70f70c7286d118e8787808aaba5acd1f966b11f"
+          }
+        },
+        {
           "client_id": "10752488152-lfflbhj09g4h112jp995ci27rkd1f85t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.puccontent.org",
             "certificate_hash": "5602632601dbb50eb89e456cd100e96682f87915"
+          }
+        },
+        {
+          "client_id": "10752488152-msh9dj6p09q4npdkccs1bsrgvl040hg7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.puccontent.org",
+            "certificate_hash": "5063a5d0d67f7fc61c70f3d6af747867ca3bae8a"
           }
         },
         {
@@ -49,7 +65,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5198941761547304~8009000347"
     },
     {
       "client_info": {

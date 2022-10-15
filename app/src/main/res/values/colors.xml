@@ -24,4 +24,5 @@
     <color name="lightBlack">#191B20</color>
     <color name="lightWhite">#F7F4FF</color>
     <color name="lightGrey">#777987</color>
+    <color name="blueOverlay">#0b6ddf</color>
 </resources>

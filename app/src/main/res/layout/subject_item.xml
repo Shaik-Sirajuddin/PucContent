@@ -12,12 +12,14 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
+        android:background="?myCardBackground"
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical"
         >
         <ImageView
+            android:background="?myCardBackground"
             android:src="@drawable/english"
             android:padding="30dp"
             android:id="@+id/image"
@@ -26,13 +28,13 @@
             android:layout_height="110dp"/>
 
         <TextView
+            android:background="?myCardBackground"
             android:id="@+id/subName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:paddingHorizontal="20dp"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="@font/reem_kufi"

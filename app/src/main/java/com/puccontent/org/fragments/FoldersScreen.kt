@@ -2,35 +2,32 @@ package com.puccontent.org.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
+import android.transition.Transition
+import android.transition.TransitionSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.puccontent.org.Adapters.FoldersAdapter
+import com.puccontent.org.adapters.FoldersAdapter
 import com.puccontent.org.R
 import com.puccontent.org.databinding.FragmentFoldersScreenBinding
 import com.puccontent.org.network.*
 import com.puccontent.org.storage.FirebaseQueryLiveData
 import com.puccontent.org.storage.MediaStorage
-import com.puccontent.org.storage.OfflineStorage
-import com.puccontent.org.util.SwipeGesture
 import java.io.File
 
 class FoldersScreen : Fragment() {
@@ -40,21 +37,23 @@ class FoldersScreen : Fragment() {
     private var year: Int = 1
     private var subject: String = ""
     private lateinit var adapter: FoldersAdapter
+    private var data : FirebaseQueryLiveData? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentFoldersScreenBinding.inflate(inflater)
-        testing()
         val argsData = requireArguments()
         sem = argsData.getInt("sem")
         year = argsData.getInt("year")
         subject = argsData.getString("subject", "Physics")
-        adapter = FoldersAdapter(requireContext(),list){
-            navigateToFilesScreen(it)
+        adapter = FoldersAdapter(requireContext(), list) { it, _ ->
+            if(it >=0 && it < list.size){
+                navigateToFilesScreen(it)
+            }
         }
         binding.chapterPath.text = subject
-        with(binding.chapterPath){
+        with(binding.chapterPath) {
             setHorizontallyScrolling(true);
             isSingleLine = true;
             marqueeRepeatLimit = -1
@@ -74,38 +73,12 @@ class FoldersScreen : Fragment() {
             binding.info.visibility = View.VISIBLE
             binding.progressCard.visibility = View.GONE
         }
-        fetchOffline()
-        fetchOnline()
+        Handler(Looper.getMainLooper()).postDelayed({
+            fetchOffline()
+            fetchOnline()
+        }, 400)
+
         return binding.root
-    }
-
-    private fun testing() {
-        val mediaStorage = MediaStorage()
-        mediaStorage.getRootDirectory(requireContext())
-    }
-
-    private fun initAds() {
-        context?.let {
-            val storage = OfflineStorage(it)
-            val id = storage.foldersScreenId
-            Firebase.database.reference.child("Ads")
-                .child("FolderBanner")
-                .get()
-                .addOnSuccessListener { data ->
-                    data.getValue<String>()?.let { itId ->
-                        storage.foldersScreenId = itId
-                    }
-                }
-            MobileAds.initialize(it)
-            val adView = AdView(requireContext())
-            adView.adUnitId = id
-            val adRequest = AdRequest.Builder().build()
-            adView.loadAd(adRequest)
-            val params =
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT)
-            binding.adContainer.addView(adView, params)
-        }
     }
 
     private fun navigateToFilesScreen(pos: Int) {
@@ -113,7 +86,11 @@ class FoldersScreen : Fragment() {
             bundleOf("year" to year, "sem" to sem, "subject" to subject, "chapter" to list[pos])
         Navigation
             .findNavController(binding.root)
-            .navigate(R.id.action_foldersScreen_to_filesScreen, bundle)
+            .navigate(
+                R.id.action_foldersScreen_to_filesScreen,
+                bundle,
+            )
+
     }
 
     private fun fetchOffline() {
@@ -141,24 +118,43 @@ class FoldersScreen : Fragment() {
         val ref = Firebase.database.reference
             .child("Puc-$year Sem-$sem")
             .child(subject).child("Chapters")
-        val data = FirebaseQueryLiveData(ref, FirebaseQueryLiveData.singleType)
-        data.observe(viewLifecycleOwner) {
-            setData(it)
+        data = FirebaseQueryLiveData(ref, FirebaseQueryLiveData.singleType)
+        data?.observe(viewLifecycleOwner) {
+            try{
+                setData(it)
+            }
+            catch (e:Exception){
+                FirebaseCrashlytics.getInstance().log(e.message.toString())
+                Log.e("FolderScreen:125" , e.message.toString())
+            }
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        data?.removeObservers(this)
+    }
     private fun setData(snapshot: DataSnapshot) {
         if (snapshot.exists()) {
             list.clear()
             for (snap in snapshot.children) {
-                snap.getValue<String>()?.let { list.add(it) }
+                snap.getValue<String>()?.let {
+                    list.add(it)
+                    val file =  context?.getExternalFilesDir("OfflineData/Puc-$year Sem-$sem/$subject/$it")
+//                    if(file?.exists() == true){
+//                        file.mkdir()
+//                    }
+                }
+
             }
             binding.info.text = resources.getString(R.string.info)
+
             if (list.isEmpty()) {
                 binding.info.visibility = View.VISIBLE
             } else {
                 binding.info.visibility = View.GONE
             }
+
             adapter.notifyDataSetChanged()
             binding.progressCard.visibility = View.GONE
         } else {

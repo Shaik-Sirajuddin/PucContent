@@ -9,15 +9,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lightViolet"
-        >
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBBar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/lightViolet"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,17 +42,16 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:fontFamily="@font/reem_kufi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:fontFamily="@font/reem_kufi"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:text="@string/about"
                     android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/backImage"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:background="@color/lightViolet"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,15 +72,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/reem_kufi"
                 android:lineSpacingExtra="3dp"
                 android:padding="10dp"
-                android:paddingStart="20dp"
-                android:fontFamily="@font/reem_kufi"
-                android:background="@color/lightViolet"
-                android:paddingEnd="20dp"
+                android:textAllCaps="true"
+                android:textColor="@color/blueOverlay"
                 android:text="App Developed by Sk Sirajuddin"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -93,7 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            app:cardBackgroundColor="@color/lightViolet"
+            android:background="?myCardBackground"
+            app:cardBackgroundColor="?myCardBackground"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,30 +97,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lightViolet"
+
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/lightViolet"
-                    android:padding="10dp"
                     android:fontFamily="@font/reem_kufi"
-                    android:textStyle="bold"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:padding="10dp"
+                    android:textColor="@color/blueOverlay"
+                    android:textAllCaps="true"
                     android:text="@string/privacy_policy_header"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#EBF8F6"
-                    android:padding="15dp"
+                    android:background="?myCardBackground"
                     android:fontFamily="@font/reem_kufi"
+                    android:padding="15dp"
                     android:text="@string/privacy_policy"
-                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -137,6 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            app:cardBackgroundColor="?myCardBackground"
             app:cardCornerRadius="7dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,107 +138,134 @@
                 android:id="@+id/writeButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#EBF8F6"
                 android:fontFamily="@font/reem_kufi"
                 android:padding="10dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
                 android:text="Write Suggestion Or Report Problem"
-                android:textColor="@color/black"
                 android:textSize="18sp"
-                app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+                app:cardBackgroundColor="?myCardBackground"
+                android:drawableTint="?invertTheme"
+                app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
+                 />
         </com.google.android.material.card.MaterialCardView>
-
+        <TextView
+            android:id="@+id/socialMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/reem_kufi"
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/suggestCard"
+            android:text="SOCIAL MEDIA"
+            android:textStyle="bold"
+            android:textColor="@color/blueOverlay"
+            android:layout_marginHorizontal="15dp"
+/>
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/links"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_marginHorizontal="15dp"
             app:cardElevation="0dp"
-            app:layout_constraintTop_toBottomOf="@id/suggestCard">
+            app:layout_constraintTop_toBottomOf="@id/socialMedia">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lightViolet"
                 android:orientation="horizontal">
+
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
                     android:id="@+id/github"
-                    app:cardElevation="0dp"
-                    android:background="@drawable/curved_box"
-                    android:layout_margin="10dp">
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    app:cardElevation="0dp">
+
                     <ImageView
-                        android:elevation="0dp"
-                        android:padding="7dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/github" />
+                        android:background="@drawable/curved_box"
+                        android:elevation="0dp"
+                        android:padding="10dp"
+                        android:src="@drawable/github"
+                        app:tint="?invertTheme" />
                 </com.google.android.material.card.MaterialCardView>
 
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
                     android:id="@+id/playstore"
-                    app:cardElevation="0dp"
-                    android:background="@drawable/curved_box"
-                    android:layout_margin="10dp">
-                    <ImageView
-                        android:elevation="0dp"
-                        android:padding="7dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/playstore" />
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:id="@+id/insta"
-                    app:cardElevation="0dp"
                     android:background="@drawable/curved_box"
-                    android:layout_margin="10dp">
+                    app:cardElevation="0dp">
+
                     <ImageView
-                        android:elevation="0dp"
-                        android:padding="7dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/insta" />
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:id="@+id/twitter"
-                    app:cardElevation="0dp"
-                    android:background="@drawable/curved_box"
-                    android:layout_margin="10dp">
-                    <ImageView
+                        android:background="@drawable/curved_box"
                         android:elevation="0dp"
-                        android:padding="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/twitter" />
+                        android:padding="10dp"
+                        android:src="@drawable/playstore1"
+                        app:tint="?invertTheme" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/insta"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    app:cardElevation="0dp"
-                    android:id="@+id/discord"
                     android:background="@drawable/curved_box"
-                    android:layout_margin="10dp">
+                    app:cardElevation="0dp">
+
                     <ImageView
-                        android:elevation="0dp"
-                        android:padding="7dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/discord" />
+                        android:background="@drawable/curved_box"
+                        android:elevation="0dp"
+                        android:padding="10dp"
+                        android:src="@drawable/insta1"
+                        app:tint="?invertTheme" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/twitter"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/curved_box"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/curved_box"
+                        android:elevation="0dp"
+                        android:padding="10dp"
+                        android:src="@drawable/twitter1"
+                        app:tint="?invertTheme" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/discord"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/curved_box"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/curved_box"
+                        android:elevation="0dp"
+                        android:padding="10dp"
+                        android:src="@drawable/discord1"
+                        app:tint="?invertTheme" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -259,11 +277,12 @@
             android:layout_margin="15dp"
             android:elevation="10dp"
             app:cardCornerRadius="5dp"
+            app:rippleColor="@android:color/transparent"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/suggestCard"
+            app:layout_constraintTop_toBottomOf="@+id/links"
             app:layout_constraintVertical_bias="1">
 
 
@@ -274,50 +293,58 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#EBF8F6"
                     android:lineSpacingExtra="3dp"
                     android:padding="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textStyle="bold"
-                    android:text="Contributors :"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:text="CONTRIBUTORS :"
+                    android:textColor="@color/blueOverlay"
+                    android:textStyle="bold" />
 
-                <TableRow android:padding="10dp">
+                <TableRow
+                    android:background="?myCardBackground"
+                    android:padding="10dp">
 
                     <TextView
-                        android:fontFamily="@font/reem_kufi"
                         android:layout_width="wrap_content"
+
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="?myCardBackground"
+                        android:fontFamily="@font/reem_kufi"
                         android:text="P Manoj"
                         android:textSize="16sp" />
 
                     <TextView
-                        android:fontFamily="@font/reem_kufi"
                         android:layout_width="wrap_content"
+
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="?myCardBackground"
+                        android:fontFamily="@font/reem_kufi"
                         android:text="Sk Farman"
                         android:textSize="16sp" />
                 </TableRow>
 
-                <TableRow android:padding="10dp">
+                <TableRow
+                    android:background="?myCardBackground"
+                    android:padding="10dp">
 
                     <TextView
-                        android:fontFamily="@font/reem_kufi"
                         android:layout_width="wrap_content"
+
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="?myCardBackground"
+                        android:fontFamily="@font/reem_kufi"
                         android:text="D Srinivas"
                         android:textSize="16sp" />
 
                     <TextView
-                        android:fontFamily="@font/reem_kufi"
                         android:layout_width="wrap_content"
+
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="?myCardBackground"
+                        android:fontFamily="@font/reem_kufi"
                         android:text="P Koushik"
                         android:textSize="16sp" />
                 </TableRow>

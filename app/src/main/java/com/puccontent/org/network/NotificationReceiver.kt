@@ -23,6 +23,7 @@ class NotificationReceiver : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.e("newToken", token)
         val storage  = OfflineStorage(this)
+
         storage.userToken = token
     }
     override fun onMessageReceived(message: RemoteMessage) {
@@ -46,8 +47,15 @@ class NotificationReceiver : FirebaseMessagingService() {
         intent.putExtra("url", url)
         val uniqueInt = (System.currentTimeMillis() and 0xff).toInt()
         val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(applicationContext, uniqueInt, intent,
-                PendingIntent.FLAG_ONE_SHOT)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                PendingIntent.getActivity(applicationContext, uniqueInt, intent,
+                    PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+            }
+            else{
+                PendingIntent.getActivity(applicationContext, uniqueInt, intent,
+                    PendingIntent.FLAG_ONE_SHOT)
+            }
+
         val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val channelId = getString(R.string.app_name)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)

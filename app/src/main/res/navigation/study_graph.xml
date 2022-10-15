@@ -15,17 +15,18 @@
         <action
             android:id="@+id/action_subjectsScreen_to_foldersScreen"
             app:destination="@id/foldersScreen"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"
+            />
         <action
             android:id="@+id/action_subjectsScreen_to_filesScreen"
             app:destination="@id/filesScreen"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/foldersScreen"
@@ -36,10 +37,10 @@
         <action
             android:id="@+id/action_foldersScreen_to_filesScreen"
             app:destination="@id/filesScreen"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
         <argument
             android:name="year"
             android:defaultValue="1"

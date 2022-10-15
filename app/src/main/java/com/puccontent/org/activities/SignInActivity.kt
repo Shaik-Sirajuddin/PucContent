@@ -30,6 +30,9 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var mAuth: FirebaseAuth
     private var allEnabled = true
+    companion object{
+        const val SIGN_IN_ERROR = "SignInActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,10 +113,12 @@ class SignInActivity : AppCompatActivity() {
                         val user = mAuth.currentUser
                         updateUI(user, true)
                     } else {
+                        Log.e(SIGN_IN_ERROR,task.exception?.message.toString())
                         updateUI(null)
                     }
                 }
         } catch (e: Exception) {
+            Log.e(SIGN_IN_ERROR,e.message.toString())
             updateUI(null)
         }
     }

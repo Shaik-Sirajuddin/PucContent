@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightViolet"
     android:fillViewport="true"
     tools:context=".activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/ic_wave"
         android:layout_height="wrap_content"
         android:paddingHorizontal="10dp">
 
@@ -47,7 +45,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Welcome,"
-                            android:textColor="#FDFCFF"
                             android:textSize="24sp"
                             android:textStyle="bold" />
 
@@ -59,7 +56,6 @@
                             android:ellipsize="end"
                             tools:text="Sirajudin"
                             android:maxLines="2"
-                            android:textColor="#F8EEFF"
                             android:textSize="24sp" />
                     </LinearLayout>
 
@@ -100,7 +96,6 @@
             android:textStyle="bold"
             android:layout_marginTop="100dp"
             android:layout_marginHorizontal="10dp"
-            android:textColor="#010003"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -123,6 +118,7 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:background="?myCardBackground"
                     android:id="@+id/quickAccessList"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
@@ -133,6 +129,8 @@
                     tools:listitem="@layout/recent_updates_item" />
 
                 <TextView
+                    android:background="?myCardBackground"
+
                     android:id="@+id/hideView"
                     android:layout_width="match_parent"
                     android:layout_height="105dp"
@@ -140,7 +138,6 @@
                     android:gravity="center"
                     android:text="No items to show"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -158,7 +155,6 @@
             android:textStyle="bold"
             android:layout_margin="10dp"
             android:text="Explore"
-            android:textColor="#010003"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

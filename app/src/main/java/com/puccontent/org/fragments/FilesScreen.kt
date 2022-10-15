@@ -8,12 +8,15 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
+import android.transition.TransitionInflater
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -25,9 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -37,12 +37,12 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.puccontent.org.*
-import com.puccontent.org.Adapters.PdfClicked
-import com.puccontent.org.Adapters.PdfsAdapter
-import com.puccontent.org.Models.MySingleton
-import com.puccontent.org.Models.PdfItem
 import com.puccontent.org.activities.ReadingActivity
+import com.puccontent.org.adapters.PdfClicked
+import com.puccontent.org.adapters.PdfsAdapter
 import com.puccontent.org.databinding.FragmentFilesScreenBinding
+import com.puccontent.org.models.MySingleton
+import com.puccontent.org.models.PdfItem
 import com.puccontent.org.network.*
 import com.puccontent.org.storage.FirebaseQueryLiveData
 import com.puccontent.org.storage.OfflineStorage
@@ -50,6 +50,7 @@ import com.puccontent.org.util.SwipeGesture
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.nio.charset.StandardCharsets
 
 
 class FilesScreen : Fragment(), PdfClicked {
@@ -74,16 +75,18 @@ class FilesScreen : Fragment(), PdfClicked {
         binding = FragmentFilesScreenBinding.inflate(inflater)
         initData()
         initViews()
-        fetchOffline()
-        fetchOnline()
+        Handler(Looper.getMainLooper()).postDelayed({
+            fetchOffline()
+            fetchOnline()
+        },400)
         return binding.root
     }
 
     private fun initViews() {
-        database = Firebase.database
         binding.textView8.text = chapter
+        database = Firebase.database
         with(binding.textView8) {
-            setHorizontallyScrolling(true);
+            setHorizontallyScrolling(true)
             isSingleLine = true;
             marqueeRepeatLimit = -1
             ellipsize = TextUtils.TruncateAt.MARQUEE;
@@ -107,10 +110,6 @@ class FilesScreen : Fragment(), PdfClicked {
         }
         val itemTouchHelper = ItemTouchHelper(swipeGesture)
         itemTouchHelper.attachToRecyclerView(binding.pdfsListView)
-        binding.pdfsListView.setOnLongClickListener {
-
-            true
-        }
         requireContext().registerReceiver(
             onDownloadComplete,
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
@@ -124,32 +123,6 @@ class FilesScreen : Fragment(), PdfClicked {
             binding.info.text = getString(R.string.offline)
             binding.info.visibility = View.VISIBLE
             binding.progressCard.visibility = View.GONE
-        }
-    }
-
-    private fun initAds() {
-        context?.let {
-            val storage = OfflineStorage(it)
-            val id = storage.filesScreenId
-            Firebase.database.reference.child("Ads")
-                .child("FilesBanner")
-                .get()
-                .addOnSuccessListener { data ->
-                    data.getValue<String>()?.let { itId ->
-                        storage.filesScreenId = itId
-                    }
-                }
-            MobileAds.initialize(it)
-            val adView = AdView(requireContext())
-            adView.adUnitId = id
-            val adRequest = AdRequest.Builder().build()
-            adView.loadAd(adRequest)
-            val params =
-                LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-            binding.adContainer.addView(adView, params)
         }
     }
 
@@ -273,8 +246,6 @@ class FilesScreen : Fragment(), PdfClicked {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(url, "application/pdf")
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//            startActivity(Intent.createChooser(intent,
-//                "Open " + list[position].name + " using ..."))
             startActivity(intent)
         } catch (e: Exception) {
             Firebase.crashlytics.log(e.message.toString())
@@ -494,9 +465,9 @@ class FilesScreen : Fragment(), PdfClicked {
             }
         }
     }
-     fun extractPdf(position: Int) {
+     override fun extractPdf(position: Int) {
         if(!checkIt(position)){
-            Toast.makeText(requireContext(),"Download the file first",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"File not downloaded to extract",Toast.LENGTH_SHORT).show()
             return
         }
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
@@ -514,7 +485,7 @@ class FilesScreen : Fragment(), PdfClicked {
                 if (uri != null) {
                     lifecycleScope.launch(Dispatchers.Default)
                     {
-                        copyFile(path, uri){ done->
+                        requireActivity().copyFile(path, uri){ done->
                             if (done) {
                                 requireActivity().runOnUiThread {
                                     Toast.makeText(requireContext(),
@@ -534,10 +505,10 @@ class FilesScreen : Fragment(), PdfClicked {
         }
 
     private fun getSizeUrl(dUrl: String): String {
-
+        val context = context ?: return ""
+        val key = OfflineStorage(context).apiKey
         val fileId = dUrl.substring(42, 75)
-        val APIKey = "AIzaSyCpn7HmOIq3ddwFB1aFkakNMXKuK0KFbWs"
-        return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${APIKey}"
+        return "https://www.googleapis.com/drive/v3/files/${fileId}?fields=size&key=${key}"
     }
 
     private fun downloadComplete() {
@@ -563,6 +534,7 @@ class FilesScreen : Fragment(), PdfClicked {
     }
 
     private fun getDownloadSize(i: Int) {
+        if(context == null) return
         val url = getSizeUrl(list[i].path)
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -578,6 +550,11 @@ class FilesScreen : Fragment(), PdfClicked {
                     .child(subject)
                     .child("Size")
                     .updateChildren(map)
+                    .addOnCompleteListener {
+                        if(!it.isSuccessful){
+                            Log.e("apiE",it.exception?.message.toString())
+                        }
+                    }
             },
             { error ->
                 Log.e("sizeError", error.message.toString())
@@ -589,8 +566,10 @@ class FilesScreen : Fragment(), PdfClicked {
     inner class SizeListener(private val ind: Int) : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             if (snapshot.exists()) {
-                list[ind].size = snapshot.getValue<String>()
-                refreshPdf(ind)
+                if(ind >=0 && ind < list.size){
+                    list[ind].size = snapshot.getValue<String>()
+                    refreshPdf(ind)
+                }
             } else {
                 getDownloadSize(ind)
             }

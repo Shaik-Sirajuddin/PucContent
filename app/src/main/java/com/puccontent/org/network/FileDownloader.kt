@@ -9,6 +9,7 @@ import android.widget.Toast
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.os.Parcelable
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
@@ -48,8 +49,10 @@ class FileDownloader {
             return str
         }
         fun convertStringToArray(str: String): Array<String?> {
+
             return str.split(",").toTypedArray()
         }
+
         val fileKey = "thisIsKey"
 
     }
@@ -96,16 +99,16 @@ fun Activity.launchOnlineView(path: String) {
         val fileId = path.substring(42, 75)
         val url = "https://drive.google.com/file/d/$fileId/view?usp=drivesdk"
         val builder = CustomTabsIntent.Builder()
-        builder.setStartAnimations(
-            this,
-            android.R.anim.slide_in_left,
-            android.R.anim.slide_out_right
-        );
-        builder.setExitAnimations(
-            this,
-            android.R.anim.slide_out_right,
-            android.R.anim.slide_in_left
-        );
+//        builder.setStartAnimations(
+//            this,
+//            android.R.anim.slide_in_left,
+//            android.R.anim.slide_out_right
+//        );
+//        builder.setExitAnimations(
+//            this,
+//            android.R.anim.slide_out_right,
+//            android.R.anim.slide_in_left
+//        );
         val customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(url))
     }catch (e:Exception){

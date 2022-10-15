@@ -1,7 +1,6 @@
 package com.puccontent.org.activities
 
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -15,13 +14,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.view.setPadding
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -37,14 +36,17 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import com.puccontent.org.Adapters.SubjectClicked
-import com.puccontent.org.Adapters.UpdateClicked
-import com.puccontent.org.Adapters.UpdatesAdapter
-import com.puccontent.org.Models.Update
-import com.puccontent.org.Models.User
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.puccontent.org.adapters.SubjectClicked
+import com.puccontent.org.adapters.UpdateClicked
+import com.puccontent.org.adapters.UpdatesAdapter
+import com.puccontent.org.models.Update
+import com.puccontent.org.models.User
 import com.puccontent.org.R
 import com.puccontent.org.databinding.ActivityMainBinding
 import com.puccontent.org.network.*
+import com.puccontent.org.storage.FirebaseQueryLiveData
 import com.puccontent.org.storage.OfflineStorage
 import com.puccontent.org.util.SwipeGesture
 import java.util.*
@@ -56,24 +58,28 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
     private var handler: Handler? = null
     private lateinit var quickAccessAdapter: UpdatesAdapter
     private val quickAccessList = ArrayList<Update>()
-    private lateinit var adLoader: AdLoader
-    private var adLoaded = false
     private val ImmediateRequestCode = 1
     private val FlexibleRequestCode = 1
     private var sharePosition = -1
+    private lateinit var offlineStorage: OfflineStorage
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
+            MobileAds.initialize(this) {}
             setSupportActionBar(binding.toolBar)
-            initAds()
+            offlineStorage = OfflineStorage(this)
             initRecyclerView()
             getToken()
             initUser()
             initViews()
             checkNotification()
             checkAppUpdate()
+            initRemoteConfig()
+            syncAdUnits()
+
             FirebaseMessaging.getInstance().token.addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d("token", it.result.toString())
@@ -104,21 +110,31 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
         val itemTouchHelper = ItemTouchHelper(swipeGesture)
         itemTouchHelper.attachToRecyclerView(binding.quickAccessList)
     }
+    private fun initRemoteConfig(){
+        val remoteConfig = Firebase.remoteConfig
+//        val configSettings = remoteConfigSettings {
+//            minimumFetchIntervalInSeconds = 3600
+//        }
+//        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetch().addOnCompleteListener {
 
+            offlineStorage.adsEnabled = remoteConfig.getBoolean("adsEnabled")
+            Log.d("remoteConfig",offlineStorage.adsEnabled.toString())
+            offlineStorage.apiKey = remoteConfig.getString("apiKey")
+            Log.d("remoteConfig",remoteConfig.getString("apiKey"))
+
+        }
+
+    }
     private fun initViews() {
         val contentBox = binding.contentBox
         val aboutBox = binding.aboutBox
         val linksBox = binding.linksBox
-//        val libraryBox = binding.libraryBox
-
         contentBox.subName.text = "Content"
         aboutBox.subName.text = "About"
-//        libraryBox.subName.text = "Library"
         linksBox.subName.text = "Links"
-
         contentBox.image.setImageResource(R.drawable.content)
         linksBox.image.setImageResource(R.drawable.links)
-//        libraryBox.image.setImageResource(R.drawable.library)
         aboutBox.image.setImageResource(R.drawable.about)
         contentBox.root.setOnClickListener {
             val intent = Intent(this@MainActivity, ContentActivity::class.java)
@@ -140,7 +156,7 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
         val acct = GoogleSignIn.getLastSignedInAccount(this)
         if (acct != null) {
             val personPhoto = acct.photoUrl
-            Glide.with(this)
+            Glide.with(applicationContext)
                 .load(personPhoto)
                 .placeholder(R.drawable.profile)
                 .into(binding.userImage)
@@ -184,35 +200,9 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ImmediateRequestCode || requestCode == FlexibleRequestCode) {
-            if (resultCode != RESULT_OK) {
-                showToast("App update failed")
-            } else {
-                showToast("App updated successfully")
-            }
-        }
-    }
-
     private fun launchUrl(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
-
-    private fun initAds() {
-        val storage = OfflineStorage(this)
-        // val id = storage.nativeAdvancedId
-        Firebase.database.reference.child("Ads")
-            .child("NativeAd")
-            .get()
-            .addOnSuccessListener {
-                it.getValue<String>()?.let { itId ->
-                    storage.nativeAdvancedId = itId
-                }
-            }
-        MobileAds.initialize(this)
-    }
-
     private fun initUser() {
         renderUserDetails()
         val intent = intent
@@ -492,7 +482,23 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
             startActivity(intent)
         }
     }
-
+    private fun syncAdUnits(){
+        val ref = Firebase.database.reference.child("Ads")
+        val liveData = FirebaseQueryLiveData(ref,FirebaseQueryLiveData.singleType)
+        liveData.observe(this) {
+            if(it.exists()){
+                val appOpenId = it.child(OfflineStorage.FBAppOpenAd).getValue<String?>()
+                appOpenId?.let {  id->
+                    offlineStorage.appOpenId = id
+                }
+                val contentBannerId = it.child(OfflineStorage.FBContentBannerAd).getValue<String?>()
+                contentBannerId?.let {  id->
+                    offlineStorage.bannerAdId = id
+                }
+                Log.d("AdsFB",contentBannerId.toString()+ " DataUpdated")
+            }
+        }
+    }
     override fun pdfClicked(position: Int) {
         try {
             val path = quickAccessList[position].path

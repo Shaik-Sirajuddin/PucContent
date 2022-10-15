@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PucContent" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.PucContent" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/pinkish</item>
-        <item name="colorPrimaryVariant">#0E1A59</item>
+        <item name="colorPrimary">#BD1C1C</item>
+        <item name="colorPrimaryVariant">#111111</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -12,12 +12,20 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:background">#111111</item>
+        <item name="android:textColor">#fdfdfd</item>
+        <item name="myCardBackground">#191919</item>
+        <item name="invertTheme">@color/white</item>
+        <item name="android:itemBackground">@android:color/transparent</item>
+
         <!-- Customize your theme here. -->
     </style>
 
     <style name="ThemeOverlay.PucContent.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
         <item name="fullscreenTextColor">@color/light_blue_A400</item>
+        <item name="android:textColor">#fdfdfd</item>
+
     </style>
     <style name="ReemKufiFontTextview" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/reem_kufi</item>

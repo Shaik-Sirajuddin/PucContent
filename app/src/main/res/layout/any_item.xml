@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     app:cardCornerRadius="15dp"
     android:outlineAmbientShadowColor="@color/black"
     android:outlineSpotShadowColor="@color/black"
+    android:background="?myCardBackground"
     app:cardElevation="1dp"
     android:layout_margin="15dp"
     app:layout_constraintEnd_toEndOf="parent"
@@ -16,12 +16,14 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
+        android:background="?myCardBackground"
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
         <ImageView
+            android:background="?myCardBackground"
             android:src="@drawable/content"
             android:padding="35dp"
             android:scaleType="centerCrop"
@@ -31,6 +33,7 @@
             android:layout_height="130dp"/>
 
         <TextView
+            android:background="?myCardBackground"
             android:id="@+id/subName"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -40,7 +43,6 @@
             android:paddingHorizontal="20dp"
             android:fontFamily="@font/reem_kufi"
             android:textStyle="bold"
-            android:textColor="@color/black"
             android:textSize="16sp"
             tools:text="Chemistry" />
     </LinearLayout>
