@@ -8,12 +8,12 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlinx-serialization'
 android {
 
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.puccontent.org"
         minSdk 21
-        targetSdk 32
+        targetSdk 34
         versionCode 30
         versionName "4.1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     namespace 'com.puccontent.org'
 }
