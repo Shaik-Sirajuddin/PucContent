@@ -3,6 +3,7 @@ package com.puccontent.org.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -49,6 +50,7 @@ import com.puccontent.org.network.*
 import com.puccontent.org.storage.FirebaseQueryLiveData
 import com.puccontent.org.storage.OfflineStorage
 import com.puccontent.org.util.SwipeGesture
+import java.lang.reflect.InvocationTargetException
 import java.util.*
 
 class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
@@ -110,7 +112,8 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
         val itemTouchHelper = ItemTouchHelper(swipeGesture)
         itemTouchHelper.attachToRecyclerView(binding.quickAccessList)
     }
-    private fun initRemoteConfig(){
+
+    private fun initRemoteConfig() {
         val remoteConfig = Firebase.remoteConfig
 //        val configSettings = remoteConfigSettings {
 //            minimumFetchIntervalInSeconds = 3600
@@ -119,13 +122,14 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
         remoteConfig.fetch().addOnCompleteListener {
 
             offlineStorage.adsEnabled = remoteConfig.getBoolean("adsEnabled")
-            Log.d("remoteConfig",offlineStorage.adsEnabled.toString())
+            Log.d("remoteConfig", offlineStorage.adsEnabled.toString())
             offlineStorage.apiKey = remoteConfig.getString("apiKey")
-            Log.d("remoteConfig",remoteConfig.getString("apiKey"))
+            Log.d("remoteConfig", remoteConfig.getString("apiKey"))
 
         }
 
     }
+
     private fun initViews() {
         val contentBox = binding.contentBox
         val aboutBox = binding.aboutBox
@@ -173,29 +177,34 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
     }
 
     private fun checkAppUpdate() {
+
         val appUpdateManager = AppUpdateManagerFactory.create(this)
 
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                if ((appUpdateInfo.clientVersionStalenessDays() ?: -1) > 10 &&
-                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-                ) {
-                    appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        AppUpdateType.IMMEDIATE,
-                        this,
-                        ImmediateRequestCode
-                    )
-                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                    appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        AppUpdateType.FLEXIBLE,
-                        this,
-                        FlexibleRequestCode
-                    )
+            try {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    if ((appUpdateInfo.clientVersionStalenessDays() ?: -1) > 10 &&
+                        appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                    ) {
+                        appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.IMMEDIATE,
+                            this,
+                            ImmediateRequestCode
+                        )
+                    } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                        appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.FLEXIBLE,
+                            this,
+                            FlexibleRequestCode
+                        )
+                    }
                 }
+            } catch (e: IntentSender.SendIntentException) {
+                 Log.e("AppUpdateIntentError",e.message.toString())
             }
         }
     }
@@ -203,6 +212,7 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
     private fun launchUrl(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
+
     private fun initUser() {
         renderUserDetails()
         val intent = intent
@@ -482,23 +492,25 @@ class MainActivity : AppCompatActivity(), SubjectClicked, UpdateClicked {
             startActivity(intent)
         }
     }
-    private fun syncAdUnits(){
+
+    private fun syncAdUnits() {
         val ref = Firebase.database.reference.child("Ads")
-        val liveData = FirebaseQueryLiveData(ref,FirebaseQueryLiveData.singleType)
+        val liveData = FirebaseQueryLiveData(ref, FirebaseQueryLiveData.singleType)
         liveData.observe(this) {
-            if(it.exists()){
+            if (it.exists()) {
                 val appOpenId = it.child(OfflineStorage.FBAppOpenAd).getValue<String?>()
-                appOpenId?.let {  id->
+                appOpenId?.let { id ->
                     offlineStorage.appOpenId = id
                 }
                 val contentBannerId = it.child(OfflineStorage.FBContentBannerAd).getValue<String?>()
-                contentBannerId?.let {  id->
+                contentBannerId?.let { id ->
                     offlineStorage.bannerAdId = id
                 }
-                Log.d("AdsFB",contentBannerId.toString()+ " DataUpdated")
+                Log.d("AdsFB", contentBannerId.toString() + " DataUpdated")
             }
         }
     }
+
     override fun pdfClicked(position: Int) {
         try {
             val path = quickAccessList[position].path

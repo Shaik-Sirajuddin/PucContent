@@ -5,8 +5,7 @@
     <item
         android:drawable="@drawable/rguktlogo"
         android:gravity="center"
-        android:width="200px"
-        android:height="200px"
-
-        />
+        android:width="100px"
+        android:height="100px"
+        tools:targetApi="m" />
 </layer-list>
